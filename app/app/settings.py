@@ -47,9 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
 
     'django.contrib.staticfiles',
+
     'django.contrib.sites',
     
-"livereload",
 
     'allauth',
     'allauth.account',
@@ -62,10 +62,10 @@ INSTALLED_APPS = [
 
 
 ]
+
 ACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSignupForm'}
 
 SOCIALACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSocialSignupForm'}
-
 
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
@@ -82,7 +82,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crum.CurrentRequestUserMiddleware',
-    'livereload.middleware.LiveReloadScript',
 
     
 ]
@@ -120,6 +119,7 @@ DATABASES = {
         "HOST": "localhost",
         "USER": "postgres",
         "PASSWORD": "Sonyw100",
+        "port":5432
     }
 }
 

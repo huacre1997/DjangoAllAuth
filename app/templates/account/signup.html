@@ -1,0 +1,52 @@
+
+{% extends "index.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+
+
+<div class="container-register">
+  <h1>{% trans "Formulario de registro" %}</h1>
+
+  <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+<form class="signup" id="formRegister" >
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button type="submit" class="btn btn-primary">{% trans "Sign Up" %} &raquo;</button>
+</form>
+</div>
+<style>
+    .jconfirm {
+      z-index: 500 !important;
+    }</style>
+  {% load  static %}
+
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script>
+  $("#formRegister").submit(function (e) { 
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "{% url 'account_signup' %}",
+      data: $(this).serialize(),
+      success: function (response) {  
+        console.log(response)
+        if(response.hasOwnProperty("error")){
+          console.log("error");
+          $("#id_password1").val("")
+          $("#id_password2").val("")
+
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock %}
