@@ -1,7 +1,8 @@
 $color: white;
 
-body{
+body {
   padding: 0 !important;
+  background: lightgrey !important;
 }
 .p_subnav {
   color: white;
@@ -70,7 +71,6 @@ body{
 .dropdown_menu2 {
   position: absolute;
   top: 100%;
-  left: -300%;
   width: 400%;
   perspective: 1000px;
   z-index: -1;
@@ -81,17 +81,14 @@ body{
     padding: 10px 20px;
     font-size: 16px;
     opacity: 0;
-  
   }
-  @media screen and (max-width:600px) {
-    width: 110%;
+  @media screen and (max-width: 600px) {
+    width: 400%;
     left: -20px;
-
   }
-  @media screen and (max-width:800px) {
-    width: 100%;
-    left: -20px;
-
+  @media screen and (max-width: 800px) {
+    width: 450%;
+    left: 0;
   }
 }
 .dropdown_menu {
@@ -109,19 +106,19 @@ body{
     font-size: 16px;
     opacity: 0;
     &:hover {
-      background-color:grey;
+      background-color: grey;
     }
-    .navlink{
+    .navlink {
       padding: 0 1.5rem;
       text-decoration: none;
       color: white;
       width: 100%;
     }
   }
-  @media screen and (max-width:600px) {
-    width: 100%;
-    left: 0;
-
+  @media screen and (max-width: 600px) {
+    width: 400%;
+    left: 30px;
+    top: -100px;
   }
 }
 .dropdown:hover .dropdown_menu--animated {
@@ -129,31 +126,28 @@ body{
 }
 
 .dropdown_menu--animated {
-  display: none ;
+  display: none;
   li {
     display: block;
     opacity: 1;
   }
-  
 }
 
-.dropdown_menu-3
-{  @for $num from 1 through 5
-   {  .dropdown_item-#{$num}{
-   
-     transform-origin: top center;
-       animation: rotateZ 300ms ($num * 60ms) ease-in-out forwards}
-      }
-     
+.dropdown_menu-3 {
+  @for $num from 1 through 5 {
+    .dropdown_item-#{$num} {
+      transform-origin: top center;
+      animation: rotateZ 300ms ($num * 60ms) ease-in-out forwards;
     }
-
+  }
+}
 
 @keyframes rotateZ {
   0% {
     opacity: 0;
     transform: translateZ(290px);
   }
-  
+
   80% {
     transform: translateZ(10px);
   }
@@ -168,7 +162,7 @@ body{
   height: 42px;
   background-color: #4285f4;
   border-radius: 2px;
-  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25); 
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
   .google-icon-wrapper {
     position: absolute;
     margin-top: 1px;
@@ -176,26 +170,58 @@ body{
     width: 40px;
     height: 40px;
     border-radius: 2px;
-    background-color: #fff; }
+    background-color: #fff;
+  }
   .google-icon {
-      position: absolute;
-      margin-top: 11px;
-      margin-left: 11px;
-      width: 18px;
-      height: 18px; }
-     .btn-text {
-        float: right;
-        margin: 11px 11px 0 0;
-        color: #fff;
-        font-size: 14px;
-        letter-spacing: 0.2px;
-        font-family: "Roboto"; }
-      &:hover{
-        box-shadow: 0 0 6px #4285f4; }
-        &:active {
-          background: #1669F2; }
-      
+    position: absolute;
+    margin-top: 11px;
+    margin-left: 11px;
+    width: 18px;
+    height: 18px;
+  }
+  .btn-text {
+    float: right;
+    margin: 11px 11px 0 0;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    font-family: "Roboto";
+  }
+  &:hover {
+    box-shadow: 0 0 6px #4285f4;
+  }
+  &:active {
+    background: #1669f2;
+  }
 }
+// .nav-second-collapse {
+//   top: -100px !important;
+//   transition: 1s ;
+// }
+.nav-second {
+  background-color: black;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: -30px;
+  left: 0;
+  transition: 0.5s;
+  height: 30px;
 
 
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+
+  @media screen and (max-width: 800px) {
+    font-size: 1em;
+  }
+}
+.fixed-top {
  
+  @media screen and (max-width: 600px) {
+    top: 0 !important;
+  }
+}

@@ -1,198 +1,800 @@
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    {% load static %}
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mery</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Mery</title>
 
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+  <style type="text/css">
+    html,
+    body,
+    header,
+    .carousel {
+      height: 70vh;
+      bottom: -35px;
+
+    }
+
+    @media (max-width: 550px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        bottom: 25px;
+
+        height: 100vh;
+      }
+    }
+
+    @media (max-width: 1000px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        bottom: 25px;
+
+        height: 80vh;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="content">
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-dark d-flex justify-content-around "
-                style="background-color: black; padding: 0.3rem ">
-                <p class="p_subnav"> <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>&nbsp;996000053</p>
-                <p class="p_subnav"><i class="fab fa-facebook" style="font-size: 1.2rem;"></i>&nbsp;GameStore</p>
-                <p class="p_subnav"><i class="fab fa-instagram" style="font-size: 1.2rem;"></i>&nbsp;GameStore</p>
-                <p class="p_subnav"> <i class="far fa-envelope"
-                        style="font-size: 1.2rem;"></i>&nbsp;huacreenciso97@gmail.com</p>
-            </nav>
-            <nav class="mb-1 navbar navbar-expand-lg navbar-light " style="box-shadow: 0 0 10px;background-color: #91d388;">
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
-                aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
-                    <ul class="navbar-nav mr-auto">
-                      <li class="nav-item active">
-                        <a class="nav-link" href="#">Home
-                          <span class="sr-only">(current)</span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                      </li>
-                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown"
-                          aria-haspopup="true" aria-expanded="false">Dropdown
-                        </a>
-                        <div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-555">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                      </li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto ">
-                        <li class="nav-item">
-                            <form class="form-inline m-auto">
-                                <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-                                  aria-label="Search">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                              </form>
-                              
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto nav-flex-icons">
-                      <li class="nav-item">
-                        <a href="#" style="color: black; width: 8em" class="nav-item nav-link  d-flex  mx-auto"
-                        id="carr">
-                        <img src="{% static 'icons/carrito.png'%}" alt="" id="carrIcon">
-                        <div class="" id="effect2">&nbsp;Mi Carrito</div>
-                        <div class="" id="effect3" style="display: none; position: absolute; right: 8em">&nbsp;0
-                        </div>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
 
-                    </a>
-                      </li>
-                      
-                    <li class="dropdown dropdown-3">
-                        <img src="{% static 'icons/usuario.png'%}" alt="" id="userIcon">
-                        &nbsp;
-                        {% if request.user.is_authenticated %}
-                        <ul class="dropdown_menu dropdown_menu-3">
-                            <li class="dropdown_item-1">Mi cuenta</li>
-                            <li class="dropdown_item-2">Historial</li>
-                            <li class="dropdown_item-3" id="logout" to="{% url 'base:logout' %}">Cerrar Sesión      </li>
-                        </ul>
-                       
-                        {%else%}
-                        <ul class="dropdown_menu2 dropdown_menu-3">
-                            <li class="dropdown_item-1 ">
-                                <button hreft="{% url 'base:login' %}" id="btnLogin"
-                                    class="btn btn-secondary btn-block">Entrar</button>
-                                Si no se encuentra registrado <a href="{% url 'base:register' %}">Registrese aquí</a>
-                            </li>
-                         
-                        </ul>
-                        {% endif %}
+    <div class="container">
 
-                    </li>
-                    </ul>
-                  </div>
-     
-            </nav>
-        </header>
-        <div id="effect" style="display: none;" class="ui-widget-content ui-corner-all">
-            <p>
-                <button id="btnLogin" class="btn btn-secondary">Entrar</button>
-                Si no se encuentra registrado <a href="#">Registrese aquí</a>
-            </p>
-        </div>
-        <div id="showOptionUsers" style="display: none;" class="ui-widget-content ui-corner-all">
-            <ul>
-                <li>Mi cuenta</li>
-                <li>Configurar</li>
-                <li><a href="">Cerrar sesion</a></li>
+      <div class="nav-second">
+        <p class="p_subnav"> <i class="fab fa-whatsapp  text-white" style="font-size: 1.5rem;"></i>&nbsp;996000053</p>
+        <p class="p_subnav"><i class="fab fa-facebook text-white" style="font-size: 1.5rem;"></i>&nbsp;GameStore</p>
+        <p class="p_subnav"><i class="fab fa-instagram" style="font-size: 1.5rem;"></i>&nbsp;GameStore</p>
+        <p class="p_subnav"> <i class="far fa-envelope" style="font-size: 1.5rem;"></i>&nbsp;huacreenciso97@gmail.com
+        </p>
+      </div>
+      <!-- Brand
+                  <a class="navbar-brand waves-effect" href="">
+                    <strong class="blue-text">MDB</strong>
+                  </a>
+            
+                   Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link waves-effect" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="#">Item 1</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="#">Item 2</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="#">Item 3</a>
+          </li>
+        </ul>
+
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          <li class="nav-item">
+            <a href="#" class="nav-item nav-link mx-auto ">
+
+              <img src="{% static 'icons/carrito.png'%}" alt="" id="carrIcon">&nbsp;
+              <span class="badge red z-depth-1 mr-1"> 1 </span>
+
+            </a>
+
+          </li>
+
+          <li class="dropdown dropdown-3">
+            <img src="{% static 'icons/usuario.png'%}" alt="" id="userIcon">
+            &nbsp;
+            {% if request.user.is_authenticated %}
+            <ul class="dropdown_menu dropdown_menu-3">
+              <li class="dropdown_item-1">Mi cuenta</li>
+              <li class="dropdown_item-2">Historial</li>
+              <li class="dropdown_item-3" id="logout" to="{% url 'base:logout' %}">Cerrar Sesión </li>
             </ul>
+
+            {%else%}
+            <ul class="dropdown_menu2 dropdown_menu-3">
+              <li class="dropdown_item-1 ">
+                <button hreft="{% url 'base:login' %}" id="btnLogin" class="btn btn-primary btn-block">Entrar</button>
+                Si no se encuentra registrado <a href="{% url 'base:register' %}">Registrese aquí</a>
+              </li>
+
+            </ul>
+            {% endif %}
+
+          </li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <div id="effect" style="display: none;" class="ui-widget-content ui-corner-all">
+    <p>
+      <button id="btnLogin" class="btn btn-secondary">Entrar</button>
+      Si no se encuentra registrado <a href="#">Registrese aquí</a>
+    </p>
+  </div>
+  <div id="showOptionUsers" style="display: none;" class="ui-widget-content ui-corner-all">
+    <ul>
+      <li>Mi cuenta</li>
+      <li>Configurar</li>
+      <li><a href="">Cerrar sesion</a></li>
+    </ul>
+  </div>
+
+
+
+  {% block content %}
+  <div id="carousel-example-1z" class="carousel slide carousel-fade pt-4" data-ride="carousel">
+
+    <!--Indicators-->
+    <ol class="carousel-indicators">
+      <li data-target="#carousel-example-1z" data-slide-to="0" class="active"></li>
+      <li data-target="#carousel-example-1z" data-slide-to="1"></li>
+      <li data-target="#carousel-example-1z" data-slide-to="2"></li>
+    </ol>
+    <!--/.Indicators-->
+
+    <!--Slides-->
+    <div class="carousel-inner" role="listbox">
+
+      <!--First slide-->
+      <div class="carousel-item active">
+        <div class="view"
+          style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%282%29.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+          <!-- Mask & flexbox options-->
+          <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
+
+            <!-- Content -->
+            <div class="text-center white-text mx-5 wow fadeIn">
+              <h1 class="mb-4">
+                <strong>Learn Bootstrap 4 with MDB</strong>
+              </h1>
+
+              <p>
+                <strong>Best & free guide of responsive web design</strong>
+              </p>
+
+              <p class="mb-4 d-none d-md-block">
+                <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and
+                  written versions
+                  available. Create your own, stunning website.</strong>
+              </p>
+
+              <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/"
+                class="btn btn-outline-white btn-lg">Start
+                free tutorial
+                <i class="fas fa-graduation-cap ml-2"></i>
+              </a>
+            </div>
+            <!-- Content -->
+
+          </div>
+          <!-- Mask & flexbox options-->
+
         </div>
-        {% block content %}
+      </div>
+      <!--/First slide-->
 
-        {% endblock content %}
+      <!--Second slide-->
+      <div class="carousel-item">
+        <div class="view"
+          style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%283%29.jpg'); background-repeat: no-repeat; background-size: cover;">
 
+          <!-- Mask & flexbox options-->
+          <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
 
+            <!-- Content -->
+            <div class="text-center white-text mx-5 wow fadeIn">
+              <h1 class="mb-4">
+                <strong>Learn Bootstrap 4 with MDB</strong>
+              </h1>
 
-        <footer class="footer">
-            <div class=" py-5 container">
-                <div class="row">
-                    <div class="col-6 col-md col-sm-6 pr-em pl-em">
-                        <h5>Contacto</h5>
-                        <ul class="d-flex  list-unstyled text-small">
-                            <li class="mr-3"><i class="fab fa-facebook-square" style="font-size:3em;"></i></li>
+              <p>
+                <strong>Best & free guide of responsive web design</strong>
+              </p>
 
-                            <li class="mr-3"><i class="fab fa-instagram-square" style="font-size:3em;"></i></li>
-                            <li class="mr-3"><i class="fab fa-whatsapp-square" style="font-size: 3em;"></i></li>
+              <p class="mb-4 d-none d-md-block">
+                <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and
+                  written versions
+                  available. Create your own, stunning website.</strong>
+              </p>
 
-                        </ul>
-                    </div>
+              <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/"
+                class="btn btn-outline-white btn-lg">Start
+                free tutorial
+                <i class="fas fa-graduation-cap ml-2"></i>
+              </a>
+            </div>
+            <!-- Content -->
 
-                    <div class="col-6 col-md col-sm-6  pr-em pl-em">
-                        <h5>Resources</h5>
-                        <ul class="list-unstyled text-small">
-                            <li><a class="text-muted" href="#">Resource</a></li>
-                            <li><a class="text-muted" href="#">Resource name</a></li>
-                            <li><a class="text-muted" href="#">Another resource</a></li>
-                            <li><a class="text-muted" href="#">Final resource</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md col-sm-6  pr-em pl-em">
-                        <h5>About</h5>
-                        <ul class="list-unstyled text-small">
-                            <li><a class="text-muted" href="#">Team</a></li>
-                            <li><a class="text-muted" href="#">Locations</a></li>
-                            <li><a class="text-muted" href="#">Privacy</a></li>
-                            <li><a class="text-muted" href="#">Terms</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md col-sm-6  pr-em pl-em">
-                        <h5>About</h5>
-                        <ul class="list-unstyled text-small">
-                            <li><a class="text-muted" href="#">Team</a></li>
-                            <li><a class="text-muted" href="#">Locations</a></li>
-                            <li><a class="text-muted" href="#">Privacy</a></li>
-                            <li><a class="text-muted" href="#">Terms</a></li>
-                        </ul>
-                    </div>
+          </div>
+          <!-- Mask & flexbox options-->
 
+        </div>
+      </div>
+      <!--/Second slide-->
 
-                </div>
+      <!--Third slide-->
+
+      <!--/Third slide-->
+
+    </div>
+    <!--/.Slides-->
+
+    <!--Controls-->
+    <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+    <!--/.Controls-->
+
+  </div>
+  <br>
+  <br>
+  <br>
+  <main>
+    <div class="container">
+      <h1>{{request.user.email}}</h1>
+      <!--Navbar-->
+      <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
+
+        <!-- Navbar brand -->
+        <span class="navbar-brand">Categories:</span>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+          aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+          <!-- Links -->
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">All
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Shirts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sport wears</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Outwears</a>
+            </li>
+
+          </ul>
+          <!-- Links -->
+
+          <form class="form-inline">
+            <div class="md-form my-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            </div>
+          </form>
+        </div>
+        <!-- Collapsible content -->
+
+      </nav>
+      <!--/.Navbar-->
+
+      <!--Section: Products v.3-->
+      <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Shirt</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Denim shirt
+                      <span class="badge badge-pill danger-color">NEW</span>
+                    </a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>120$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
 
             </div>
-            <div class="col-12 text-center">
-                <p>&copy; 2015 RapidTables.com</p>
+            <!--Card-->
 
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Sport wear</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Sweatshirt</a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>139$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
 
             </div>
-        </footer>
+            <!--Card-->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/14.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Sport wear</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Grey blouse
+                      <span class="badge badge-pill primary-color">bestseller</span>
+                    </a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>99$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Fourth column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/15.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Outwear</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Black jacket</a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>219$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          <!--Fourth column-->
+
+        </div>
+        <!--Grid row-->
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Shirt</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Denim shirt
+                      <span class="badge badge-pill danger-color">NEW</span>
+                    </a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>120$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/14.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Sport wear</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Sweatshirt</a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>139$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/15.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Sport wear</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Grey blouse
+                      <span class="badge badge-pill primary-color">bestseller</span>
+                    </a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>99$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          <!--Grid column-->
+
+          <!--Fourth column-->
+          <div class="col-lg-3 col-md-6 mb-4">
+
+            <!--Card-->
+            <div class="card">
+
+              <!--Card image-->
+              <div class="view overlay">
+                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top"
+                  alt="">
+                <a>
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <!--Card image-->
+
+              <!--Card content-->
+              <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>Outwear</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="" class="dark-grey-text">Black jacket</a>
+                  </strong>
+                </h5>
+
+                <h4 class="font-weight-bold blue-text">
+                  <strong>219$</strong>
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          <!--Fourth column-->
+
+        </div>
+        <!--Grid row-->
+
+      </section>
+      <!--Section: Products v.3-->
+
+      <!--Pagination-->
+      <nav class="d-flex justify-content-center wow fadeIn">
+        <ul class="pagination pg-blue">
+
+          <!--Arrow left-->
+          <li class="page-item disabled">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+
+          <li class="page-item active">
+            <a class="page-link" href="#">1
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">3</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">4</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">5</a>
+          </li>
+
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!--Pagination-->
+
+    </div>
+  </main>
 
 
-        {% load static %}
-        <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
+  {% endblock content %}
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-            crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <footer class="page-footer text-center font-small mt-4 wow fadeIn">
+    <div class=" py-5 container">
+      <div class="row">
+        <div class="col-6 col-md col-sm-6 pr-em pl-em">
+          <h5>Contacto</h5>
+          <ul class="d-flex  list-unstyled text-small">
+            <li class="mr-3"><i class="fab fa-facebook-square" style="font-size:3em;"></i></li>
 
-        <script src="{% static 'js/base.js' %}"></script>
-        <script src="{% static 'js/login.js' %}"></script>
+            <li class="mr-3"><i class="fab fa-instagram-square" style="font-size:3em;"></i></li>
+            <li class="mr-3"><i class="fab fa-whatsapp-square" style="font-size: 3em;"></i></li>
 
-        <script src="{% static 'js/messages.js' %}"></script>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md col-sm-6  pr-em pl-em">
+          <h5>Resources</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Resource</a></li>
+            <li><a class="text-muted" href="#">Resource name</a></li>
+            <li><a class="text-muted" href="#">Another resource</a></li>
+            <li><a class="text-muted" href="#">Final resource</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md col-sm-6  pr-em pl-em">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Team</a></li>
+            <li><a class="text-muted" href="#">Locations</a></li>
+            <li><a class="text-muted" href="#">Privacy</a></li>
+            <li><a class="text-muted" href="#">Terms</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md col-sm-6  pr-em pl-em">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Team</a></li>
+            <li><a class="text-muted" href="#">Locations</a></li>
+            <li><a class="text-muted" href="#">Privacy</a></li>
+            <li><a class="text-muted" href="#">Terms</a></li>
+          </ul>
+        </div>
+
+
+      </div>
+
+    </div>
+    <div class="footer-copyright py-3">
+      © 2019 Copyright:
+      <a href="#" target="_blank"> MDBootstrap.com </a>
+    </div>
+  </footer>
+
+
+
 </body>
+{% load static %}
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/mdb.js' %}"></script>
+
+<!-- <script type="text/javascript" src="{% static 'js/modules/wow.js' %}">
+  // Animations initialization
+
+</script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script src="{% static 'js/base.js' %}"></script>
+
+<script src="{% static 'js/login.js' %}"></script>
+
+<script src="{% static 'js/messages.js' %}"></script>
+{% block js_page %}
+
+{% endblock js_page %}
 
 </html>

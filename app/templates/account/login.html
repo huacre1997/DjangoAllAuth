@@ -2,14 +2,14 @@
 {% load account socialaccount %}
 
 {% block content %}
-
+<div class="container">
 <h1>{% trans "Sign In" %}</h1>
 
 {% get_providers as socialaccount_providers %}
 {% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
+<!-- <p>{% blocktrans with site.name as site_name %}Please sign in with one
   of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-  for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+  for a {{ site_name }} account and sign in below:{% endblocktrans %}</p> -->
 
 <div class="socialaccount_ballot">
 
@@ -26,16 +26,34 @@
 
 <form id="formlogin" class="login">
   {% csrf_token %}
-  <div class="form-group"><label for="id_login">Correo electrónico:</label> <input type="email" name="login"
-      class="form-control" placeholder="Correo electrónico" autofocus="autofocus" required="" id="id_login"></div>
-  <div class="form-group"><label for="id_password">Contraseña:</label>
-    <input class="form-control" type="password" name="password" placeholder="Contraseña" required="" id="id_password">
+
+  <div class="md-form">
+    <i class="fas fa-user prefix"></i>
+    <input type="email" name="login" class="form-control" required=""
+      id="materialLoginFormEmail">
+    <label for="materialLoginFormEmail">E-mail</label>
+
+  </div>
+  <div class="md-form">
+    <i class="fas fa-lock prefix"></i>
+    <input class="form-control" type="password" name="password"  required="" id="materialLoginFormPassword">
+    <label for="materialLoginFormPassword">Password</label>
+
   </div>
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
   {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+
+
+  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "¿Olvidaste tu contraseña?" %}</a>
+  <button class="btn btn-primary btn-block my-4" type="submit">Entrar</button>
+
+  <!-- Register -->
+  <p class="text-center">No eres miembro?
+      <a href="">Registrate aquí</a>
+  </p>
+
+  <!-- Social login -->
 </form>
 <div class="login-or" style="text-align: center;">-{% trans 'or' %}-</div>
 
@@ -44,21 +62,23 @@
 
 </div>
 <a title="Google" class="socialaccount_provider google" href="/accounts/google/login/?process=login">
-  <div class="google-btn">
+  <div class="google-btn justify-content-center">
     <div class="google-icon-wrapper">
       <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
     </div>
     <p class="btn-text">Ingresar con Google</p>
   </div>
 </a>
-{% load  static %}
 <style>
   .jconfirm {
-    z-index: 500 !important;
+    z-index: 1031 !important;
   }
 </style>
-<!-- <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script> -->
 
+</div>
+{% endblock %}
+
+{% block js_page %}
 <script>
   $("#formlogin").submit(function (e) {
     console.log("ENtro al form");
@@ -82,4 +102,4 @@
     });
   });
 </script>
-{% endblock %}
+{% endblock js_page %}

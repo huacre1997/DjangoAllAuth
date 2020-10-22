@@ -1,4 +1,6 @@
 $(function() {
+  new WOW().init();
+
     $('#navbar.navbar-right ul li a').click(function() {
       //clear active status of any parent LI's
       $('#navbar.navbar-right ul li').removeClass('active');

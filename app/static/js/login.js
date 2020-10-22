@@ -1,15 +1,15 @@
 
-
 $(function () {
     $("#logout").on("click", function () {
         url=$(this).attr("to")
         location.href=url
     });
     $("#btnLogin").on("click",function(){
-        console.log("Entro al event");
+
+        $("#navbarSupportedContent").removeClass("show")
          url=$(this).attr("hreft")
-           
-        $.confirm({
+           console.log(url);
+         const login=$.confirm({
                     title:"",
                     columnClass: 'col-lg-5 col-md-7 col-xs-9',
                     closeIcon: true,

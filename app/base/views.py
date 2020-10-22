@@ -7,13 +7,19 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 
 from django.views.generic import FormView,TemplateView
-
-
 from allauth.account.decorators import verified_email_required
 from allauth.account.views import LoginView,SignupView
 
 
 from  accounts.models import  CustomCliente
+
+from allauth.exceptions import ImmediateHttpResponse
+
+from allauth.account import app_settings
+
+
+from allauth.account.utils import complete_signup
+
 
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -35,11 +41,16 @@ class RegisterView(SignupView):
         data={}
         form = MyCustomSignupForm(request.POST)
         if form.is_valid():
-            form.save(request)
-            data = {
-                'stat': True,
-                'form': render_to_string(self.template_name, {'form': form}, request=request)}
-            return JsonResponse(data)
+            self.user = form.save(self.request)
+            try:
+                return complete_signup(
+                    self.request,
+                    self.user,
+                    app_settings.EMAIL_VERIFICATION,
+                    None,
+                )
+            except ImmediateHttpResponse as e:
+                return e.response
         else :
             data = {
                 "error":form.errors,
