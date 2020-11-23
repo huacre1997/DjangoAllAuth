@@ -1,0 +1,432 @@
+{% extends "index.html" %}
+{% load static %}
+{% load poll_extras %}
+
+{% block content %}
+<div class="container my-5 pt-3  z-depth-1" style="background-color: white; margin-top: 7em !important">
+
+  <!--Section: Content-->
+  <section class="">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Library</a></li>
+        <li class="breadcrumb-item active">Data</li>
+      </ol>
+    </nav>
+    <style>
+      .link-black a {
+        color: black;
+      }
+
+      .link-black a:hover {
+        color: #0056b3;
+      }
+
+      .link-black .active {
+        color: #0056b3;
+      }
+
+      .divider-small {
+        width: 30px;
+        background-color: rgba(0, 0, 0, .1);
+        height: 3px;
+      }
+    </style>
+
+
+    <!--Grid row-->
+
+    <div class="row d-flex justify-content-center">
+      <!--Grid column-->
+      <div class="col-lg-3 col-md-5 col-sm-12 border p-4">
+
+        <!-- Filter panel -->
+
+
+
+        <div class="mb-5">
+          <h1>{{aea}}</h1>
+          <h5 class="font-weight-bold mb-3">Categorías</h5>
+
+          <div class="divider-small mb-3"></div>
+          <!--Accordion wrapper-->
+
+          <!-- CATEGORIA ARBOL  -->
+          {% for item in category %}
+
+
+          <ul class="tree">
+            <li class="has">
+              <div class="custom-control custom-checkbox  d-flex justify-content-between align-items-center ">
+
+                <input type="checkbox" value="{{item.cat.id}}" class="custom-control-input catCheck" name="category"
+                  id="checkCat{{item.id}}">
+                <label class="custom-control-label" for="checkCat{{item.id}}">{{item.name}} </label>
+                <i class="fas fa-angle-up"></i>
+              </div>
+              <ul>
+                {% for sub in subcategory  %}
+                {% if item.id == sub.category %}
+                <li class="">
+                  <div class="custom-control custom-checkbox d-flex justify-content-between align-items-center  ">
+                    <input type="checkbox" value="{{sub.id}}" class="custom-control-input subcatCheck"
+                      name="subcategory" id="defaultUnchecked{{sub.id}}"
+                      {% if  sub.id|to_str in request.GET.subcategory or  item.id|to_str in request.GET.category%}
+                      checked {% endif %}>
+                    <label class="custom-control-label" for="defaultUnchecked{{sub.id}}">{{sub.name}}
+                    </label>
+                    <span class="badge badge-info  indigo darken-1">
+                      {{sub.subcategory_count }}
+                    </span>
+                  </div>
+
+                </li>
+                {%endif%}
+                {%endfor%}
+              </ul>
+            </li>
+
+          </ul>
+          {%endfor%}
+          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light" disabled>Limpiar
+            filtro</button>
+
+
+
+
+          {% comment %}
+
+          {% url 'products:filterProductAll' 'category' item.cat.slug as the_url %}
+          <div id="collapseOne{{item.i}}" class="collapsed animated fadeInDown faster collap " role="tabpanel"
+            aria-labelledby="headingOne{{item.i}}" data-parent="#accordionEx">
+            <div class="card-body pt-0 pr-1 ">
+              {% for sub in subcategory  %}
+              {% if item.cat.id == sub.subcat.category.id %}
+              <div class="custom-control custom-checkbox  d-flex justify-content-between align-items-center">
+                <input type="checkbox" class="custom-control-input" id="defaultUnchecked{{sub.i}}">
+                <label class="custom-control-label" for="defaultUnchecked{{sub.i}}">{{sub.subcat.name}}
+
+
+                </label>
+                <span class="badge badge-info  indigo darken-1">
+                  {{sub.subcat.subcategory_count }}
+                </span>
+
+              </div>
+              {% endif %}
+
+              {% endfor %}
+
+
+            </div>
+          </div>
+
+
+          {% endfor %}
+          <!-- Accordion card -->
+          {% endcomment %}
+
+
+          <!-- Accordion wrapper -->
+
+
+
+
+
+
+        </div>
+        <!-- Filter panel -->
+        <div class="mb-5">
+
+          <h5 class="font-weight-bold mb-3">Marcas</h5>
+          <div class="divider-small mb-3"></div>
+          {% for item in marca %}
+          <div class="form-check pl-0 mb-1  d-flex justify-content-between align-items-center">
+            <input type="radio" value="{{item.name}}" {% if request.GET.brand == item.name %} checked
+              {%endif%} class="form-check-input marca" id="optionbrand{{item.id}}" name="brand">
+            <label class="form-check-label" for="optionbrand{{item.id}}">{{item.name}}</label>
+            <span class="badge badge-info  indigo darken-1">
+            </span>
+
+          </div>
+
+          {% endfor %}
+          <button id="cleanFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3" disabled>Limpiar
+            filtro</button>
+        </div>
+        <!-- Filter panel -->
+        <div class="mb-5">
+
+          <h5 class="font-weight-bold mb-3">{{aea}}{{num}}</h5>
+
+          <div class="divider-small mb-3"></div>
+
+          <input type="range" min="0" max="319" />
+
+          <div class="row justify-content-center">
+
+            <!-- Grid column -->
+            <div class="col-md-6 text-left">
+              <p class="dark-grey-text"><strong id="resellerEarnings">0$</strong></p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-6 text-right">
+              <p class="dark-grey-text"><strong id="clientPrice">319$</strong></p>
+            </div>
+            <!-- Grid column -->
+          </div>
+
+        </div>
+        <!-- Filter panel -->
+
+        <!-- Filter panel -->
+        <div class="link-black">
+
+          <h5 class="font-weight-bold mb-3">Rating</h5>
+
+          <div class="divider-small mb-3"></div>
+
+          <div class="amber-text fa-sm mb-1">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <a href="" class="ml-2 active">4 and more</a>
+          </div>
+
+          <div class="amber-text fa-sm mb-1">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <a href="" class="ml-2">3 - 3,99</a>
+          </div>
+
+          <div class="amber-text fa-sm mb-1">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <a href="" class="ml-2">3.00 and less</a>
+          </div>
+
+        </div>
+        <!-- Filter panel -->
+
+      </div>
+      <!--Grid column-->
+
+      <div class="col-lg-9 col-md-5 col-sm-12 border p-4">
+        <div id="loadingCharge" style="visibility: visible;"></div>
+        <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> --> 
+
+          <div class="container">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-8"> {% if catname %}
+                    <h4>{{catname}}</h4>
+                    {% else %}
+                    {% if subcatname %}
+                    <h4>{{subcatname}}</h4>
+                    {% else %}
+                    <h4>Nuestros productos</h4>
+                    {% endif %}
+                    {% endif %}</div>
+                  <div class="col-lg-4">
+                    <form method="get" id="formFilter2">
+
+                      <select class="browser-default custom-select" id="select" name="order">
+                        <option value="all"></option>
+                        <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
+                          menor a mayor</option>
+                        <option value="priceHigher" {% if request.GET.order == "priceHigher" %} selected {%endif%}>
+                          Precio mayor a menor</option>
+
+                      </select>
+                    </form>
+
+
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+          <br><br>
+     
+          <!--Section: Products v.3-->
+          <div class=" ListProducts" id="ListProducts">
+          <section class="text-center mb-4">
+
+       
+            <!--Grid row-->
+
+            <!--Grid row-->
+            <div class="row" >
+             <!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade animated zoomIn faster" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+
+  <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+  <div class="modal-dialog modal-dialog-centered" role="document" id="modalProductDetail">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+   
+    </div>
+  </div>
+</div>
+            
+              <!--Grid column-->
+              <!--Card-->
+            
+              {% if product %}
+              {% load thumbnail %}
+              {% for item in product  %}
+              <div class="col-lg-4 col-md-6 mb-4">
+
+                <div class="card animated fadeIn hoverable">
+                  <!--Card image-->
+                  <div class="view overlay zoom Details" tag-url="{{item.slug}}"  >
+                    <div class="image_container "> 
+                      <div  class="loader " style="visibility: visible;">Loading...</div> 
+
+                    <img src="{{item.image|thumbnail_url:'avatar' }}"  class="img-fluid imgProduct">
+                    
+                  </div>
+                    <a class="bk">
+                      <div class="mask flex-center rgba-black-strong">
+                        <i class="fas fa-search-plus" style="color: white; font-size: 1.4em;">&nbsp;</i>
+                        <p class="white-text">Ver Detalles</p>
+                      </div>
+                    </a>
+                  </div>
+                  <!--Card image-->
+                  <!--Card content-->
+                  <div class="card-body text-center">
+                    <!--Category & Title-->
+                    <a href="" class="grey-text">
+                      {{item.marca}}
+                    </a>
+                    <h5>
+                      <strong>
+                        <a href="" class="dark-grey-text">{{item.name}}
+                          <span class="badge badge-pill danger-color animated pulse infinite">NEW</span>
+                        </a>
+                      </strong>
+                    </h5>
+
+                    <h4 class="font-weight-bold blue-text">
+                      <strong>S/.{{item.price}}</strong>
+                    </h4>
+                    <button type="button" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                        src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Cotizar</button>
+
+                  </div>
+                </div>
+                <!--Card content-->
+
+                </div>
+
+              {% endfor %}
+              {%else%}
+              <div class="container">
+                <br><br>
+
+                <div class="alert alert-dark" role="alert">
+                  No se encontraron resultados para <a href="#" class="alert-link">{{subcatname}}</a>. Por favor
+                  intente nuevamente.
+                </div>
+              </div>
+
+              {% endif %}
+
+              <!--Card-->
+
+
+
+
+
+            </div>
+            <!--Grid row-->
+
+          </section>
+          <!--Section: Products v.3-->
+
+          <!--Pagination-->
+          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;" >
+            <ul class="pagination pagination-circle pg-blue">
+
+              <!--Arrow left-->
+           
+              <li class="page-item  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link" page_number="1">Primero</a>
+              </li>
+
+              <li class="page-item ">
+                <a   class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous" page_number="{% if page_obj.has_previous %}{{product.previous_page_number}}{% endif %}">
+                  <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                  <span class="sr-only">Anterior</span>
+                </a>
+              </li>
+             
+
+              {% for i in page_obj.paginator  %}
+              <li class="page-item  {% if request.GET.page == i.number|to_str %}active {% endif %}">  <a page_number="{{i.number}}"  class="page-link number_page">{{i.number}}</a></li>
+            
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" aria-label="Next" page_number="{{ page_obj.next_page_number }}">
+                  <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+
+              <li class="page-item"><a class="page-link" page_number="{{ page_obj.paginator.num_pages }}">Last</a></li>
+
+              {% endif %}
+
+
+
+
+
+
+            </ul>
+          </nav>
+        </div>
+          <!--Pagination-->
+
+      </div>
+    </div>
+</div>
+
+<!--Grid row-->
+
+
+</section>
+<!--Section: Content-->
+</div>
+</div>
+{% endblock content %}

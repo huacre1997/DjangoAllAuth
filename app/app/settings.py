@@ -50,19 +50,26 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     
+    'easy_thumbnails',
 
+    "debug_toolbar",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'ckeditor',
 
     "base",
     "accounts",
     "products"
 
-
 ]
 
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (250, 350), 'crop': False},
+    },
+    }
 ACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSignupForm'}
 
 SOCIALACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSocialSignupForm'}
@@ -83,6 +90,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crum.CurrentRequestUserMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     
 ]
@@ -109,7 +117,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -157,6 +169,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+       
+    }
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 

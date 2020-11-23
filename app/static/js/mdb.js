@@ -14930,7 +14930,6 @@ var WOW;
 		// $('.nav-second').addClass('nav-second-collapse');
 		// $('.fixed-top').addClass('up');
 
-		console.log("if")
       } else {
 		$('.scrolling-navbar').removeClass('top-nav-collapse');
 		// $('.nav-second').removeClass('nav-second-collapse');

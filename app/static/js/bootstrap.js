@@ -1859,7 +1859,7 @@
     };
 
     Dropdown._clearMenus = function _clearMenus(event) {
-      if (event && (event.which === RIGHT_MOUSE_BUTTON_WHICH || event.type === 'keyup' && event.which !== TAB_KEYCODE)) {
+      if (event && ( event.type === 'keyup' && event.which !== TAB_KEYCODE)) {
         return;
       }
 

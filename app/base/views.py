@@ -1,40 +1,42 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth import get_user_model
-
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-
 from django.views.generic import FormView,TemplateView
-from allauth.account.decorators import verified_email_required
 from allauth.account.views import LoginView,SignupView
-
-
-from  accounts.models import  CustomCliente
-
 from allauth.exceptions import ImmediateHttpResponse
-
 from allauth.account import app_settings
-
-
 from allauth.account.utils import complete_signup
-
-
 from django.contrib.auth.models import User
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from allauth.account.forms import LoginForm
 from accounts.forms import MyCustomSignupForm
-from django.views.decorators.csrf import csrf_exempt
 import json
-UserModel = get_user_model()
 from allauth.account.admin import EmailAddress
-class IndexView(TemplateView):
-    template_name = "index.html"
+from products.models import Category,SubCategory,Marcas,Product,Productimage
+from django.urls import reverse
+from django.template import RequestContext 
+from  .mixins import CustomMixin
+from django.views import generic
+
+class IndexView(TemplateView,CustomMixin):
+    template_name="index.html"
+    
+def handler404(request, exception, template_name="base/404.html"):
+    response = render_to_response(template_name)
+    response.status_code = 404
+    return response
+
+# class IndexView(TemplateView):
+#     template_name="index.html"
+#     def get(self,request,*args, **kwargs):
+#         data=[]
+#         for i in SubCategory.objects.all():
+#             data.append(i.toJSON())
+#         return render(request, self.template_name, {'obj': data})
 
 
+    
 class RegisterView(SignupView):
     form_class=MyCustomSignupForm
     def post(self,request,*args, **kwargs):
