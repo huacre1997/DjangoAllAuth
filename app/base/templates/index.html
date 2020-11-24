@@ -20,7 +20,7 @@
 
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
 
-  <style type="text/css">
+  <!-- <style type="text/css">
     html,
     body,
     header,
@@ -53,10 +53,12 @@
         height: 80vh;
       }
     }
-  </style>
+  </style> -->
 </head>
 
 <body>
+  <div id="loadingCharge" style="visibility: visible;"></div>
+  <div  class="loader2 " style="visibility: visible;" id="spinnner2">Loading...</div> 
 
   <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
 
@@ -90,19 +92,14 @@
             aria-haspopup="true" aria-expanded="false">Productos
             <span class="sr-only">(current)</span>
           </a>
+            
           <div class="dropdown-menu mega-menu v-1 z-depth-1 white  px-3  animated " id="megamenu"  
             aria-labelledby="navbarDropdownMenuLink1">
+            {% for item  in category  %}
+
             <div class="row">
               <div class="col-md-6 col-xl-6 sub-menu mb-xl-0 mb-5">
-                <ul class="list-unstyled">
-                  {% for item in category  %}
-
-                  <li class="sub-title text-uppercase">
-                    <a class="dropdown-item pl-1 mt-2 cat " hreft="{% url 'products:getCat' item.slug %}">
-                      {{item}}
-                    </a>
-                  </li>
-                  {%endfor%}
+                <ul class="list-unstyled">{{item.name}}
                 </ul>
               </div>
               <div class="col-md-6 col-xl-6 sub-menu mb-xl-0 mb-4 ">
@@ -118,6 +115,8 @@
               </div>
    
           </div>
+          {% endfor %}
+
         </li>
         <li class="nav-item dropdown mega-dropdown ">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink2" 

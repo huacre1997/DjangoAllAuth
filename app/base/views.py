@@ -16,10 +16,9 @@ from allauth.account.admin import EmailAddress
 from products.models import Category,SubCategory,Marcas,Product,Productimage
 from django.urls import reverse
 from django.template import RequestContext 
-from  .mixins import CustomMixin
 from django.views import generic
 
-class IndexView(TemplateView,CustomMixin):
+class IndexView(TemplateView):
     template_name="index.html"
     
 def handler404(request, exception, template_name="base/404.html"):

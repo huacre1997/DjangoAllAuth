@@ -25,8 +25,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path("",include(("base.urls","base"),namespace="base")),
     path("",include(("products.urls","products"),namespace="products")),
-    path('__debug__/', include(debug_toolbar.urls)),
-    path('imagefit/', include('imagefit.urls')),
+    path('__debug__/', include(debug_toolbar.urls))
 
 
 

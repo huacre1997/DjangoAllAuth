@@ -2,11 +2,11 @@ $(document).ready(function () {
 
   window.onload = function () {
     $("#loadingCharge").css("visibility", "hidden");
-    $("#loadingSpinner").css("visibility", "hidden");
+    $("#spinnner2").css("visibility", "hidden");
+
     imageLoad();
   };
   const imageLoad = () => {
-    console.log(document.querySelectorAll(".bk"));
     var x=document.getElementsByClassName("bk");
     var i;
     for (i = 0; i < x.length; i++) {
@@ -19,32 +19,23 @@ $(document).ready(function () {
     imgLoad.on("progress", onProgress);
     imgLoad.on("always", onAlways);
     imageCount = imgLoad.images.length;
-    console.log(imageCount);
     function onProgress(imgLoad, image) {
       if (image.isLoaded) {
+        
         image.img.parentNode.className = "";
+        image.img.parentNode.nextSibling.nextSibling.style.visibility="visible"
 
-        image.img.parentNode.firstChild.nextSibling.style.visibility = "hidden";
+        // image.img.parentNode.firstChild.nextSibling.style.visibility = "visible";
         // image.img.parentNode.nextSibling.nextSibling.style.display="block";
       } else {
+        image.img.setAttribute("src", "../static/img/no-imagen.jpg");
+
         image.img.parentNode.nextSibling.nextSibling.style.display = "none";
 
-        console.log(image.img.parentNode.nextSibling.nextSibling);
-        image.img.setAttribute("src", "../static/img/no-imagen.jpg");
-        image.img.parentNode.className = "";
+        // image.img.parentNode.className = "";
         
       }
-      loadedImageCount++;
-      console.log(loadedImageCount);
-      if(loadedImageCount!=imageCount){
-        image.img.parentNode.nextSibling.nextSibling.style.visibility="hidden"
-        console.log("if");
-      }else{
-        var i;
-        for (i = 0; i < x.length; i++) {
-          x[i].style.visibility = "visible";
-        }
-      }
+  
     }
 
     function onAlways() {
@@ -68,18 +59,53 @@ $(document).ready(function () {
     document.getElementById("ListProducts").appendChild(img);
     window.history.pushState({ page: "another" }, "another page", url);
   }
-  const callUrl = async (url) => {
-    console.log(url);
-    const data = await fetch(url);
-    const dataHtml = await data.text();
+  const callUrl =  (url) => {
+    // const data = await fetch(url);
+    // console.log(data.response);
+    // const dataHtml = await data.text();
+    // console.log(dataHtml);
+    
+  //   console.time('response in');
 
-    renderPage(dataHtml,url)
+
+    $.ajax({  
+      type: "get",
+      url: url,
+
+      startTime: performance.now(),
+      
+      
+    
+      success: function (response) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(response, "text/html");
+        var img = doc.querySelector(".ListProducts");
+
+        $("#ListProducts").text("").append(img)
+        window.history.pushState({ page: "another" }, "another page", url);
+         var time = performance.now() - this.startTime;
+ 
+         var seconds = time / 1000;
+  
+         seconds = seconds.toFixed(3);
+  
+         var result = 'AJAX request took ' + seconds + ' seconds to complete.';
+         console.log(result);
+         imageLoad();
+         $("#loadingCharge").css("visibility", "hidden");
+         $("#spinnner2").css("visibility", "hidden");
+
+         var body = $("html, body");
+         body.stop().animate({ scrollTop: 100 }, 500, "swing");
+
+      }
+    
+  });;
+
      
 
     
 
-    imageLoad();
-    $("#loadingCharge").css("visibility", "hidden");
   };
 
   const removeParam = (key, sourceURL) => {
@@ -147,6 +173,10 @@ $(document).ready(function () {
 
   //   FUNCIONES CHECK ||
   $(".subcatCheck").change(function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
+
     e.preventDefault();
     if ($(this).prop("checked")) {
       number.push($(this).val());
@@ -170,6 +200,10 @@ $(document).ready(function () {
   });
 
   $(".catCheck").change(function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
+
     let arra = $(this).parent().siblings("ul").find("input[type='checkbox']");
     if ($(this).prop("checked")) {
       arra.each(function (index, element) {
@@ -186,6 +220,10 @@ $(document).ready(function () {
   });
 
   $("#select").on("change", function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
+
     oldURL = window.location.href;
     if ($(this).val() == "all") {
       console.log("all");
@@ -200,6 +238,10 @@ $(document).ready(function () {
     }
   });
   $(".marca").on("change", function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
+
     console.log("if");
     oldURL = window.location.href;
 
@@ -221,6 +263,10 @@ $(document).ready(function () {
   });
   $("#cleanFilter").click(function (e) {
     e.preventDefault();
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
+
     oldURL = window.location.href;
 
     newUrl2 = removeParam("brand", oldURL);
@@ -232,6 +278,9 @@ $(document).ready(function () {
     });
   });
   $("#cleanCheckFilter").click(function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
     e.preventDefault();
     oldURL = window.location.href;
 
@@ -245,14 +294,20 @@ $(document).ready(function () {
   });
   $(document).on("click", ".page-link", function (e) {
     $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
     var x=document.getElementsByClassName("imgProduct");
     var i;
     for (i = 0; i < x.length; i++) {
       x[i].src = "";
+      x[i].parentNode.className="image_container"
+      x[i].parentNode.nextSibling.nextSibling.style.display = "block";
+      x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
+
     }
     if ($(this).attr("page_number")) {
       oldURL = window.location.href;
-
+      console.log(oldURL);
       var url = new URL(oldURL);
       url.searchParams.set("page", $(this).attr("page_number")); // setting your param
       var newUrl = url.href;
@@ -260,7 +315,6 @@ $(document).ready(function () {
       callUrl(newUrl.replace(/%2C/g, ","));
     }
 
-    var body = $("html, body");
-    body.stop().animate({ scrollTop: 100 }, 500, "swing");
+  
   });
 });

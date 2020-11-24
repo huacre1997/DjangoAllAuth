@@ -1,9 +1,14 @@
 from django import template
 from django.conf import settings
-from  products.models import Marcas
+from  products.models import Marcas,Category
 register = template.Library()
-
-
+@register.inclusion_tag('productList.html')
+def show_results(poll):
+    choices = poll.objects.all()
+    return {'choices': choices}
+     # marca=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
+        # category=Category.objects.values("id","name","slug")
+        # subcategory=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
 def to_str(value):
     """converts int to string"""
     return str(value)
@@ -13,10 +18,7 @@ def type_of(value):
 def to_url(value):
     """converts int to string"""
     return '%s%s' % (settings.MEDIA_URL, value)
-# def get_marca(value):
-#     context=Marcas.objects.values("name").get(id=value)
-#     return  context.get("name")
-# register.filter('get_marca', get_marca)
+
 
 register.filter('url', to_url)
 

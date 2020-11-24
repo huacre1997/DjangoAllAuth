@@ -1,4 +1,4 @@
-from celery import task
+from celery import  task
 from easy_thumbnails.files import generate_all_aliases
 
 @task

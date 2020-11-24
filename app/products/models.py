@@ -133,6 +133,8 @@ class Product(BaseModel):
     name=models.CharField("Nombre del producto", max_length=50)
     sku = models.CharField(max_length=50) 
     price = models.DecimalField("Precio",max_digits=9,decimal_places=2)   
+    before = models.DecimalField("Precio",max_digits=9,decimal_places=2,blank=True)   
+
     subcategory=models.ForeignKey(SubCategory, verbose_name="SubCategoria", on_delete=models.CASCADE,related_name="subcategoria_id") 
     marca=models.ForeignKey(Marcas, verbose_name="Marcas del producto", on_delete=models.CASCADE,related_name="marca_id")
     description= RichTextField(blank=True,null=True)

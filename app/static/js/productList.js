@@ -72,7 +72,30 @@ $(document).ready(function () {
   });
   $(document).on("click",".Details",function (e) { 
     e.preventDefault();
-    const data=fetch("search/"+$(this).attr("tag-url"))
-    console.log(data);
+    $('.modal-body').text("")
+
+    $('#exampleModalCenter').modal('show')
+    $.ajax({
+      type: "get",
+      startTime: performance.now(),
+      url: "search/"+$(this).attr("tag-url"),
+      success: function (response) {
+        console.log(response);
+
+       
+      }
+    }).done(function(response){
+      $('.modal-body').append(response.response)
+
+      var time = performance.now() - this.startTime;
+ 
+      var seconds = time / 1000;
+
+      seconds = seconds.toFixed(3);
+
+      var result = 'AJAX request took ' + seconds + ' seconds to complete.';
+      console.log(result);
+    });
   });
+  
 });

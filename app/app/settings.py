@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.sites',
-    
+    'fast_pagination',
+
     'easy_thumbnails',
 
     "debug_toolbar",
@@ -109,6 +110,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.marcas',
+                'app.context_processors.category'
 
             ],
         },

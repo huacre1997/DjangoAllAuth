@@ -11,82 +11,145 @@ from django.core import serializers
 from django.db.models import Count
 from django.contrib import messages
 from django.core.paginator import Paginator
-
-
-class ProductList(ListView):
-    model=Product
-    template_name="productList.html"
-    context_object_name = "product"
-    paginate_by=6
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+from django.core.paginator import (
+    InvalidPage, PageNotAnInteger, EmptyPage, Paginator)
+from django.template.loader import render_to_string
+from fast_pagination.helpers import FastPaginator
+# def ProductList(request):
+#     model=Product
+#     template_name="productList.html"
+#     context_object_name = "product"
+#     paginate_by=3
+#     def dispatch(self, request, *args, **kwargs):
+#         return super().dispatch(request, *args, **kwargs)
     
  
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["marca"]=Marcas.objects.all()
-        return context
-        
-# def filter():
-#         def post(self,request,*args, **kwargs):
-#         data={}
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["marca"]=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
+#         context["category"]=Category.objects.values("id","name","slug")
+#         context["subcategory"]=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
 
-#         categ=Category.objects.values("id","name","slug")
-#         subcategory= SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))     
-#         marca=Marcas.objects.all()
-#         brand=self.request.GET.get("brand")
-#         order=self.request.GET.get("order")
-#         chesubcat=self.request.GET.get("subcategory")
-       
-#         queryset=Product.objects.values("id","slug","name","marca__name","price","image")
-#         if chesubcat and order and brand==None:
-#             print("chekcsubcat and order and brand none")
-#             if order=="priceLower":
-#                 queryset=Product.objects.get_subcategory_product(chesubcat).order_by("price")
-#             elif order=="priceHigher":
-#                 print("else")
-#                 queryset=Product.objects.get_subcategory_product(chesubcat).order_by("price").reverse()           
+#         return context
+def ProductList(request):
+    if request.method == 'GET':
+        brand=request.GET.get("brand")
+        order=request.GET.get("order")
+        chesubcat=request.GET.get("subcategory")
+        if chesubcat==None and order==None and brand==None:
+            response=Product.objects.select_related().values("id","name","price","marca__name","image")
 
-#         elif chesubcat and brand and order:
-#             print("checksubcat and brand and order")
-#             if order=="priceLower":
-#                 queryset=Product.objects.filterMultiple(chesubcat,brand).order_by("price")
-#             elif order=="priceHigher":
-#                 queryset=Product.objects.filterMultiple(chesubcat,brand).order_by("price").reverse()
-#             queryset=Product.objects.filterMultiple(chesubcat,brand) 
+        if chesubcat and order and brand==None:
+            print("chekcsubcat and order and brand none")
+            if order=="priceLower":
+                response=Product.objects.get_subcategory_product(chesubcat).order_by("price")
+            elif order=="priceHigher":
+                print("else")
+                response=Product.objects.get_subcategory_product(chesubcat).order_by("price").reverse()           
+
+        elif chesubcat and brand and order:
+            print("checksubcat and brand and order")
+            if order=="priceLower":
+                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price").reverse()
+            response=Product.objects.filterMultiple(chesubcat,brand) 
         
-#         elif chesubcat and brand:
-#             print("checksubcat and brand ")
-#             queryset=Product.objects.filterMultiple(chesubcat,brand)             
-#         elif order=="priceLower" and brand:
-#             print("priceLower and brand")
-#             queryset=Product.objects.get_brands_product(brand).order_by("price")
+        elif chesubcat and brand:
+            print("checksubcat and brand ")
+            response=Product.objects.filterMultiple(chesubcat,brand)             
+        elif order=="priceLower" and brand:
+            print("priceLower and brand")
+            response=Product.objects.get_brands_product(brand).order_by("price")
             
-#         elif order=="priceHigher" and brand:
-#             print("pricehiguer and brand")
-#             queryset=Product.objects.get_brands_product(brand).order_by("price").reverse()
-#         elif chesubcat:
-#             print("checksubcat")
-#             queryset=Product.objects.get_subcategory_product(chesubcat)
-#         elif brand:
-#             print("brand")
-#             queryset = Product.objects.get_brands_product(brand)
-#         elif order=="priceLower":
-#             queryset=Product.objects.orderLower()
-#         elif order=="priceHigher":
-#             queryset=Product.objects.orderHigher()
-#         # paginator=Paginator(queryset,3)
-#         # page=request.GET.get("page")
-#         # posts=paginator.get_page(page)
-#         # context={"product":queryset,"marca":marca,"category":categ,"subcategory":subcategory}
-#         # return render(request,"productList.html",context)
-#         try:
-#             data=[]
-#             for i in queryset:
-#                 data.append(i.toJSON())
-#             return JsonResponse(data,safe=False)
-#         except Exception as e:
-#             print(e)
+        elif order=="priceHigher" and brand:
+            print("pricehiguer and brand")
+            response=Product.objects.get_brands_product(brand).order_by("price").reverse()
+        elif chesubcat:
+            print("checksubcat")
+            response=Product.objects.get_subcategory_product(chesubcat)
+        elif brand:
+            print("brand")
+            response = Product.objects.get_brands_product(brand)
+        elif order=="priceLower":
+            response=Product.objects.orderLower()
+        elif order=="priceHigher":
+            response=Product.objects.orderHigher()
+
+        # marca=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
+        # category=Category.objects.values("id","name","slug")
+        # subcategory=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
+        # product=Product.objects.select_related("marca").values("id","name","price","image")
+        objects = list(response[:3 * 3]) #2 !!!
+        post = Paginator(objects, 6)
+        if(request.GET.get("page")):
+            response = post.page(request.GET.get("page"))  
+        else:
+            response = post.page(1)
+             
+        context={"product":response}
+        return render(request,"productList.html",context)
+def filter(request):
+    if request.method == 'GET':
+        data={}
+        brand=request.GET.get("brand")
+        order=request.GET.get("order")
+        chesubcat=request.GET.get("subcategory")
+       
+        response=Product.objects.values("id","slug","name","marca__name","price","image")
+        if chesubcat and order and brand==None:
+            print("chekcsubcat and order and brand none")
+            if order=="priceLower":
+                response=Product.objects.get_subcategory_product(chesubcat).order_by("price")
+            elif order=="priceHigher":
+                print("else")
+                response=Product.objects.get_subcategory_product(chesubcat).order_by("price").reverse()           
+
+        elif chesubcat and brand and order:
+            print("checksubcat and brand and order")
+            if order=="priceLower":
+                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price").reverse()
+            response=Product.objects.filterMultiple(chesubcat,brand) 
+        
+        elif chesubcat and brand:
+            print("checksubcat and brand ")
+            response=Product.objects.filterMultiple(chesubcat,brand)             
+        elif order=="priceLower" and brand:
+            print("priceLower and brand")
+            response=Product.objects.get_brands_product(brand).order_by("price")
+            
+        elif order=="priceHigher" and brand:
+            print("pricehiguer and brand")
+            response=Product.objects.get_brands_product(brand).order_by("price").reverse()
+        elif chesubcat:
+            print("checksubcat")
+            response=Product.objects.get_subcategory_product(chesubcat)
+        elif brand:
+            print("brand")
+            response = Product.objects.get_brands_product(brand)
+        elif order=="priceLower":
+            response=Product.objects.orderLower()
+        elif order=="priceHigher":
+            response=Product.objects.orderHigher()
+        objects = list(response[:3 * 3]) #2 !!!
+        paginator = Paginator(objects, 3)
+        post = paginator.page(request.GET.get("page"))        # page=request.GET.get("page")
+        # posts=paginator.page(page)
+        # context={"product":queryset,"marca":marca,"category":categ,"subcategory":subcategory}
+        # return render(request,"productList.html",context)
+        
+        data = {
+                'response': render_to_string("productList.html", {'product ': post}, request=request)}
+        return JsonResponse(data)
+        # try:
+        #     data=[]
+        #     for i in queryset:
+        #         data.append(i.toJSON())
+        #     return JsonResponse(data,safe=False)
+        # except Exception as e:
+        #     print(e)
 class getCat(TemplateView):
     template_name="index.html"
     def get(self,request,*args, **kwargs):
@@ -97,20 +160,11 @@ class getCat(TemplateView):
  
         return JsonResponse(data,safe=False)
 
-class getProduct(DetailView):
+def getProduct(request,id):
 
-    model=Product  
-    template_name="modal.html"
-    context_object_name = 'obj'
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-    def get(self,response,*args, **kwargs):
-        data=[]
-        try:
-            for i in Product.objects.filter(slug=self.get_object().slug):
-                item=i.toJSON()
-                data.append(item)
-
-        except:
-            pass
+    if request.method == 'GET':
+        item=Product.objects.get(id=id)
+        print(item.price)
+        data = {
+                'response': render_to_string("modal.html", {'product': item}, request=request)}
         return JsonResponse(data,safe=False)

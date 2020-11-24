@@ -1,1 +1,90 @@
-{{obj.price}}
+<div class="row">
+  <div class="col-lg-6">
+    <img src="../../media/{{product.image}}" style="width: 100%;" class="img-fluid">
+  </div>
+  <div class="col-lg-6">
+    <!-- Classic tabs -->
+    <!-- Classic tabs -->
+    <div class="classic-tabs mx-2">
+
+      <ul class="nav indigo darken-4" id="myClassicTabShadow" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link  waves-light active show" id="profile-tab-classic-shadow" data-toggle="tab"
+            href="#profile-classic-shadow" role="tab" aria-controls="profile-classic-shadow"
+            aria-selected="true">Características</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-light" id="follow-tab-classic-shadow" data-toggle="tab" href="#follow-classic-shadow"
+            role="tab" aria-controls="follow-classic-shadow" aria-selected="false">Descripción</a>
+        </li>
+
+      </ul>
+
+      <div class="tab-content card" id="myClassicTabContentShadow">
+        <div class="tab-pane fade active show" id="profile-classic-shadow" role="tabpanel"
+          aria-labelledby="profile-tab-classic-shadow">
+          <p>
+          <h2 class="h2-responsive">{{product.name}}</h2>
+          <hr class="my-4">
+
+          <h5>
+            <strong>Marca</strong>
+            <small class="text-muted">{{product.marca}}</small>
+          </h5>
+          <h5>
+            <strong>SKU</strong>
+            <small class="text-muted">{{product.sku}}</small>
+          </h5>
+          <h5>
+            <strong>Categoría</strong>
+            <small class="text-muted">{{product.subcategory}}/{{product.subcategory.category}}</small>
+          </h5>
+          <ul class="list-unstyled list-inline rating mb-0">
+            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"> </i></li>
+            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
+            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
+            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
+            <li class="list-inline-item"><i class="fas fa-star-half-alt amber-text"></i></li>
+            <li class="list-inline-item">
+              <p class="text-muted">4.5 (413)</p>
+            </li>
+          </ul>
+          <div class="d-flex align-items-end">
+            <h2 class="font-weight-bold blue-text"><strong>S/.{{product.price}}</strong></h2>&nbsp;&nbsp;
+            <h4
+              class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
+          </h4>
+          </div>
+        
+          <button type="button" class="btn btn-indigo btn-block carrbutton seeDetail waves-effect waves-light"> <img
+              src="/static/icons/recibo.png" class="carrIconButton">&nbsp;&nbsp;Cotizar</button>
+          </p>
+        </div>
+        <div class="tab-pane fade" id="follow-classic-shadow" role="tabpanel"
+          aria-labelledby="follow-tab-classic-shadow">
+          <div class="scrollbar scrollbar-primary">
+            <div class="force-overflow">
+          <article class="article">
+            <h5 class="article__title"><strong>Descripcion</strong></h5>
+            <div class="article__content">
+             
+                
+                      {% autoescape off %}
+                      {{product.description}}
+                      {% endautoescape %}
+             
+            </div>
+          </article>
+        </div>
+      </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- Classic tabs -->
+
+
+
+  </div>
+</div>

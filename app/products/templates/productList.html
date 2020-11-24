@@ -90,43 +90,12 @@
 
           </ul>
           {%endfor%}
-          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light" disabled>Limpiar
+          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"  {% if  request.GET.category or request.GET.subcategory  %}  {%else%}disabled{%endif%}>Limpiar
             filtro</button>
 
 
 
 
-          {% comment %}
-
-          {% url 'products:filterProductAll' 'category' item.cat.slug as the_url %}
-          <div id="collapseOne{{item.i}}" class="collapsed animated fadeInDown faster collap " role="tabpanel"
-            aria-labelledby="headingOne{{item.i}}" data-parent="#accordionEx">
-            <div class="card-body pt-0 pr-1 ">
-              {% for sub in subcategory  %}
-              {% if item.cat.id == sub.subcat.category.id %}
-              <div class="custom-control custom-checkbox  d-flex justify-content-between align-items-center">
-                <input type="checkbox" class="custom-control-input" id="defaultUnchecked{{sub.i}}">
-                <label class="custom-control-label" for="defaultUnchecked{{sub.i}}">{{sub.subcat.name}}
-
-
-                </label>
-                <span class="badge badge-info  indigo darken-1">
-                  {{sub.subcat.subcategory_count }}
-                </span>
-
-              </div>
-              {% endif %}
-
-              {% endfor %}
-
-
-            </div>
-          </div>
-
-
-          {% endfor %}
-          <!-- Accordion card -->
-          {% endcomment %}
 
 
           <!-- Accordion wrapper -->
@@ -148,12 +117,13 @@
               {%endif%} class="form-check-input marca" id="optionbrand{{item.id}}" name="brand">
             <label class="form-check-label" for="optionbrand{{item.id}}">{{item.name}}</label>
             <span class="badge badge-info  indigo darken-1">
+              {{item.brand_count}}
             </span>
 
           </div>
 
           {% endfor %}
-          <button id="cleanFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3" disabled>Limpiar
+          <button id="cleanFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3" {% if  request.GET.brand  %}  {%else%}disabled{%endif%}>Limpiar
             filtro</button>
         </div>
         <!-- Filter panel -->
@@ -224,7 +194,6 @@
       <!--Grid column-->
 
       <div class="col-lg-9 col-md-5 col-sm-12 border p-4">
-        <div id="loadingCharge" style="visibility: visible;"></div>
         <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> --> 
 
           <div class="container">
@@ -280,19 +249,18 @@
   aria-hidden="true">
 
   <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-  <div class="modal-dialog modal-dialog-centered" role="document" id="modalProductDetail">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document" id="modalProductDetail">
 
 
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">{{product.name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
-      </div>
+      </div>    
    
     </div>
   </div>
@@ -308,14 +276,14 @@
 
                 <div class="card animated fadeIn hoverable">
                   <!--Card image-->
-                  <div class="view overlay zoom Details" tag-url="{{item.slug}}"  >
+                  <div class="view overlay zoom Details" tag-url="{{item.id}}"  >
                     <div class="image_container "> 
                       <div  class="loader " style="visibility: visible;">Loading...</div> 
 
-                    <img src="{{item.image|thumbnail_url:'avatar' }}"  class="img-fluid imgProduct">
+                    <img src="{{item.image|thumbnail_url:'avatar' }}"  style="width: 100%;"   class="img-fluid imgProduct" >
                     
                   </div>
-                    <a class="bk">
+                    <a class="bk product{{item.id}}" >
                       <div class="mask flex-center rgba-black-strong">
                         <i class="fas fa-search-plus" style="color: white; font-size: 1.4em;">&nbsp;</i>
                         <p class="white-text">Ver Detalles</p>
@@ -327,7 +295,7 @@
                   <div class="card-body text-center">
                     <!--Category & Title-->
                     <a href="" class="grey-text">
-                      {{item.marca}}
+                      {{item.marca__name}}
                     </a>
                     <h5>
                       <strong>
@@ -391,7 +359,7 @@
               </li>
              
 
-              {% for i in page_obj.paginator  %}
+              {% for i in product.paginator  %}
               <li class="page-item  {% if request.GET.page == i.number|to_str %}active {% endif %}">  <a page_number="{{i.number}}"  class="page-link number_page">{{i.number}}</a></li>
             
               {% endfor %}
