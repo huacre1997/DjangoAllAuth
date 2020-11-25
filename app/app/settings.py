@@ -68,7 +68,7 @@ INSTALLED_APPS = [
 
 THUMBNAIL_ALIASES = {
     '': {
-        'avatar': {'size': (250, 350), 'crop': False},
+        'avatar': {'size': (250, 300), 'crop': False},
     },
     }
 ACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSignupForm'}
@@ -134,7 +134,7 @@ DATABASES = {
         'NAME': "carrito",
         "HOST": "localhost",
         "USER": "postgres",
-        "PASSWORD": "Sonyw100",
+        "PASSWORD": "123",
         "port":5432
     }
 }

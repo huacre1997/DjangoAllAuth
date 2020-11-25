@@ -19,6 +19,12 @@
   <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.min.css' %}">
 
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/slick-1.8.0/slick.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/main_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
 
   <!-- <style type="text/css">
     html,
@@ -54,13 +60,331 @@
       }
     }
   </style> -->
+  <style type="text/css">
+	output{ display: block; width: 100% }
+	.section-content{border-top:7px solid #eee}
+	.card-product-list:last-child{
+		margin-bottom:0!important
+	}
+	.section-content .padding-y{
+		padding-top:60px!important; padding-bottom:60px!important;
+ 	}
+
+ 	.section-header, .section-footer{
+ 		    box-shadow: 0 2px 10px rgba(51, 51, 51, 0.1);
+ 		    position: relative;
+ 	}
+</style>
 </head>
 
 <body>
-  <div id="loadingCharge" style="visibility: visible;"></div>
+  <span id="loadingCharge" style="visibility: visible;"></span>
   <div  class="loader2 " style="visibility: visible;" id="spinnner2">Loading...</div> 
+<header class="header">
 
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+		<!-- Top Bar -->
+
+		<div class="top_bar">
+			<div class="container">
+				<div class="row">
+					<div class="col d-flex flex-row">
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="../media/images/phone.png" alt=""></div>+38 068 005 3570</div>
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="../media/images/mail.png" alt=""></div>silvia.enciso71@gmail.com</div>
+						<div class="top_bar_content ml-auto">
+							<div class="top_bar_menu">
+								<ul class="standard_dropdown top_bar_dropdown">
+									<li>
+										<a href="#">Español<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="#">English</a></li>
+										
+										</ul>
+									</li>
+									<li>
+										<a href="#">S./ Nuevos Soles<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="#">$ US dollar</a></li>
+											
+										</ul>
+									</li>
+								</ul>
+							</div>
+							<div class="top_bar_user">
+								<div class="user_icon"><img src="../media/images/user.svg" alt=""></div>
+								<div><a href="#">Registrarse</a></div>
+								<div><a href="#">Ingresar</a></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>		
+		</div>
+
+		<!-- Header Main -->
+
+		<div class="header_main">
+			<div class="container">
+				<div class="row">
+
+					<!-- Logo -->
+					<div class="col-lg-2 col-sm-3 col-3 order-1">
+						<div class="logo_container">
+							<div class="logo "><a class=" text-black-50" href="#">Mery</a></div>
+						</div>
+					</div>
+
+					<!-- Search -->
+					<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+						<div class="header_search">
+							<div class="header_search_content">
+								<div class="header_search_form_container">
+									<form action="#" class="header_search_form clearfix">
+										<input type="search" required="required" class="header_search_input" placeholder="Buscar productos...">
+										<div class="custom_dropdown">
+											<div class="custom_dropdown_list">
+												<span class="custom_dropdown_placeholder clc">Todas categorías</span>
+												<i class="fas fa-chevron-down"></i>
+												<ul class="custom_list clc">
+                          													<li><a class="clc" href="#">Todas categorías</a></li>
+
+													{% for item in category  %}
+                          													<li><a class="clc" href="#">{{item.name}}</a></li>
+
+                          {% endfor %}
+												</ul>
+											</div>
+										</div>
+										<button type="submit" class="header_search_button trans_300 indigo darken-1" value="Submit"><img src="../media/images/search.png" alt=""></button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Wishlist -->
+					<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+						<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+							<div class="wishlist d-flex flex-row align-items-center justify-content-end">
+								<div class="wishlist_icon"><img src="../media/images/heart.png" alt=""></div>
+								<div class="wishlist_content">
+									<div class="wishlist_text"><a href="#">Wishlist</a></div>
+									<div class="wishlist_count">115</div>
+								</div>
+							</div>
+
+							<!-- Cart -->
+							<div class="cart">
+								<div class="cart_container d-flex flex-row align-items-center justify-content-end">
+									<div class="cart_icon">
+										<img src="../media/images/cart.png" alt="">
+										<div class="cart_count indigo darken-1"><span>10</span></div>
+									</div>
+									<div class="cart_content">
+										<div class="cart_text"><a href="#">Cart</a></div>
+										<div class="cart_price">$85</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Main Navigation -->
+
+		<nav class="main_nav">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						
+						<div class="main_nav_content d-flex flex-row ">
+
+							<!-- Categories Menu -->
+
+							<div class="cat_menu_container indigo darken-1">
+								<div class=" cat_menu_title d-flex flex-row align-items-center justify-content-start">
+									<div class="cat_burger"><span></span><span></span><span></span></div>
+									<div class="cat_menu_text ">Categorías</div>
+								</div>
+
+								<ul class="{% block categories %}cat_menu{% endblock categories %}">
+                 {% for item  in category  %}
+
+									<li><a href="#">{{item.name}} <i class="fas fa-chevron-right ml-auto"></i></a></li>
+									{% comment %} <li class="hassubs">
+										<a href="#">Hardware<i class="fas fa-chevron-right"></i></a>
+										<ul>
+											<li class="hassubs">
+												<a href="#">Menu Item<i class="fas fa-chevron-right"></i></a>
+												<ul>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+												</ul>
+											</li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
+										</ul>
+									</li> {% endcomment %}
+               
+           
+   
+          {% endfor %}
+								</ul>
+
+         
+							</div>
+
+							<!-- Main Nav Menu -->
+
+							<div class="main_nav_menu ml-auto">
+								<ul class="standard_dropdown main_nav_dropdown">
+									<li><a href="{% url 'base:index' %}">Home<i class="fas fa-chevron-down"></i></a></li>
+									<li class="hassubs">
+										<a href="#">Ofertas<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li>
+												<a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
+												<ul>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+												</ul>
+											</li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Nuestras Marcas<i class="fas fa-chevron-down"></i></a>
+										<ul>
+                    {% for item in marca  %}
+                    <li><a href="#">{{item.name}}<i class="fas fa-chevron-down"></i></a></li>
+                    
+                    {% endfor %}
+											{% comment %} <li>
+												<a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
+												<ul>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+												</ul>
+											</li> {% endcomment %}
+											
+										
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="{% url 'products:getProducList' %}">Productos</a>
+								
+									</li>
+									<li><a href="blog.html">Blog<i class="fas fa-chevron-down"></i></a></li>
+									<li><a href="contact.html">Contacto<i class="fas fa-chevron-down"></i></a></li>
+								</ul>
+							</div>
+
+							<!-- Menu Trigger -->
+
+							<div class="menu_trigger_container ml-auto">
+								<div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+									<div class="menu_burger">
+										<div class="menu_trigger_text">menu</div>
+										<div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+		
+		<!-- Menu -->
+
+		<div class="page_menu">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						
+						<div class="page_menu_content">
+							
+							<div class="page_menu_search">
+								<form action="#">
+									<input type="search" required="required" class="page_menu_search_input" placeholder="Buscar productos...">
+								</form>
+							</div>
+							<ul class="page_menu_nav">
+							
+								<li class="page_menu_item has-children">
+									<a href="#">Moneda<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">US Dollar<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">PEN Soles<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item">
+									<a href="#">Home<i class="fa fa-angle-down"></i></a>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Super Ofertas<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Super Deals<i class="fa fa-angle-down"></i></a></li>
+										<li class="page_menu_item has-children">
+											<a href="#">Menu Item<i class="fa fa-angle-down"></i></a>
+											<ul class="page_menu_selection">
+												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											</ul>
+										</li>
+										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Principales Marcas<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+                  {% for item in marca  %}
+                  			<li><a href="#">{{item.name}}<i class="fa fa-angle-down"></i></a></li>
+
+                  {% endfor %}
+									
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Trending Styles<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Trending Styles<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item"><a href="blog.html">Blog<i class="fa fa-angle-down"></i></a></li>
+								<li class="page_menu_item"><a href="contact.html">Contacto<i class="fa fa-angle-down"></i></a></li>
+							</ul>
+							
+							<div class="menu_contact">
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="../media/images/phone_white.png" alt=""></div>+51 949 473 197</div>
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="../media/images/mail_white.png" alt=""></div>silvia.enciso71@gmail.com</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</header>
+
+  </header>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar" style="display:none">
 
 <div class="container">
 
@@ -87,35 +411,14 @@
 
       <!-- Left -->
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown mega-dropdown ">
+        <li class="nav-item ">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink1" 
-            aria-haspopup="true" aria-expanded="false">Productos
+            aria-haspopup="true" aria-expanded="false" href="">Productos
             <span class="sr-only">(current)</span>
           </a>
             
-          <div class="dropdown-menu mega-menu v-1 z-depth-1 white  px-3  animated " id="megamenu"  
-            aria-labelledby="navbarDropdownMenuLink1">
-            {% for item  in category  %}
-
-            <div class="row">
-              <div class="col-md-6 col-xl-6 sub-menu mb-xl-0 mb-5">
-                <ul class="list-unstyled">{{item.name}}
-                </ul>
-              </div>
-              <div class="col-md-6 col-xl-6 sub-menu mb-xl-0 mb-4 ">
-                <div class="text-center " style="display: none;position: absolute; bottom: 40%;left: 50%;" id="spinner">
-                  <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
-                <ul class="list-unstyled" id="subcatlist">
-
-                 
-                </ul>
-              </div>
+        
    
-          </div>
-          {% endfor %}
 
         </li>
         <li class="nav-item dropdown mega-dropdown ">
@@ -127,22 +430,21 @@
             aria-labelledby="navbarDropdownMenuLink2">
             <div class="col-md-6 col-lg-12 sub-menu mb-xl-0 mb-5">
               <ul class="list-unstyled">
-
+{% comment  %}
             {% for mar in marca %}
 
             {% if forloop.first %}     <li class="sub-title text-uppercase">
               <div class="row ">{% endif %}
             <div class="col-lg-6 ">
-              {% comment %}
               <a href="{% url 'products:filterProduct' 'marca' mar.id mar.slug %}" class="dropdown-item brand waves-effect waves-light ">
 
-              {% endcomment %}
                         {{ mar.name }}
                     </a>
                 </div>
             {% if forloop.counter|divisibleby:2 %}</div></li>  <li class="sub-title text-uppercase"><div class="row">{% endif %}
             {% if forloop.last %}</div></li>{% endif %}
         {% endfor %}
+{% endcomment %}
 
             </ul>
           </div>
@@ -325,7 +627,7 @@
   <br>
   <br>
   <main>
-    <div class="container my-5">
+    <div class="container">
 
       <!-- Section: Block Content -->
       <section>
@@ -610,7 +912,25 @@
 <script src="{% static 'js/productList.js' %}"></script>
 <script src="{% static 'js/messages.js' %}"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TimelineMax.min.js'%}"></script>
+<script src="{% static 'plugins/scrollmagic/ScrollMagic.min.js'%}"></script>
+<script src="{% static 'plugins/greensock/animation.gsap.min.js'%}"></script>
+<script src="{% static 'plugins/greensock/ScrollToPlugin.min.js'%}"></script>
+<script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js'%}"></script>
+<script src="{% static 'plugins/slick-1.8.0/slick.j'%}"></script>
+<script src="{% static 'plugins/easing/easing.js'%}"></script>
+<script src="{% static 'js/custom.js'%}"></script>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+</script>
 {% block js_page %}
 
 {% endblock js_page %}

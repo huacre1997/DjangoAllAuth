@@ -90,7 +90,7 @@ html, body {
       }
       
       .tree .active,
-      .active li {
+      .active .on {
         background: #efefef;
       }
       
@@ -241,4 +241,7 @@ html, body {
         
         .scrollbar-secondary {
         scrollbar-color: #aa66cc #F5F5F5;
+        }
+        .none{
+          display: none !important;
         }
