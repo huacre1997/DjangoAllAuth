@@ -197,7 +197,7 @@
       <div class="col-lg-9 col-md-5 col-sm-12 border p-4">
         <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> --> 
 
-          <div class="container">
+          <div class="">
             <div class="card">
               <div class="card-body">
                 <div class="row">
@@ -236,6 +236,8 @@
      
           <!--Section: Products v.3-->
           <section class=" ListProducts" id="ListProducts">
+                      {% if  product %}
+
           <section class="text-center mb-4">
 
        
@@ -270,11 +272,8 @@
               <!--Grid column-->
               <!--Card-->
             
-            
               {% load thumbnail %}
-              {% load el_pagination_tags %}
 
-{% paginate   product %}
               {% for item in product  %}
               <div class="col-lg-4 col-md-6 mb-4">
 
@@ -322,19 +321,22 @@
                 </div>
 
               {% endfor %}
-              {% show_pages %}
-
-          
-
-              <!--Card-->
-
 
 
 
 
             </div>
             <!--Grid row-->
+{% else %}
+          
+    <div class="card">
+  <div class="card-body">
+    No se encontraron productos para {{item}}
+  </div>
+</div>
+              <!--Card-->
 
+{% endif %}
           </section>
           <!--Section: Products v.3-->
 

@@ -297,7 +297,7 @@ $(document).ready(function () {
       $("#cleanCheckFilter").prop("disabled", true);
     });
   });
-  $(document).on("click", ".endless_page_link", function (e) {
+  $(document).on("click", ".page-link", function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
 
@@ -322,4 +322,7 @@ $(document).ready(function () {
 
   
   });
+
+
 });
+

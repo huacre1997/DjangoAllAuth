@@ -143,7 +143,7 @@ DATABASES = {
         'NAME': "carrito",
         "HOST": "localhost",
         "USER": "postgres",
-        "PASSWORD": "Sonyw100",
+        "PASSWORD": "123",
         "port":5432
     }
 }

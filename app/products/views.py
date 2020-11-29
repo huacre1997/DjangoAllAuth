@@ -35,7 +35,7 @@ from django.views.decorators.cache import cache_page
 #         return context
 
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def ProductList(request):
     
     if request.method == 'GET':
@@ -91,13 +91,13 @@ def ProductList(request):
         # page_obj = paginator2.get_page(page_number)
     else:
         print("else")
-    # post = Paginator(response, 6)
-    # if(request.GET.get("page")):
-    #     page_obj = post.page(request.GET.get("page"))  
-    # else:
-    #     page_obj = post.page(1)
+    post = Paginator(response,3)
+    if(request.GET.get("page")):
+        page_obj = post.page(request.GET.get("page"))  
+    else:
+        page_obj = post.page(1)
             
-    context={"product":response}
+    context={"product":page_obj}
     return render(request,"productList.html",context)
 def filter(request):
     if request.method == 'GET':
@@ -178,3 +178,22 @@ def getProduct(request,id):
         data = {
                 'response': render_to_string("modal.html", {'product': item}, request=request)}
         return JsonResponse(data,safe=False)
+def search(request):
+    search=request.GET.get("q")
+    brand=request.GET.get("brand")
+    print(brand)
+    if brand and search:
+        print("brand and search")
+        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search).filter(marca__name=brand)
+    if search and brand==None:    
+        print(" search")
+
+        context=Product.objects.filter(name__icontains=search)
+    post = Paginator(context,3)
+    if(request.GET.get("page")):
+        page_obj = post.page(request.GET.get("page"))  
+    else:
+        page_obj = post.page(1)
+            
+    context={"product":page_obj,"item":search}
+    return render(request,"productList.html",context)
