@@ -119,7 +119,7 @@ class ProductManager(models.Manager):
     def get_category_product(self,category):
         return self.get_queryset().get_category_product(category)
     def get_subcategory_product(self,subcategory):
-        return self.get_queryset().values("id","name","marca__name","price","image").filter(subcategory__id__in=subcategory.split(","))   
+        return self.get_queryset().values("id","name","marca__name","price","image").filter(subcategory__id__in=subcategory.split(",")).distinct()   
     def orderLower(self):
         return self.get_queryset().values("id","name","marca__name","price","image").order_by("price")
     def orderHigher(self):

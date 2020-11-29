@@ -118,7 +118,7 @@
               {%endif%} class="form-check-input marca" id="optionbrand{{item.id}}" name="brand">
             <label class="form-check-label" for="optionbrand{{item.id}}">{{item.name}}</label>
             <span class="badge badge-info  indigo darken-1">
-              {{item.brand_count}}
+              {{item.marca_count}}
             </span>
 
           </div>
@@ -235,7 +235,7 @@
           <br><br>
      
           <!--Section: Products v.3-->
-          <div class=" ListProducts" id="ListProducts">
+          <section class=" ListProducts" id="ListProducts">
           <section class="text-center mb-4">
 
        
@@ -270,8 +270,11 @@
               <!--Grid column-->
               <!--Card-->
             
-              {% if product %}
+            
               {% load thumbnail %}
+              {% load el_pagination_tags %}
+
+{% paginate   product %}
               {% for item in product  %}
               <div class="col-lg-4 col-md-6 mb-4">
 
@@ -319,17 +322,9 @@
                 </div>
 
               {% endfor %}
-              {%else%}
-              <div class="container">
-                <br><br>
+              {% show_pages %}
 
-                <div class="alert alert-dark" role="alert">
-                  No se encontraron resultados para <a href="#" class="alert-link">{{subcatname}}</a>. Por favor
-                  intente nuevamente.
-                </div>
-              </div>
-
-              {% endif %}
+          
 
               <!--Card-->
 
@@ -384,7 +379,8 @@
 
             </ul>
           </nav>
-        </div>
+        
+        </section>
           <!--Pagination-->
 
       </div>

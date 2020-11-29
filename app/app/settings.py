@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+EL_PAGINATION_PER_PAGE=1
 AUTHENTICATION_BACKENDS = [
     
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'fast_pagination',
-
     'easy_thumbnails',
 
     "debug_toolbar",
@@ -59,13 +58,18 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'ckeditor',
-
+    "el_pagination",
     "base",
     "accounts",
     "products"
 
 ]
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 THUMBNAIL_ALIASES = {
     '': {
         'avatar': {'size': (250, 300), 'crop': False},
@@ -92,6 +96,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crum.CurrentRequestUserMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 
     
 ]
@@ -111,7 +118,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'app.context_processors.marcas',
-                'app.context_processors.category'
+                'app.context_processors.category',
+                'django.template.context_processors.request', ## For EL-pagination
+
 
             ],
         },
@@ -134,7 +143,7 @@ DATABASES = {
         'NAME': "carrito",
         "HOST": "localhost",
         "USER": "postgres",
-        "PASSWORD": "123",
+        "PASSWORD": "Sonyw100",
         "port":5432
     }
 }

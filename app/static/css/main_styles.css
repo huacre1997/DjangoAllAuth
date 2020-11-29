@@ -149,12 +149,12 @@ h6::selection
 {
 	color: #db5246;
 }
-section
+/* section
 {
 	display: block;
 	position: relative;
 	box-sizing: border-box;
-}
+} */
 .clear
 {
 	clear: both;

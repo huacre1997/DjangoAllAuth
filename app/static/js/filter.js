@@ -1,7 +1,10 @@
 $(document).ready(function () {
    $("#loadingCharge").css("visibility", "hidden");
     $("#spinnner2").css("visibility", "hidden");
-    console.log("onload");
+   $( ".endless_page_link").each(function (index, element) {
+     $(element).attr("href","")
+     
+   });
   window.onload = function () {
  
   };
@@ -17,7 +20,6 @@ $(document).ready(function () {
     imgLoad.on("progress", onProgress);
     imgLoad.on("always", onAlways);
     function onProgress(imgLoad, image) {
-      console.log(image);
       if (image.isLoaded) {
         console.log("loaded")
         image.img.parentNode.className = "";
@@ -28,18 +30,19 @@ $(document).ready(function () {
       } else {
         console.log("no loaded")
 
-        image.img.setAttribute("src", "../static/img/no-imagen.jpg");
 
         image.img.parentNode.nextSibling.nextSibling.style.display = "none";
 
         // image.img.parentNode.className = "";
         
       }
-  
+      image.img.setAttribute("src", "../static/img/no-imagen.jpg");
+
     }
 
     function onAlways() {
       console.log("cargo");
+      
     }
   };
   const number = [];
@@ -98,7 +101,7 @@ $(document).ready(function () {
          $("#spinnner2").css("visibility", "hidden");
 
          var body = $("html, body");
-         body.stop().animate({ scrollTop: 100 }, 500, "swing");
+         body.stop().animate({ scrollTop: 150 }, 500, "swing");
 
       }
     
@@ -294,7 +297,7 @@ $(document).ready(function () {
       $("#cleanCheckFilter").prop("disabled", true);
     });
   });
-  $(document).on("click", ".page-link", function (e) {
+  $(document).on("click", ".endless_page_link", function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
 
@@ -307,11 +310,11 @@ $(document).ready(function () {
       x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
 
     }
-    if ($(this).attr("page_number")) {
+    if ($(this).text()) {
       oldURL = window.location.href;
       console.log(oldURL);
       var url = new URL(oldURL);
-      url.searchParams.set("page", $(this).attr("page_number")); // setting your param
+      url.searchParams.set("page", $(this).text()); // setting your param
       var newUrl = url.href;
 
       callUrl(newUrl.replace(/%2C/g, ","));

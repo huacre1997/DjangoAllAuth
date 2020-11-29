@@ -15,6 +15,8 @@ from django.core.paginator import (
     InvalidPage, PageNotAnInteger, EmptyPage, Paginator)
 from django.template.loader import render_to_string
 from fast_pagination.helpers import FastPaginator
+from django.views.decorators.cache import cache_page
+
 # def ProductList(request):
 #     model=Product
 #     template_name="productList.html"
@@ -31,13 +33,17 @@ from fast_pagination.helpers import FastPaginator
 #         context["subcategory"]=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
 
 #         return context
+
+
+@cache_page(60 * 15)
 def ProductList(request):
+    
     if request.method == 'GET':
         brand=request.GET.get("brand")
         order=request.GET.get("order")
         chesubcat=request.GET.get("subcategory")
         if chesubcat==None and order==None and brand==None:
-            response=Product.objects.select_related().values("id","name","price","marca__name","image")
+            response=Product.objects.values("id","name","price","marca__name","image").distinct()
 
         if chesubcat and order and brand==None:
             print("chekcsubcat and order and brand none")
@@ -80,19 +86,23 @@ def ProductList(request):
         # category=Category.objects.values("id","name","slug")
         # subcategory=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
         # product=Product.objects.select_related("marca").values("id","name","price","image")
-        objects = list(response[:3 * 3]) #2 !!!
-        post = Paginator(objects, 6)
-        if(request.GET.get("page")):
-            response = post.page(request.GET.get("page"))  
-        else:
-            response = post.page(1)
-             
-        context={"product":response}
-        return render(request,"productList.html",context)
+    
+       
+        # page_obj = paginator2.get_page(page_number)
+    else:
+        print("else")
+    # post = Paginator(response, 6)
+    # if(request.GET.get("page")):
+    #     page_obj = post.page(request.GET.get("page"))  
+    # else:
+    #     page_obj = post.page(1)
+            
+    context={"product":response}
+    return render(request,"productList.html",context)
 def filter(request):
     if request.method == 'GET':
         data={}
-        brand=request.GET.get("brand")
+        brand=request.GET.get("brand")  
         order=request.GET.get("order")
         chesubcat=request.GET.get("subcategory")
        
@@ -133,15 +143,15 @@ def filter(request):
             response=Product.objects.orderLower()
         elif order=="priceHigher":
             response=Product.objects.orderHigher()
-        objects = list(response[:3 * 3]) #2 !!!
-        paginator = Paginator(objects, 3)
-        post = paginator.page(request.GET.get("page"))        # page=request.GET.get("page")
+        # objects = list(response[:3 * 3]) #2 !!!
+        # paginator = Paginator(objects, 3)
+        # post = paginator.page(request.GET.get("page"))        # page=request.GET.get("page")
         # posts=paginator.page(page)
         # context={"product":queryset,"marca":marca,"category":categ,"subcategory":subcategory}
         # return render(request,"productList.html",context)
         
         data = {
-                'response': render_to_string("productList.html", {'product ': post}, request=request)}
+                'response': render_to_string("productList.html", {'product ': response}, request=request)}
         return JsonResponse(data)
         # try:
         #     data=[]

@@ -5,6 +5,7 @@ from .views import *
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     # path('', ProductsView, name="productView"),
      path('<str:cat>',getCat.as_view(),name="getCat"),
