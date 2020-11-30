@@ -16,7 +16,7 @@ from easy_thumbnails.signals import saved_file
 from easy_thumbnails.signal_handlers import generate_aliases_global
 
 
-class Category(BaseModel):
+class Category(MPTTModel):
     name = models.CharField(verbose_name="Nombre Categoría",max_length=100)
     slug = models.SlugField(max_length=100)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
@@ -47,7 +47,8 @@ class Category(BaseModel):
     class Meta:
         verbose_name = 'Categoría'
         verbose_name_plural = 'Categorías'
-
+    class MPTTMeta:
+        order_insertion_by=['name']
 
 class Marcas(BaseModel):
     name=models.CharField(verbose_name="Nombre de la Marca", max_length=100)
@@ -106,8 +107,7 @@ class Product(BaseModel):
     sku = models.CharField(max_length=50) 
     price = models.DecimalField("Precio",max_digits=9,decimal_places=2)   
     before = models.DecimalField("Precio",max_digits=9,decimal_places=2,blank=True)   
-
-    subcategory=models.ForeignKey(SubCategory, verbose_name="SubCategoria", on_delete=models.CASCADE,related_name="subcategoria_id") 
+    category=models.ForeignKey(Category, verbose_name="Categoría", on_delete=models.CASCADE,related_name="category_id") 
     marca=models.ForeignKey(Marcas, verbose_name="Marcas del producto", on_delete=models.CASCADE,related_name="marca_id")
     description= RichTextField(blank=True,null=True)
     modelo=models.CharField("Modelo",max_length=50)
@@ -137,7 +137,7 @@ class Product(BaseModel):
    
     def toJSON(self):
         item = model_to_dict(self)
-        item['subcategory'] = self.subcategory.toJSON()
+        item['category'] = self.category.toJSON()
         item['marca'] = self.marca.toJSON()
         item["image"]=self.image.url
         item["price"]=format(self.price,".2f")

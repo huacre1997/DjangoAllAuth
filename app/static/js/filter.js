@@ -34,9 +34,9 @@ $(document).ready(function () {
         image.img.parentNode.nextSibling.nextSibling.style.display = "none";
 
         // image.img.parentNode.className = "";
-        
+        image.img.setAttribute("src", "../static/img/no-imagen.jpg");
       }
-      image.img.setAttribute("src", "../static/img/no-imagen.jpg");
+     
 
     }
 

@@ -55,43 +55,49 @@
           <!--Accordion wrapper-->
 
           <!-- CATEGORIA ARBOL  -->
-          {% for item in category %}
+          {% load mptt_tags %}
+          {% for genre in category|tree_info %}
+          {% if structure.new_level %}<ul>
+            <li>{% else %}</li>
+            <li>{% endif %}
+              {{ genre.name }}
+            
+          {% endfor %}
+          {% recursetree category %}
+
 
 
           <ul class="tree">
             <li class="has">
               <div class="custom-control custom-checkbox  d-flex justify-content-between align-items-center ">
 
-                <input type="checkbox" value="{{item.cat.id}}" class="custom-control-input catCheck" name="category"
+                <input type="checkbox" value="{{node.id}}" class="custom-control-input catCheck" name="category"
                   id="checkCat{{item.id}}">
-                <label class="custom-control-label" for="checkCat{{item.id}}">{{item.name}} </label>
+                <label class="custom-control-label" for="checkCat{{node.id}}">{{node.name}} </label>
                 <i class="fas fa-angle-up"></i>
               </div>
-              <ul>
-                {% for sub in subcategory  %}
-                {% if item.id == sub.category %}
-                <li class="on">
-                  <div class="custom-control custom-checkbox d-flex justify-content-between align-items-center  ">
-                    <input type="checkbox" value="{{sub.id}}" class="custom-control-input subcatCheck"
-                      name="subcategory" id="defaultUnchecked{{sub.id}}"
-                      {% if  sub.id|to_str in request.GET.subcategory or  item.id|to_str in request.GET.category%}
-                      checked {% endif %}>
-                    <label class="custom-control-label" for="defaultUnchecked{{sub.id}}">{{sub.name}}
-                    </label>
-                    <span class="badge badge-info  indigo darken-1">
-                      {{sub.subcategory_count }}
-                    </span>
-                  </div>
 
-                </li>
-                {%endif%}
-                {%endfor%}
-              </ul>
+              {% if not node.is_leaf_node %}
+            <li class="on">
+              <div class="custom-control custom-checkbox d-flex justify-content-between align-items-center  ">
+                <input type="checkbox" value="{{children.id}}" class="custom-control-input subcatCheck"
+                  name="subcategory" id="defaultUnchecked{{children.id}}"
+                  {% if  sub.id|to_str in request.GET.subcategory or  item.id|to_str in request.GET.category%} checked
+                  {% endif %}>
+                <label class="custom-control-label" for="defaultUnchecked{{sub.id}}">{{children}}
+                </label>
+
+              </div>
+
+            </li>
+            {%endif%}
+
             </li>
 
           </ul>
-          {%endfor%}
-          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"  {% if  request.GET.category or request.GET.subcategory  %}  {%else%}disabled{%endif%}>Limpiar
+          {% endrecursetree %}
+          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
+            {% if  request.GET.category or request.GET.subcategory  %} {%else%}disabled{%endif%}>Limpiar
             filtro</button>
 
 
@@ -114,8 +120,8 @@
           <div class="divider-small mb-3"></div>
           {% for item in marca %}
           <div class="form-check pl-0 mb-1  d-flex justify-content-between align-items-center">
-            <input type="radio" value="{{item.name}}" {% if request.GET.brand == item.name %} checked
-              {%endif%} class="form-check-input marca" id="optionbrand{{item.id}}" name="brand">
+            <input type="radio" value="{{item.name}}" {% if request.GET.brand == item.name %} checked {%endif%}
+              class="form-check-input marca" id="optionbrand{{item.id}}" name="brand">
             <label class="form-check-label" for="optionbrand{{item.id}}">{{item.name}}</label>
             <span class="badge badge-info  indigo darken-1">
               {{item.marca_count}}
@@ -124,7 +130,8 @@
           </div>
 
           {% endfor %}
-          <button id="cleanFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3" {% if  request.GET.brand  %}  {%else%}disabled{%endif%}>Limpiar
+          <button id="cleanFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3"
+            {% if  request.GET.brand  %} {%else%}disabled{%endif%}>Limpiar
             filtro</button>
         </div>
         <!-- Filter panel -->
@@ -195,83 +202,83 @@
       <!--Grid column-->
 
       <div class="col-lg-9 col-md-5 col-sm-12 border p-4">
-        <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> --> 
+        <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> -->
 
-          <div class="">
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-8"> {% if catname %}
-                    <h4>{{catname}}</h4>
-                    {% else %}
-                    {% if subcatname %}
-                    <h4>{{subcatname}}</h4>
-                    {% else %}
-                    <h4>Nuestros productos</h4>
-                    {% endif %}
-                    {% endif %}</div>
-                  <div class="col-lg-4">
-                    <form method="get" id="formFilter2">
+        <div class="">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-8"> {% if catname %}
+                  <h4>{{catname}}</h4>
+                  {% else %}
+                  {% if subcatname %}
+                  <h4>{{subcatname}}</h4>
+                  {% else %}
+                  <h4>Nuestros productos</h4>
+                  {% endif %}
+                  {% endif %}</div>
+                <div class="col-lg-4">
+                  <form method="get" id="formFilter2">
 
-                      <select class="browser-default custom-select" id="select" name="order">
-                        <option value="all"></option>
-                        <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
-                          menor a mayor</option>
-                        <option value="priceHigher" {% if request.GET.order == "priceHigher" %} selected {%endif%}>
-                          Precio mayor a menor</option>
+                    <select class="browser-default custom-select" id="select" name="order">
+                      <option value="all"></option>
+                      <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
+                        menor a mayor</option>
+                      <option value="priceHigher" {% if request.GET.order == "priceHigher" %} selected {%endif%}>
+                        Precio mayor a menor</option>
 
-                      </select>
-                    </form>
+                    </select>
+                  </form>
 
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <br><br>
+
+        <!--Section: Products v.3-->
+        <section class="ListProducts" id="ListProducts">
+          {% if  product %}
+
+          <section class="text-center mb-4">
+
+
+            <!--Grid row-->
+
+            <!--Grid row-->
+            <div class="row">
+              <!-- Button trigger modal -->
+
+              <!-- Modal -->
+              <div class="modal fade animated zoomIn faster" id="exampleModalCenter" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+                <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+                <div class="modal-dialog modal-xl modal-dialog-centered" role="document" id="modalProductDetail">
+
+
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">{{product.name}}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
 
                   </div>
                 </div>
               </div>
 
-
-            </div>
-          </div>
-
-          <br><br>
-     
-          <!--Section: Products v.3-->
-          <section class=" ListProducts" id="ListProducts">
-                      {% if  product %}
-
-          <section class="text-center mb-4">
-
-       
-            <!--Grid row-->
-
-            <!--Grid row-->
-            <div class="row" >
-             <!-- Button trigger modal -->
-
-<!-- Modal -->
-<div class="modal fade animated zoomIn faster" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-
-  <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-  <div class="modal-dialog modal-xl modal-dialog-centered" role="document" id="modalProductDetail">
-
-
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">{{product.name}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      </div>    
-   
-    </div>
-  </div>
-</div>
-            
               <!--Grid column-->
               <!--Card-->
-            
+
               {% load thumbnail %}
 
               {% for item in product  %}
@@ -279,14 +286,15 @@
 
                 <div class="card animated fadeIn hoverable">
                   <!--Card image-->
-                  <div class="view overlay zoom Details" tag-url="{{item.id}}"  >
-                    <div class="image_container "> 
-                      <div  class="loader " style="visibility: visible;">Loading...</div> 
+                  <div class="view overlay zoom Details" tag-url="{{item.id}}">
+                    <div class="image_container ">
+                      <div class="loader " style="visibility: visible;">Loading...</div>
 
-                    <img src="{{item.image|thumbnail_url:'avatar' }}"  style="width:100%;"   class="img-fluid imgProduct" >
-                    
-                  </div>
-                    <a class="bk product{{item.id}}" >
+                      <img src="{{item.image|thumbnail_url:'avatar' }}" style="width:100%;"
+                        class="img-fluid imgProduct">
+
+                    </div>
+                    <a class="bk product{{item.id}}">
                       <div class="mask flex-center rgba-black-strong">
                         <i class="fas fa-search-plus" style="color: white; font-size: 1.4em;">&nbsp;</i>
                         <p class="white-text">Ver Detalles</p>
@@ -303,7 +311,8 @@
                     <h5 class="h5-responsive">
                       <strong>
                         <a href="" class="dark-grey-text">{{item.name}}
-                          {% comment %} <span class="badge badge-pill danger-color animated pulse infinite">NEW</span> {% endcomment %}
+                          {% comment %} <span class="badge badge-pill danger-color animated pulse infinite">NEW</span>
+                          {% endcomment %}
                         </a>
                       </strong>
                     </h5>
@@ -318,7 +327,7 @@
                 </div>
                 <!--Card content-->
 
-                </div>
+              </div>
 
               {% endfor %}
 
@@ -327,39 +336,42 @@
 
             </div>
             <!--Grid row-->
-{% else %}
-          
-    <div class="card">
-  <div class="card-body">
-    No se encontraron productos para {{item}}
-  </div>
-</div>
-              <!--Card-->
+            {% else %}
 
-{% endif %}
+            <div class="card">
+              <div class="card-body">
+                No se encontraron productos para {{item}}
+              </div>
+            </div>
+            <!--Card-->
+
+            {% endif %}
           </section>
           <!--Section: Products v.3-->
 
           <!--Pagination-->
-          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;" >
+          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;">
             <ul class="pagination pagination-circle pg-blue">
 
               <!--Arrow left-->
-           
-              <li class="page-item  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link" page_number="1">Primero</a>
+
+              <li class="page-item  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link"
+                  page_number="1">Primero</a>
               </li>
 
               <li class="page-item ">
-                <a   class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous" page_number="{% if page_obj.has_previous %}{{product.previous_page_number}}{% endif %}">
+                <a class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous"
+                  page_number="{% if page_obj.has_previous %}{{product.previous_page_number}}{% endif %}">
                   <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
                   <span class="sr-only">Anterior</span>
                 </a>
               </li>
-             
+
 
               {% for i in product.paginator  %}
-              <li class="page-item  {% if request.GET.page == i.number|to_str %}active {% endif %}">  <a page_number="{{i.number}}"  class="page-link number_page">{{i.number}}</a></li>
-            
+              <li class="page-item  {% if request.GET.page == i.number|to_str %}active {% endif %}"> <a
+                  page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
+
               {% endfor %}
 
               {% if page_obj.has_next %}
@@ -381,9 +393,9 @@
 
             </ul>
           </nav>
-        
+
         </section>
-          <!--Pagination-->
+        <!--Pagination-->
 
       </div>
     </div>

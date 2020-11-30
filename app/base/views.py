@@ -13,7 +13,7 @@ from allauth.account.forms import LoginForm
 from accounts.forms import MyCustomSignupForm
 import json
 from allauth.account.admin import EmailAddress
-from products.models import Category,SubCategory,Marcas,Product,Productimage
+from products.models import Category,Marcas,Product,Productimage
 from django.urls import reverse
 from django.template import RequestContext 
 from django.views import generic

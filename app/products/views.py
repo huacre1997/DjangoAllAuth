@@ -165,7 +165,7 @@ class getCat(TemplateView):
     def get(self,request,*args, **kwargs):
         data = []
         cat = kwargs['cat']
-        for i in SubCategory.objects.values("id","name","slug").filter(category__slug=cat):
+        for i in Category.objects.values("id","name","slug").filter(slug=cat):
             data.append(i.toJSON())
  
         return JsonResponse(data,safe=False)

@@ -5,40 +5,45 @@ from django.db import IntegrityError
 es_formats.DATETIME_FORMAT = "d M Y H:i:s"
 from django.contrib import messages
 from django.utils.translation import ngettext
-from .forms import SubCategoryForm
 from .models import *
-class CategoryAdmin(admin.ModelAdmin):
+from mptt.admin import DraggableMPTTAdmin
+class CategoryAdmin(DraggableMPTTAdmin):
+    mptt_level_indent = 50
+
+    mptt_indent_field = "name"
+    list_display = ('tree_actions', 'indented_title',
+                    'related_products_count', 'related_products_cumulative_count')
+    list_display_links = ('indented_title',)
+    exclude = ('created_by','modified_by','slug')
 
     def get_queryset(self, request):
-            return Category.objects.annotate(subcategory_count=Count('categoria_id'))
+        qs = super().get_queryset(request)
 
-    def subcategory_count(self, obj):
-            return obj.subcategory_count
-    subcategory_count.short_description = 'N° Subcategorias'
-    subcategory_count.admin_order_field = 'subcategory_count'
-    list_display = ('name',"subcategory_count" ,'created_by','created','modified_by','modified',"status")
+        # Add cumulative product count
+        qs = Category.objects.add_related_count(
+                qs,
+                Product,
+                'category',
+                'products_cumulative_count',
+                cumulative=True)
 
-    exclude = ('created_by','modified_by','slug')
+        # Add non cumulative product count
+        qs = Category.objects.add_related_count(qs,
+                 Product,
+                 'category',
+                 'products_count',
+                 cumulative=False)
+        return qs
+
+    def related_products_count(self, instance):
+        return instance.products_count
+    related_products_count.short_description = 'Related products (for this specific category)'
+
+    def related_products_cumulative_count(self, instance):
+        return instance.products_cumulative_count
+    related_products_cumulative_count.short_description = 'Related products (in tree)'
    
-class SubCategoryAdmin(admin.ModelAdmin):
-    
-    def get_queryset(self, request):
-            return SubCategory.objects.annotate(product_count=Count('subcategoria_id'))
 
-    def product_count(self, obj):
-            return obj.product_count
-
-    def save_model(self, request, obj, form, change):
-
-        obj.user = request.user
-        super().save_model(request, obj, form, change)
-
-    product_count.short_description = 'N° Productos'
-    product_count.admin_order_field = 'product_count'
-  
-    list_display = ('name','category','product_count', 'created_by','created','modified_by','modified',"status")
-
-    exclude = ('created_by','modified_by','slug')
 class MarcasAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_by','created','modified_by','modified',"status")
 
@@ -47,13 +52,13 @@ class ProductImageAdmin(admin.StackedInline):
     model=Productimage
 class ProductAdmin(admin.ModelAdmin):
     inlines=[ProductImageAdmin]
-    list_display = ('name','subcategory','marca', 'created_by','created','modified_by','modified',"status")
+    list_display = ('name','category','marca', 'created_by','created','modified_by','modified',"status")
 
     exclude = ('created_by','modified_by','slug')
 
 
-    
+
+
 admin.site.register(Category,CategoryAdmin)
-admin.site.register(SubCategory,SubCategoryAdmin)
 admin.site.register(Marcas,MarcasAdmin)
 admin.site.register(Product,ProductAdmin)

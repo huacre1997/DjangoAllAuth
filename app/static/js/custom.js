@@ -157,12 +157,13 @@ $(document).ready(function()
 		});
 
 
-		$('select').on('change', function (e)
+		/* 
+	$('select').on('change', function (e)
 		{
 			placeholder.text(this.value);
 
 			$(this).animate({width: placeholder.width() + 'px' });
-		});
+		});	*/
 	}
 
 	/* 

@@ -8,7 +8,6 @@ def marcas(request):
 
 
 def category(request):
-    from products.models import Category,SubCategory
-    category=Category.objects.values("id","name","slug").distinct()
-    subcategory=SubCategory.objects.values("id","name","category").annotate(subcategory_count=Count('subcategoria_id')).distinct()
-    return {"category":category,"subcategory":subcategory}
+    from products.models import Category
+    category=Category.objects.all()
+    return {"category":category}
