@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'fast_pagination',
     'easy_thumbnails',
+    'mptt',
 
     "debug_toolbar",
     'allauth',

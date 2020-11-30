@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from ckeditor.fields import RichTextField
 from django.db.utils import IntegrityError
 
+from mptt.models import MPTTModel, TreeForeignKey
 
 from django.dispatch import receiver
 from easy_thumbnails.signals import saved_file
@@ -18,6 +19,8 @@ from easy_thumbnails.signal_handlers import generate_aliases_global
 class Category(BaseModel):
     name = models.CharField(verbose_name="Nombre Categoría",max_length=100)
     slug = models.SlugField(max_length=100)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
     # meta_keywords = models.CharField('Meta Keywords',max_length=255)
     # meta_description = models.CharField("Meta Description", max_length=255) 
     def save(self, *args, **kwargs):
