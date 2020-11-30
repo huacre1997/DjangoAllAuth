@@ -154,31 +154,25 @@
                 <div class="header_search_form_container">
                   <form action="{% url 'products:search'  %}" class="header_search_form clearfix">
                     <input name="q" type="search" class="header_search_input" placeholder="Buscar productos...">
-                    <div class="custom_dropdown">
-                      <div class="custom_dropdown_list">
-                        <span class="custom_dropdown_placeholder clc">Todas categorías</span>
-                        <i class="fas fa-chevron-down"></i>
-                        <ul class="custom_list clc ">
-                          <li><a class="clc" href="#" id="0"> Todas las categorías</a></li>
+                    <select class="browser-default custom-select" name="in" style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 30px;">
+                      <option value="">Seleccione</option>
+                      {% load mptt_tags %}
+                      {% recursetree category %}
+                      {% if  node.is_leaf_node %}
+                      <option value="{{ node.id }}"> {{ node.name }}</option>
 
-                            {% load mptt_tags %}
-                            {% recursetree category %}
-                            {{node.is_leaf_node }} 
-                            {% if  not node.is_leaf_node %}
-                            <li> <strong>{{ node.name }} </strong>   </li>
-                       
-                            {% endif %}
-                            
-                            {% if not node.is_leaf_node %}
-                            <ul class="children">
-                                {{ children }}
-                            </ul>
-                        {% endif %}
 
-                              {% endrecursetree %}
-                        </ul>
-                      </div>
-                    </div>
+                      {% endif %}
+                      {% if not node.is_leaf_node %}
+                      <optgroup label="{{node.name}}">
+                        {{children}}
+                      </optgroup>
+                      {% endif %}
+
+                      {% endrecursetree %}
+                    </select>
+
+
                     <button type="submit" class="header_search_button trans_300 indigo darken-1" value="Submit"><img
                         src="../media/images/search.png" alt=""></button>
                   </form>
@@ -233,20 +227,20 @@
                   <div class="cat_burger"><span></span><span></span><span></span></div>
                   <div class="cat_menu_text ">Categorías</div>
                 </div>
-                
-                
+
+
                 <ul class="root {% block categories %}cat_menu{% endblock categories %}">
-                
+
                   {% recursetree category %}
 
                   <li><a href="#"> {{ node.name }} </a>
                     {% if not node.is_leaf_node %}
                     <ul class="children">
-                        {{ children }}
+                      {{ children }}
                     </ul>
-                {% endif %}
+                    {% endif %}
                   </li>
-                 
+
 
 
 
@@ -665,6 +659,18 @@
 
         <!-- Grid row -->
         <div class="row">
+          {% load mptt_tags %}
+
+          {% recursetree category %}
+          {{ node.name }}
+          {% if not node.is_leaf_node %}
+          <strong>{{children }}</strong>
+          {% endif %}
+
+          {% endrecursetree %}
+
+
+
 
           <!-- Grid column -->
           {% for item in product %}

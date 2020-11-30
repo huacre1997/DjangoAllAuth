@@ -97,7 +97,7 @@ def ProductList(request):
     else:
         page_obj = post.page(1)
             
-    context={"product":page_obj}
+    context={"product":page_obj,"text":'Nuestros productos.'}
     return render(request,"productList.html",context)
 def filter(request):
     if request.method == 'GET':
@@ -151,7 +151,7 @@ def filter(request):
         # return render(request,"productList.html",context)
         
         data = {
-                'response': render_to_string("productList.html", {'product ': response}, request=request)}
+                'response': render_to_string("productList.html", {'product ': response,"text":'Nuestros productos.'}, request=request)}
         return JsonResponse(data)
         # try:
         #     data=[]
@@ -181,19 +181,26 @@ def getProduct(request,id):
 def search(request):
     search=request.GET.get("q")
     brand=request.GET.get("brand")
-    print(brand)
-    if brand and search:
+    categ=request.GET.get("in")
+    print(categ)
+    if  search and categ:
+        print("categ and search")
+        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,category=categ)
+    
+    if brand and search and categ:
         print("brand and search")
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search).filter(marca__name=brand)
-    if search and brand==None:    
+        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,marca__name=brand,category=categ)
+   
+    if search and categ==None and brand==None:    
         print(" search")
 
         context=Product.objects.filter(name__icontains=search)
+    cantidad=context.count()
     post = Paginator(context,3)
     if(request.GET.get("page")):
         page_obj = post.page(request.GET.get("page"))  
     else:
         page_obj = post.page(1)
             
-    context={"product":page_obj,"item":search}
+    context={"product":page_obj,"item":search,"text":'Mostrando '+str(cantidad)+' resultados para "'+search+'".'}
     return render(request,"productList.html",context)
