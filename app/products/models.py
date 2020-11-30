@@ -44,37 +44,6 @@ class Category(BaseModel):
     class Meta:
         verbose_name = 'Categoría'
         verbose_name_plural = 'Categorías'
-class SubCategory(BaseModel):
-
-    category=models.ForeignKey(Category, verbose_name="Categoría", on_delete=models.CASCADE,related_name="categoria_id")
-    name = models.CharField(verbose_name="Nombre Subcategoría",max_length=100)
-    slug = models.SlugField(max_length=100, unique=True,error_messages={
-        'unique':"Ya ingresó esa subcategoria"
-    })
-
-    def save(self, *args, **kwargs):
-    
-        user = get_current_user()
-        if user and not user.pk:
-            user = None
-        if not self.pk:
-            self.created_by = user
-        self.modified_by = user
-        self.slug = slugify(self.name)
-    
-        super(SubCategory, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-     
-    def toJSON(self):
-        item = model_to_dict(self)
-        item['category'] = self.category.toJSON()
-        return item
-
-    class Meta:
-        verbose_name = 'SubCategoria'
-        verbose_name_plural = 'SubCategorias'
 
 
 class Marcas(BaseModel):
