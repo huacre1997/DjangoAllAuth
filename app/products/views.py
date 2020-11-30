@@ -97,7 +97,7 @@ def ProductList(request):
     else:
         page_obj = post.page(1)
             
-    context={"product":page_obj}
+    context={"product":page_obj,"tag2":"Productos"}
     return render(request,"productList.html",context)
 def filter(request):
     if request.method == 'GET':
@@ -169,7 +169,12 @@ class getCat(TemplateView):
             data.append(i.toJSON())
  
         return JsonResponse(data,safe=False)
-
+def getBrands(request,name):
+    marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__name=name)
+    return render(request,"productList.html",{"product":marcas,"tag1":name,"tag2":"Marcas"})
+def getCategories(request,name):
+    marcas=Product.objects.values("id","name","price","marca__name","image").filter(subcategory__category=name)
+    return render(request,"productList.html",{"product":marcas,"tag1":name,"tag2":"Categorias"})
 def getProduct(request,id):
 
     if request.method == 'GET':
@@ -181,19 +186,31 @@ def getProduct(request,id):
 def search(request):
     search=request.GET.get("q")
     brand=request.GET.get("brand")
+    cat=request.GET.get("in")
+    print(cat)
+    print(search)
     print(brand)
-    if brand and search:
-        print("brand and search")
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search).filter(marca__name=brand)
-    if search and brand==None:    
-        print(" search")
 
-        context=Product.objects.filter(name__icontains=search)
+    if brand and search and cat:
+        print("brand and search")
+        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search, marca__name=brand,subcategory__category=cat )
+    if brand==None and search==None and cat==None:
+        print("none alll")
+        context=Product.objects.values("id","name","price","marca__name","image")
+    if search and cat!="0":
+        print("search and cat")
+      
+        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,subcategory__category=cat )
+
+    if search and (cat==None or cat=="0") and brand==None:    
+        print(" search")
+        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search)
+    
     post = Paginator(context,3)
     if(request.GET.get("page")):
         page_obj = post.page(request.GET.get("page"))  
     else:
         page_obj = post.page(1)
             
-    context={"product":page_obj,"item":search}
+    context={"product":page_obj,"item":search,"tag2":"Productos"}
     return render(request,"productList.html",context)

@@ -12,8 +12,8 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Library</a></li>
-        <li class="breadcrumb-item active">Data</li>
+        <li class="breadcrumb-item">{{tag2}}</li>
+        <li class="breadcrumb-item active">{{tag1}}</li>
       </ol>
     </nav>
     <style>
@@ -211,7 +211,7 @@
                     {% endif %}
                     {% endif %}</div>
                   <div class="col-lg-4">
-                    <form method="get" id="formFilter2">
+                    <form id="formFilter2">
 
                       <select class="browser-default custom-select" id="select" name="order">
                         <option value="all"></option>
@@ -279,7 +279,7 @@
 
                 <div class="card animated fadeIn hoverable">
                   <!--Card image-->
-                  <div class="view overlay zoom Details" tag-url="{{item.id}}"  >
+                  <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' item.id %}"  >
                     <div class="image_container "> 
                       <div  class="loader " style="visibility: visible;">Loading...</div> 
 

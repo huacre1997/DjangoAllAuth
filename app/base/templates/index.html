@@ -145,15 +145,16 @@
 												<span class="custom_dropdown_placeholder clc">Todas categorías</span>
 												<i class="fas fa-chevron-down"></i>
 												<ul class="custom_list clc">
-                          													<li><a class="clc" href="#">Todas categorías</a></li>
+                          					<li><a class="clc menuItem" id="0">Todas categorías</a></li>
 
 													{% for item in category  %}
-                          													<li><a class="clc" href="#">{{item.name}}</a></li>
+                          			<li><a class="clc menuItem" id="{{item.id}}" href="#">{{item.name}}</a></li>
 
                           {% endfor %}
 												</ul>
 											</div>
 										</div>
+                     <input type="hidden" id="catSearch" value="0" name="in">
 										<button type="submit" class="header_search_button trans_300 indigo darken-1" value="Submit"><img src="../media/images/search.png" alt=""></button>
 									</form>
 								</div>
@@ -263,7 +264,7 @@
 										<a href="#">Nuestras Marcas<i class="fas fa-chevron-down"></i></a>
 										<ul>
                     {% for item in marca  %}
-                    <li><a href="#">{{item.name}}<i class="fas fa-chevron-down"></i></a></li>
+                    <li><a href="{% url 'products:getMarcas' item.name %}">{{item.name}}<i class="fas fa-chevron-down"></i></a></li>
                     
                     {% endfor %}
 											{% comment %} <li>
@@ -352,7 +353,7 @@
 									<a href="#">Principales Marcas<i class="fa fa-angle-down"></i></a>
 									<ul class="page_menu_selection">
                   {% for item in marca  %}
-                  			<li><a href="#">{{item.name}}<i class="fa fa-angle-down"></i></a></li>
+                  			<li><a href="{% url 'products:getMarcas' item.slug %}">{{item.name}}<i class="fa fa-angle-down"></i></a></li>
 
                   {% endfor %}
 									

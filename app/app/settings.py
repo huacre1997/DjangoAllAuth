@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'ckeditor',
-    "el_pagination",
     "base",
     "accounts",
     "products"

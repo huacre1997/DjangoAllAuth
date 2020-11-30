@@ -14,6 +14,8 @@ urlpatterns = [
     # path('products/filter',filterProduct.as_view(),name="filterProduct"),
      path('products/search/<int:id>',getProduct,name="getProductDetail"),
      path('products/search',search,name="search"),
+     path('brands/<str:name>',getBrands,name="getMarcas"),
+     path('categorys/<str:name>',getCategories,name="getCategories")
 
     # path('products/',getFiltered,name="filterProduct"),
     # path('<str:tipo>/<str:slug>',filterProductAll.as_view(),name="filterProductAll"),
