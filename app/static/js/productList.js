@@ -78,7 +78,7 @@ $(document).ready(function () {
     $.ajax({
       type: "get",
       startTime: performance.now(),
-      url: "search/"+$(this).attr("tag-url"),
+      url: $(this).attr("tag-url"),
       success: function (response) {
         console.log(response);
 

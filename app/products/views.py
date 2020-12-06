@@ -97,7 +97,7 @@ def ProductList(request):
     else:
         page_obj = post.page(1)
             
-    context={"product":page_obj,"text":'Nuestros productos.'}
+    context={"product":page_obj,"text":'Nuestros productos.',"tag":"Productos","productActive":"active"}
     return render(request,"productList.html",context)
 def filter(request):
     if request.method == 'GET':
@@ -149,7 +149,6 @@ def filter(request):
         # posts=paginator.page(page)
         # context={"product":queryset,"marca":marca,"category":categ,"subcategory":subcategory}
         # return render(request,"productList.html",context)
-        
         data = {
                 'response': render_to_string("productList.html", {'product ': response,"text":'Nuestros productos.'}, request=request)}
         return JsonResponse(data)
@@ -160,18 +159,27 @@ def filter(request):
         #     return JsonResponse(data,safe=False)
         # except Exception as e:
         #     print(e)
-class getCat(TemplateView):
-    template_name="index.html"
+class byCategory(TemplateView):
+    template_name="productList.html"
     def get(self,request,*args, **kwargs):
         data = []
         cat = kwargs['cat']
-        for i in Category.objects.values("id","name","slug").filter(slug=cat):
-            data.append(i.toJSON())
- 
-        return JsonResponse(data,safe=False)
+        node = Category.objects.get(slug=cat)
+        if node.is_child_node():
+            category=Product.objects.values("id","name","price","marca__name","image").filter(category=node)
+        else:
+            category=Product.objects.values("id","name","price","marca__name","image").filter(category__parent=node.get_root().id)
+        return render(request,self.template_name,{"product":category ,"tag":"Categorias","tag2":node,"productActive":"active"})
+class byMarcas(TemplateView):
+    template_name="productList.html"
+    def get(self,request,*args, **kwargs):
+        data = []
+        marca = kwargs['marca']
+        marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__slug=marca)
+        return render(request,self.template_name,{"product":marcas ,"tag":"Marcas","tag2":marca,"productActive":"active"})
+
 
 def getProduct(request,id):
-
     if request.method == 'GET':
         item=Product.objects.get(id=id)
         print(item.price)
@@ -206,5 +214,5 @@ def search(request):
     else:
         page_obj = post.page(1)
              
-    context={"product":page_obj,"item":search,"num":2}
+    context={"product":page_obj,"item":search,"tag":"Productos"}
     return render(request,"productList.html",context)

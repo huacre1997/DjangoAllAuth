@@ -12,8 +12,9 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Library</a></li>
-        <li class="breadcrumb-item active">Data</li>
+        <li class="breadcrumb-item">{{tag|title}}</li>
+        <li class="breadcrumb-item {{productActive}}">{{tag2 |title}}</li>
+
       </ol>
     </nav>
     <style>
@@ -65,36 +66,24 @@
           {% endfor %}
           {% recursetree category %}
 
+  <li class="has">  
+          <ul class="tree ">
+             <li>
 
-
-          <ul class="tree">
-            <li class="has">
-              <div class="custom-control custom-checkbox  d-flex justify-content-between align-items-center ">
-
-                <input type="checkbox" value="{{node.id}}" class="custom-control-input catCheck" name="category"
-                  id="checkCat{{item.id}}">
-                <label class="custom-control-label" for="checkCat{{node.id}}">{{node.name}} </label>
-                <i class="fas fa-angle-up"></i>
-              </div>
-
-              {% if not node.is_leaf_node %}
+            {{ node.name }}
+           
+            {% if  not node.is_leaf_node %}
             <li class="on">
-              <div class="custom-control custom-checkbox d-flex justify-content-between align-items-center  ">
-                <input type="checkbox" value="{{children.id}}" class="custom-control-input subcatCheck"
-                  name="subcategory" id="defaultUnchecked{{children.id}}"
-                  {% if  sub.id|to_str in request.GET.subcategory or  item.id|to_str in request.GET.category%} checked
-                  {% endif %}>
-                <label class="custom-control-label" for="defaultUnchecked{{sub.id}}">{{children}}
-                </label>
-
-              </div>
-
-            </li>
-            {%endif%}
-
-            </li>
+                 <i class="fa fa-angle-up"></i> <ul class="children om">
+                    {{ children }} 
+                </ul>
+                </li>
+            {% endif %}
+        </li>
+ 
 
           </ul>
+          </li>
           {% endrecursetree %}
           <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
             {% if  request.GET.category or request.GET.subcategory  %} {%else%}disabled{%endif%}>Limpiar
@@ -285,7 +274,7 @@
 
                 <div class="card animated fadeIn hoverable">
                   <!--Card image-->
-                  <div class="view overlay zoom Details" tag-url="{{item.id}}">
+                  <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' item.id %}">
                     <div class="image_container ">
                       <div class="loader " style="visibility: visible;">Loading...</div>
 
