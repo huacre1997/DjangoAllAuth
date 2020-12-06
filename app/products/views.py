@@ -182,7 +182,9 @@ def search(request):
     search=request.GET.get("q")
     brand=request.GET.get("brand")
     categ=request.GET.get("in")
-    print(categ)
+    print("search", search)
+    print("brand", brand)
+    print("categ" ,categ)
     if  search and categ:
         print("categ and search")
         context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,category=categ)
@@ -191,16 +193,18 @@ def search(request):
         print("brand and search")
         context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,marca__name=brand,category=categ)
    
-    if search and categ==None and brand==None:    
+    if search and categ=="" and brand==None:    
         print(" search")
-
         context=Product.objects.filter(name__icontains=search)
-    cantidad=context.count()
+    if search=="" and categ=="" :   
+        print(" search and categ")
+        context=Product.objects.values("id","name","price","marca__name","image")
     post = Paginator(context,3)
+    print(post)
     if(request.GET.get("page")):
         page_obj = post.page(request.GET.get("page"))  
     else:
         page_obj = post.page(1)
-            
-    context={"product":page_obj,"item":search,"text":'Mostrando '+str(cantidad)+' resultados para "'+search+'".'}
+             
+    context={"product":page_obj,"item":search,"num":2}
     return render(request,"productList.html",context)

@@ -213,11 +213,11 @@
                  
                  
                
-                  <h4>{{text}}</h4>
+                  <h4>Mostrando {{ product.paginator.count }} resultado para {{request.GET.p}}</h4>
                  
                   {% endif %}</div>
                 <div class="col-lg-4">
-                  <form method="get" id="formFilter2">
+                  <form  id="formFilter2">
 
                     <select class="browser-default custom-select" id="select" name="order">
                       <option value="all"></option>
