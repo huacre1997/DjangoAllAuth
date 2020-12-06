@@ -23,7 +23,7 @@ $(function() {
     });
    
     $(document).on('click', '.tree i', function(e) {
-      $(this).parent().next('ul').fadeToggle();
+      $(this).next('ul').fadeToggle();
       $(this).toggleClass(function(){
         return $(this).is('.fa-angle-down') ? ($(this).removeClass("fa-angle-down").addClass("fa-angle-up")):($(this).removeClass("fa-angle-up").addClass("fa-angle-down"));
         
