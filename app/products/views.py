@@ -149,7 +149,6 @@ def filter(request):
         # posts=paginator.page(page)
         # context={"product":queryset,"marca":marca,"category":categ,"subcategory":subcategory}
         # return render(request,"productList.html",context)
-        
         data = {
                 'response': render_to_string("productList.html", {'product ': response,"text":'Nuestros productos.'}, request=request)}
         return JsonResponse(data)
@@ -191,7 +190,7 @@ def search(request):
         print("brand and search")
         context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,marca__name=brand,category=categ)
    
-    if search and categ==None and brand==None:    
+    if search and categ=="" and brand==None:    
         print(" search")
 
         context=Product.objects.filter(name__icontains=search)
