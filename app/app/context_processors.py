@@ -8,6 +8,12 @@ def marcas(request):
 
 
 def category(request):
-    from products.models import Category
-    category=Category.objects.all()
+    from products.models import Category,Product
+    category=Category.objects.add_related_count(
+                Category.objects.all(),
+                Product,
+                'category',
+                'products_cumulative_count',
+                cumulative=True)
+    
     return {"category":category}

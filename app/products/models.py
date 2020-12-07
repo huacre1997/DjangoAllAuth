@@ -19,10 +19,29 @@ from easy_thumbnails.signal_handlers import generate_aliases_global
 class Category(MPTTModel):
     name = models.CharField(verbose_name="Nombre Categoría",max_length=100)
     slug = models.SlugField(max_length=100)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children2')
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
 
-    # meta_keywords = models.CharField('Meta Keywords',max_length=255)
-    # meta_description = models.CharField("Meta Description", max_length=255) 
+        # Add cumulative product count
+        qs = Category.objects.add_related_count(
+                qs,
+                Product,
+                'category',
+                'products_cumulative_count',
+                cumulative=True)
+
+        # Add non cumulative product count
+        qs = Category.objects.add_related_count(qs,
+                 Product,
+                 'category',
+                 'products_count',
+                 cumulative=False)
+        return qs
+
+    def related_products_count(self, instance):
+        return instance.products_count
+
     def save(self, *args, **kwargs):
         user = get_current_user()
         if user and not user.pk:
@@ -32,7 +51,7 @@ class Category(MPTTModel):
         self.modified_by = user
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
-      
+    
     
     def clean_slug(self):
         print(self.cleaned_data["slug"])
@@ -99,6 +118,9 @@ class ProductManager(models.Manager):
         return self.get_queryset().values("id","name","marca__name","price","image").order_by("price").reverse()
     def filterMultiple(self,subcategory,brand):
         return self.get_queryset().filterMultiple(subcategory,brand) 
+    def get_children(self):
+        print("aea")
+        pass
 from PIL import Image
 from io import BytesIO
 from django.core.files import File
@@ -106,8 +128,8 @@ class Product(BaseModel):
     name=models.CharField("Nombre del producto", max_length=50)
     sku = models.CharField(max_length=50) 
     price = models.DecimalField("Precio",max_digits=9,decimal_places=2)   
-    before = models.DecimalField("Precio",max_digits=9,decimal_places=2,blank=True)   
-    category=models.ForeignKey(Category, verbose_name="Categoría", on_delete=models.CASCADE,related_name="category_id") 
+    before = models.DecimalField("Precio anterior",max_digits=9,decimal_places=2,blank=True)   
+    category=TreeForeignKey("Category", verbose_name="Categoría", on_delete=models.CASCADE,related_name="children") 
     marca=models.ForeignKey(Marcas, verbose_name="Marcas del producto", on_delete=models.CASCADE,related_name="marca_id")
     description= RichTextField(blank=True,null=True)
     modelo=models.CharField("Modelo",max_length=50)
@@ -118,7 +140,7 @@ class Product(BaseModel):
     image=models.ImageField("Imagen Principal",blank=True,upload_to="uploads/")
 
     objects=ProductManager()
-
+   
     def save(self, *args, **kwargs):
         user = get_current_user()
         if user and not user.pk:
@@ -134,7 +156,7 @@ class Product(BaseModel):
         ordering=["-created"]
     def __str__(self):
         return self.name
-   
+ 
     def toJSON(self):
         item = model_to_dict(self)
         item['category'] = self.category.toJSON()

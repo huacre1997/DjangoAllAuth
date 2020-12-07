@@ -65,12 +65,26 @@ html, body {
       }
    
      
-      
+      .children3>ul:hover{
+        background-color: grey;
+        border-radius: 0.25em;
+        padding: 0 0.5em;
+
+
+      }
+      .activate{
+        background-color: grey;
+        width: 100%;
+        padding: 0 0.5em;
+        border-radius: 0.25em;
+      }
       .tree ul {
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
         margin: 4px auto;
-        margin-left: 6px;
+        margin-left: 1em;
         border-left: 1px dashed #dfdfdf;
+        width: 100%;
       }
       
       

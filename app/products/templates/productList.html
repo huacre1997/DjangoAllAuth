@@ -4,6 +4,7 @@
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
+
 <div class="container pt-3  z-depth-1" style="background-color: white;">
 
   <!--Section: Content-->
@@ -57,30 +58,33 @@
 
           <!-- CATEGORIA ARBOL  -->
           {% load mptt_tags %}
-          {% for genre in category|tree_info %}
-          {% if structure.new_level %}<ul>
-            <li>{% else %}</li>
-            <li>{% endif %}
-              {{ genre.name }}
-            
-          {% endfor %}
-          {% recursetree category %}
 
-          <ul class="tree d-flex justify-content-between align-items-center  flex-wrap ">
-            {{ node.name }}
+          {% recursetree category %}
+          
+          <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap "  data-toggle="buttons">
+            <div class=" d-flex justify-content-between align-items-center  flex-wrap "><i class="fa fa-angle-down mr-1"></i> <a tag-url="{% url 'products:byCategory' node.slug %}" class="catFilter">{{ node.name }} </a></div>
+            <span class="badge badge-info  indigo darken-1">
+              {{node.products_cumulative_count}}
+
+            </span>
             {% if  not node.is_leaf_node %}
-                 <i class="fa fa-angle-up"></i> <ul class="children ">
-                    {{ children }} 
-                </ul>
+          
+            <ul class="children3 ">
+              {{ children }}
+            </ul>
+            
             {% endif %}
- 
+
 
           </ul>
-          </li>
+      
+
           {% endrecursetree %}
-          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
+
+      
+          <!-- <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
             {% if  request.GET.category or request.GET.subcategory  %} {%else%}disabled{%endif%}>Limpiar
-            filtro</button>
+            filtro</button> -->
 
 
 
@@ -186,20 +190,13 @@
       <div class="col-lg-9 col-md-5 col-sm-12 border p-4">
         <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> -->
 
-        <div class="">
-          <div class="card">
-            <div class="card-body">
+      
               <div class="row">
-                <div class="col-lg-8"> {% if product %}
-                
-                 
-                 
-               
-                  <h4>Mostrando {{ product.paginator.count }} resultado para {{request.GET.p}}</h4>
-                 
-                  {% endif %}</div>
+                <div class="col-lg-8"> 
+                  <h4>{{tag2 |title}}</h4>
+               </div>
                 <div class="col-lg-4">
-                  <form  id="formFilter2">
+                  <form id="formFilter2">
 
                     <select class="browser-default custom-select" id="select" name="order">
                       <option value="all"></option>
@@ -214,15 +211,13 @@
 
                 </div>
               </div>
-            </div>
 
+       <hr>
 
-          </div>
-        </div>
-
-        <br><br>
+        
 
         <!--Section: Products v.3-->
+        <section class="container">     Mostrando {{ cont }} resultado </section>
         <section class="ListProducts" id="ListProducts">
           {% if  product %}
 
@@ -321,7 +316,7 @@
 
             <div class="card">
               <div class="card-body">
-                No se encontraron productos para {{item}}
+                No se encontraron productos para {{tag2 |title}}
               </div>
             </div>
             <!--Card-->
@@ -390,3 +385,16 @@
 </div>
 </div>
 {% endblock content %}
+{% block js_page %}
+<script>
+  $(function () {
+    $(".cat_menu_container ").hover(function () {
+     $(this).children("ul").removeClass("none")
+      console.log("si");
+    }, function () {
+      $(this).children("ul").addClass("none")
+    }
+  );
+  });
+</script>
+{% endblock js_page %}

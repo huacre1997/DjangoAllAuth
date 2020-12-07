@@ -2,7 +2,8 @@ $(function() {
 
   
   new WOW().init();
-
+    $(".children").find("i").remove()
+    $(".children2>.treeview-animated-element>.treeview-animated ").children().unwrap().unwrap().children().unwrap().removeClass("treeview-animated-items").children().removeClass("closed").addClass("treeview-animated-element").next().remove()
     $('#navbar.navbar-right ul li a').click(function() {
       //clear active status of any parent LI's
       $('#navbar.navbar-right ul li').removeClass('active');
@@ -23,9 +24,9 @@ $(function() {
     });
    
     $(document).on('click', '.tree i', function(e) {
-      $(this).next('ul').fadeToggle();
+      $(this).parent().siblings('ul').fadeToggle();
       $(this).toggleClass(function(){
-        return $(this).is('.fa-angle-down') ? ($(this).removeClass("fa-angle-down").addClass("fa-angle-up")):($(this).removeClass("fa-angle-up").addClass("fa-angle-down"));
+        return $(this).is('.fa-angle-right') ? ($(this).removeClass("fa-angle-right").addClass("fa-angle-down")):($(this).removeClass("fa-angle-down").addClass("fa-angle-right"));
         
       })
       

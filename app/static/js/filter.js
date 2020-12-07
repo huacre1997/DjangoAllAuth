@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  
    $("#loadingCharge").css("visibility", "hidden");
     $("#spinnner2").css("visibility", "hidden");
    $( ".endless_page_link").each(function (index, element) {
@@ -319,6 +320,29 @@ $(document).ready(function () {
 
       callUrl(newUrl.replace(/%2C/g, ","));
     }
+
+  
+  });
+  //  $(".cat_menu_container").on("click",function (e) { 
+  //    console.log("si");
+  //    e.preventDefault();
+  //    $(this).children("ul").toggle();
+  //  });
+ 
+  $(document).on("click", ".children3  .catFilter", function (e) {
+    // $("#loadingCharge").css("visibility", "visible");
+    window.location.href=$(this).attr("tag-url")
+  //   $("#spinnner2").css("visibility", "visible");
+  //  $(".catFilter").each(function (index, element) {
+  //    $(element).parent().parent().removeClass("activate")
+     
+  //  });
+  //     callUrl($(this).attr("tag-url"));
+  //     $(this).toggleClass(function(){
+  //       return $(this).parent().parent().is('.activate') ? ($(this).parent().parent().removeClass("activate animated bounceInRight")):($(this).parent().parent().addClass("activate"))
+        
+  //     })
+  //     console.log($(this).parent().parent().attr("class"));
 
   
   });

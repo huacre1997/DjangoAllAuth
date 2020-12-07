@@ -154,7 +154,8 @@
                 <div class="header_search_form_container">
                   <form action="{% url 'products:search'  %}" class="header_search_form clearfix">
                     <input name="q" type="search" class="header_search_input" placeholder="Buscar productos...">
-                    <select   class="browser-default custom-select" name="in" style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 30px;">
+                    <select class="browser-default custom-select" name="in"
+                      style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 30px;">
                       <option value="">Seleccione</option>
                       {% load mptt_tags %}
                       {% recursetree category %}
@@ -170,6 +171,9 @@
                       {% endif %}
 
                       {% endrecursetree %}
+
+
+                      
                     </select>
 
 
@@ -229,14 +233,14 @@
                 </div>
 
 
-                <ul class="root {% block categories %}cat_menu{% endblock categories %}">
+                <ul class="root  {% block categories %}cat_menu{% endblock categories %}">
 
                   {% recursetree category %}
 
                   <li><a href="{% url 'products:byCategory' node.slug %}"> {{ node.name }} </a>
                     {% if not node.is_leaf_node %}
                     <ul class="children">
-                   {{ children }}
+                      {{ children }}
                     </ul>
                     {% endif %}
                   </li>
@@ -275,7 +279,8 @@
                     <a href="#">Nuestras Marcas<i class="fas fa-chevron-down"></i></a>
                     <ul>
                       {% for item in marca  %}
-                      <li><a href="{% url 'products:byMarcas' item.slug %}">{{item.name}}<i class="fas fa-chevron-down"></i></a></li>
+                      <li><a href="{% url 'products:byMarcas' item.slug %}">{{item.name}}<i
+                            class="fas fa-chevron-down"></i></a></li>
 
                       {% endfor %}
                       {% comment %} <li>
@@ -660,21 +665,9 @@
         <!-- Grid row -->
         <div class="row">
           {% load mptt_tags %}
-{% drilldown_tree_for_node category as cat all_descendants %}
-  {{cat}}
-          {% recursetree category %}
-          {{ node.name }}
-          {% if not node.is_leaf_node %}
-        <strong>{{children }}</strong>
-          {%else%}
-              D
-          {% endif %}
-          
+         
 
-          {% endrecursetree %}
-
-
-
+   
 
           <!-- Grid column -->
           {% for item in product %}
@@ -824,7 +817,7 @@
 
   {% endblock content %}
 
-  <!-- <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated bounce infinite"
+  {% comment %} <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated bounce infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated flash infinite"
     alt="Transparent MDB Logo" id="animated-img1">
@@ -867,7 +860,7 @@
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideInUp infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideOutDown infinite"
-    alt="Transparent MDB Logo" id="animated-img1"> -->
+    alt="Transparent MDB Logo" id="animated-img1">  {% endcomment %}
 
 
 
