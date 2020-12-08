@@ -342,7 +342,7 @@ h6::selection
 	padding-left: 13px;
 	padding-right: 13px;
 }
-.standard_dropdown li
+/* .standard_dropdown li
 {
 	display: inline-block;
 	position: relative;
@@ -426,7 +426,7 @@ h6::selection
 {
 	left: 100%;
 	top: 0 !important;
-}
+} */
 .top_bar_user
 {
 	display: inline-block;
@@ -3526,7 +3526,7 @@ select option
 	margin-bottom: 18px;
 	margin-top: -10px;
 }
-.footer .logo
+/* .footer .logo
 {
 	top: auto;
 	-webkit-transform: transform: none;
@@ -3534,7 +3534,7 @@ select option
     -ms-transform: transform: none;
     -o-transform: transform: none;
     transform: none;
-}
+} */
 .footer .logo a
 {
 	color: #000000;

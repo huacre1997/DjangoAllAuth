@@ -91,7 +91,7 @@ def ProductList(request):
         # page_obj = paginator2.get_page(page_number)
     else:
         print("else")
-    post = Paginator(response,3)
+    post = Paginator(response,4)
     if(request.GET.get("page")):
         page_obj = post.page(request.GET.get("page"))  
     else:
@@ -100,18 +100,46 @@ def ProductList(request):
     context={"product":page_obj,"text":'Nuestros productos.',"tag":"Productos","productActive":"active"}
     return render(request,"productList.html",context)
 
-class byCategory(TemplateView):
-    template_name="productList.html"
-    def get(self,request,*args, **kwargs):
+
+def byCategory(request,cat):
+    if request.method=="GET":
         data = []
-        cat = kwargs['cat']
+        brand=request.GET.get("brand")
+        order=request.GET.get("order")
+
         node = Category.objects.get(slug=cat)
-    
+
         if node.is_child_node():
             category=Product.objects.values("id","name","price","marca__name","image").filter(category=node)
         else:
             category=Product.objects.values("id","name","price","marca__name","image").filter(category__parent=node.get_root().id)
-        return render(request,self.template_name,{"product":category ,"tag":"Categorias","tag2":node,"cont":category.count()})
+        if order=="priceLower" and brand:
+            print("priceLower and brand")
+            context=category.filter(marca__name=brand).order_by("price")
+        elif order=="priceHigher" and brand:
+            print("priceHigher and brand")
+            context=category.filter(marca__name=brand).order_by("price").reverse()
+        elif brand:
+            print("brand")
+
+            context=category.filter(marca__name=brand)
+        elif brand==None:
+            print("brand ==None")
+            context=category
+        elif order:
+            print("order")
+
+            if  order=="priceLower":
+                context=category.order_by("price")
+            else:
+                context=category.order_by("price").reverse()
+
+        post = Paginator(context,1)
+        if(request.GET.get("page")):
+            page_obj = post.page(request.GET.get("page"))  
+        else:
+            page_obj = post.page(1)
+        return render(request,"productList.html",{"product":page_obj ,"tag":"Productos","tag2":node})
 class byMarcas(TemplateView):
     template_name="productList.html"
     def get(self,request,*args, **kwargs):
@@ -128,33 +156,38 @@ def getProduct(request,id):
         data = {
                 'response': render_to_string("modal.html", {'product': item}, request=request)}
         return JsonResponse(data,safe=False)
-def search(request):
-    search=request.GET.get("q")
-    brand=request.GET.get("brand")
-    categ=request.GET.get("in")
-    print("search", search)
-    print("brand", brand)
-    print("categ" ,categ)
-    if  search and categ:
-        print("categ and search")
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,category=categ)
+class Search(TemplateView):
+    template_name="productList.html"
+
+    def get(self,request,*args, **kwargs):
+        search=request.GET.get("q")
+        brand=request.GET.get("brand")
+        categ=request.GET.get("in")
+        print("search", search)
+        print("brand", brand)
+        print("categ" ,categ)
+
     
-    if brand and search and categ:
-        print("brand and search")
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,marca__name=brand,category=categ)
-   
-    if search and categ=="" and brand==None:    
-        print(" search")
-        context=Product.objects.filter(name__icontains=search)
-    if search=="" and categ=="" :   
-        print(" search and categ")
-        context=Product.objects.values("id","name","price","marca__name","image")
-    post = Paginator(context,3)
-    print(post)
-    if(request.GET.get("page")):
-        page_obj = post.page(request.GET.get("page"))  
-    else:
-        page_obj = post.page(1)
-             
-    context={"product":page_obj,"item":search,"tag":"Productos"}
-    return render(request,"productList.html",context)
+        if  search and categ:
+            print("categ and search")
+            context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,category=categ)
+        
+        if brand and search and categ:
+            print("brand and search")
+            context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,marca__name=brand,category=categ)
+    
+        if search and categ=="" and brand==None:    
+            print(" search")
+            context=Product.objects.filter(name__icontains=search)
+        if search=="" and categ=="" :   
+            print(" search and categ")
+            context=Product.objects.values("id","name","price","marca__name","image")
+        post = Paginator(context,3)
+        print(post)
+        if(request.GET.get("page")):
+            page_obj = post.page(request.GET.get("page"))  
+        else:
+            page_obj = post.page(1)
+                
+        context={"product":page_obj,"tag3":search,"tag":"Productos","cont":context.count()}
+        return render(request,"productList.html",context)

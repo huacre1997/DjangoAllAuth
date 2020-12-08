@@ -20,7 +20,10 @@ from django.views import generic
 
 class IndexView(TemplateView):
     template_name="index.html"
-    
+class AboutView(TemplateView):
+    template_name="about.html"    
+class ContactView(TemplateView):
+    template_name="contact.html"
 def handler404(request, exception, template_name="base/404.html"):
     response = render_to_response(template_name)
     response.status_code = 404

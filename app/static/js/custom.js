@@ -178,7 +178,6 @@ $(document).ready(function()
 			var menu = $('.page_menu');
 			var menuContent = $('.page_menu_content');
 			var menuTrigger = $('.menu_trigger');
-			console.log(menuTrigger)
 			//Open / close page menu
 			menuTrigger.on('click', function()
 			{

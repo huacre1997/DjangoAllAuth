@@ -1,0 +1,5 @@
+.children > ul:hover {
+  background-color: lightgrey;
+  border-radius: 0.25em;
+  padding: 0 0.5em;
+}

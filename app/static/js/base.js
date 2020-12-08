@@ -2,8 +2,8 @@ $(function() {
 
   
   new WOW().init();
+  $(".pagination li:nth-child(3)").addClass("active")
     $(".children").find("i").remove()
-    $(".children2>.treeview-animated-element>.treeview-animated ").children().unwrap().unwrap().children().unwrap().removeClass("treeview-animated-items").children().removeClass("closed").addClass("treeview-animated-element").next().remove()
     $('#navbar.navbar-right ul li a').click(function() {
       //clear active status of any parent LI's
       $('#navbar.navbar-right ul li').removeClass('active');
@@ -37,6 +37,13 @@ $(function() {
       $(this).parentsUntil('.tree').children("input[type='checkbox']").prop('checked', this.checked);
       e.stopPropagation();
     });
-   
+    $(".children>ul").hover(function () {
+        $(this).css("background-color","lightgrey").css("border-radius","0.25em").css("padding","0 0.5em").css("transition","0.5s")
+        
+      }, function () {
+        $(this).css("background-color","").css("border-radius","").css("padding","")
+
+      }
+    );
   });
   

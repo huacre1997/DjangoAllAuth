@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/compiled.min.css' %}">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -104,7 +105,7 @@
             <div class="top_bar_contact_item">
               <div class="top_bar_icon"><img src="../media/images/mail.png" alt=""></div>silvia.enciso71@gmail.com
             </div>
-            <div class="top_bar_content ml-auto">
+            {% comment %} <div class="top_bar_content ml-auto">
               <div class="top_bar_menu">
                 <ul class="standard_dropdown top_bar_dropdown">
                   <li>
@@ -128,7 +129,7 @@
                 <div><a href="#">Registrarse</a></div>
                 <div><a href="#">Ingresar</a></div>
               </div>
-            </div>
+            </div> {% endcomment %}
           </div>
         </div>
       </div>
@@ -173,7 +174,7 @@
                       {% endrecursetree %}
 
 
-                      
+
                     </select>
 
 
@@ -217,7 +218,7 @@
 
     <!-- Main Navigation -->
 
-    <nav class="main_nav">
+    <nav class="main_nav main-header-inner">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -256,51 +257,31 @@
 
               <!-- Main Nav Menu -->
 
-              <div class="main_nav_menu ml-auto">
-                <ul class="standard_dropdown main_nav_dropdown">
-                  <li><a href="{% url 'base:index' %}">Home<i class="fas fa-chevron-down"></i></a></li>
-                  <li class="hassubs">
-                    <a href="#">Ofertas<i class="fas fa-chevron-down"></i></a>
-                    <ul>
-                      <li>
-                        <a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
-                        <ul>
-                          <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                          <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                          <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                        </ul>
-                      </li>
-                      <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                      <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                      <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                    </ul>
-                  </li>
-                  <li class="hassubs">
-                    <a href="#">Nuestras Marcas<i class="fas fa-chevron-down"></i></a>
-                    <ul>
-                      {% for item in marca  %}
-                      <li><a href="{% url 'products:byMarcas' item.slug %}">{{item.name}}<i
-                            class="fas fa-chevron-down"></i></a></li>
-
-                      {% endfor %}
-                      {% comment %} <li>
-                        <a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
-                        <ul>
-                          <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                          <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                          <li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-                        </ul>
-                      </li> {% endcomment %}
-
-
-                    </ul>
-                  </li>
+              <div class="main_nav_menu ml-auto main-menu">
+                <ul style="height:100%">
+                  <li><a href="{% url 'base:index' %}">Home</a></li>
+                 
+                 
                   <li class="hassubs">
                     <a href="{% url 'products:getProducList' %}">Productos</a>
 
                   </li>
-                  <li><a href="blog.html">Blog<i class="fas fa-chevron-down"></i></a></li>
-                  <li><a href="contact.html">Contacto<i class="fas fa-chevron-down"></i></a></li>
+                  <li class="static "><a href="#">Marcas <i class="fa fa-angle-down"></i></a>
+                    <ul class="megamenu dropdown">
+                      {% for item in marca  %}
+                      <div class="col-lg-2">
+
+                        <ul>
+                          <li><a href="{% url 'products:byMarcas' item.slug %}">{{item.name}}</a></li>
+                        </ul>
+                      </div>
+
+                     {%endfor%}
+                      
+                    </ul>
+                  </li>
+                  <li><a href="{% url 'base:about'  %}">Nosotros</a></li>
+                  <li><a href="{% url 'base:contact'  %}">Contacto</a></li>
                 </ul>
               </div>
 
@@ -665,9 +646,9 @@
         <!-- Grid row -->
         <div class="row">
           {% load mptt_tags %}
-         
 
-   
+
+
 
           <!-- Grid column -->
           {% for item in product %}
@@ -860,7 +841,7 @@
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideInUp infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideOutDown infinite"
-    alt="Transparent MDB Logo" id="animated-img1">  {% endcomment %}
+    alt="Transparent MDB Logo" id="animated-img1"> {% endcomment %}
 
 
 

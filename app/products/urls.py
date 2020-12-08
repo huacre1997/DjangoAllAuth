@@ -8,13 +8,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # path('', ProductsView, name="productView"),
-     path('categorias/<str:cat>',byCategory.as_view(),name="byCategory"),
-     path('marcas/<str:marca>',byMarcas.as_view(),name="byMarcas"),
+     path('products/<str:cat>',byCategory,name="byCategory"),
+     path('products/marcas/<str:marca>',byMarcas.as_view(),name="byMarcas"),
 
      path('products/',ProductList,name="getProducList"),
     # path('products/filter,filterProduct.as_view(),name="filterProduct"),
      path('products/search/<int:id>',getProduct,name="getProductDetail"),
-     path('products/search',search,name="search"),
+     path('products/search',Search.as_view(),name="search"),
 
     # path('products/',getFiltered,name="filterProduct"),
     # path('<str:tipo>/<str:slug>',filterProductAll.as_view(),name="filterProductAll"),

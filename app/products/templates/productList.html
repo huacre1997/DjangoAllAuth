@@ -13,8 +13,8 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-        <li class="breadcrumb-item">{{tag|title}}</li>
-        <li class="breadcrumb-item {{productActive}}">{{tag2 |title}}</li>
+        <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">{{tag|title}}</a></li>
+        <li class="breadcrumb-item subtitle active">{{tag2 |title}}</li>
 
       </ol>
     </nav>
@@ -52,36 +52,39 @@
         <div class="mb-5">
           <h1>{{aea}}</h1>
           <h5 class="font-weight-bold mb-3">Categorías</h5>
+        
 
           <div class="divider-small mb-3"></div>
           <!--Accordion wrapper-->
 
           <!-- CATEGORIA ARBOL  -->
           {% load mptt_tags %}
-
+          <div class="parentTree">
           {% recursetree category %}
-          
-          <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap "  data-toggle="buttons">
-            <div class=" d-flex justify-content-between align-items-center  flex-wrap "><i class="fa fa-angle-down mr-1"></i> <a tag-url="{% url 'products:byCategory' node.slug %}" class="catFilter">{{ node.name }} </a></div>
-            <span class="badge badge-info  indigo darken-1">
+          <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap  " data-toggle="buttons">
+            <div class=" d-flex justify-content-between align-items-center  flex-wrap w-100  {% if node.slug in request.path %}activate{% endif %}"><i
+                class="fa fa-angle-down mr-1"></i> <a tag-url="{% url 'products:byCategory' node.slug %}"
+                class="catFilter">{{ node.name }} </a>
+                  <span class="badge badge-info  indigo darken-1">
               {{node.products_cumulative_count}}
 
-            </span>
-            {% if  not node.is_leaf_node %}
+            </span></div>
           
-            <ul class="children3 ">
+            {% if  not node.is_leaf_node %}
+
+            <ul class="children">
               {{ children }}
             </ul>
-            
+
             {% endif %}
 
 
           </ul>
-      
 
           {% endrecursetree %}
+</div>
 
-      
+
           <!-- <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
             {% if  request.GET.category or request.GET.subcategory  %} {%else%}disabled{%endif%}>Limpiar
             filtro</button> -->
@@ -190,34 +193,53 @@
       <div class="col-lg-9 col-md-5 col-sm-12 border p-4">
         <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> -->
 
+
+        <div class="row ">
+          {% if tag2 %}
+              <h4 class="titleProducts font-weight-bold ml-3 ">{{tag2 |title}}</h4>
+
+          {% elif tag3 %}
+          
+                  <h4 class="titleProducts font-weight-bold ml-3">Mostrando resultados de búsqueda.</h4>
+          {% elif tag %}
+          
+                  <h4 class="titleProducts font-weight-bold ml-3 ">Nuestro Productos</h4>
+          {% endif %}
       
-              <div class="row">
-                <div class="col-lg-8"> 
-                  <h4>{{tag2 |title}}</h4>
-               </div>
-                <div class="col-lg-4">
-                  <form id="formFilter2">
+        </div>
 
-                    <select class="browser-default custom-select" id="select" name="order">
-                      <option value="all"></option>
-                      <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
-                        menor a mayor</option>
-                      <option value="priceHigher" {% if request.GET.order == "priceHigher" %} selected {%endif%}>
-                        Precio mayor a menor</option>
-
-                    </select>
-                  </form>
+        <hr>
 
 
-                </div>
-              </div>
-
-       <hr>
-
-        
+<div class="row mb-2 align-items-center">
+    <div class="col-lg-8">
 
         <!--Section: Products v.3-->
-        <section class="container">     Mostrando {{ cont }} resultado </section>
+        {% if tag3 %}
+                <section class="container results" > Mostrando {{ product.paginator.count }} resultados para "{{tag3}}." </section>
+count
+        {% else %}
+                        <section class="container results" > Mostrando {{ product.paginator.count }} resultados.</section>
+
+        {% endif %}
+        </div>
+    <div class="col-lg-4">
+            <form id="formFilter2">
+
+              <select class="browser-default custom-select" id="select" name="order">
+                <option value="all"></option>
+                <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
+                  menor a mayor</option>
+                <option value="priceHigher" {% if request.GET.order == "priceHigher" %} selected {%endif%}>
+                  Precio mayor a menor</option>
+
+              </select>
+            </form>
+
+
+          </div>
+</div>
+
         <section class="ListProducts" id="ListProducts">
           {% if  product %}
 
@@ -316,7 +338,7 @@
 
             <div class="card">
               <div class="card-body">
-                No se encontraron productos para {{tag2 |title}}
+                No se encontraron productos 
               </div>
             </div>
             <!--Card-->
@@ -326,7 +348,7 @@
           <!--Section: Products v.3-->
 
           <!--Pagination-->
-          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;">
+          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;" id="paginator">
             <ul class="pagination pagination-circle pg-blue">
 
               <!--Arrow left-->
@@ -342,10 +364,10 @@
                   <span class="sr-only">Anterior</span>
                 </a>
               </li>
-
-
               {% for i in product.paginator  %}
-              <li class="page-item  {% if request.GET.page == i.number|to_str %}active {% endif %}"> <a
+              <li class="page-item {% if request.GET.page == i.number|to_str %}active{% endif %}
+              {% ifchanged request.GET.page %}{% endifchanged %}
+              "> <a
                   page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
 
               {% endfor %}
@@ -389,12 +411,11 @@
 <script>
   $(function () {
     $(".cat_menu_container ").hover(function () {
-     $(this).children("ul").removeClass("none")
+      $(this).children("ul").removeClass("none")
       console.log("si");
     }, function () {
       $(this).children("ul").addClass("none")
-    }
-  );
+    });
   });
 </script>
 {% endblock js_page %}

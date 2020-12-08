@@ -65,15 +65,12 @@ html, body {
       }
    
      
-      .children3>ul:hover{
-        background-color: grey;
-        border-radius: 0.25em;
-        padding: 0 0.5em;
-
-
+     
+      i{
+        cursor:pointer;
       }
       .activate{
-        background-color: grey;
+        background-color: lightgrey;
         width: 100%;
         padding: 0 0.5em;
         border-radius: 0.25em;
@@ -82,12 +79,28 @@ html, body {
         display: flex;
         flex-wrap: wrap;
         margin: 4px auto;
-        margin-left: 1em;
+        margin-left: 1.5em;
         border-left: 1px dashed #dfdfdf;
         width: 100%;
       }
-      
-      
+      .parentTree>.tree>div>span {
+       
+        flex-grow: 0;
+        margin-left: 3.5em;
+       
+      }
+      .parentTree>.tree>div>i {
+       
+        flex-grow: 0.5;
+       
+      }.parentTree>.tree>div>a {
+       
+        flex-grow: 2;
+       
+      }
+      .children>ul{
+        cursor: pointer;
+      }
       .tree li {
         padding: 6px 0 0 6px;
         cursor: pointer;
