@@ -46,13 +46,29 @@
       <div class="col-lg-3 col-md-5 col-sm-12 border p-4">
 
         <!-- Filter panel -->
+        <!-- <div class="mb-5" >
+
+          <h5 class="font-weight-bold mb-3">Ordenar por</h5>
+          <div class="divider-small mb-3"></div>
+          <div class="form-check pl-0 mb-1  d-flex justify-content-between align-items-center">
+            <input type="radio" value="priceLower" 
+              class="form-check-input order" id="optionorder1" name="brand">
+            <label class="form-check-label" for="optionorder1">Menor a mayor precio</label>
+          </div>
+          <div class="form-check pl-0 mb-1  d-flex justify-content-between align-items-center">
+            <input type="radio" value="priceHigher" 
+              class="form-check-input order" id="optionorder2" name="brand">
+            <label class="form-check-label" for="optionorder2">Mayor a menor precio</label>
+          </div>
+
+    
+        </div> -->
 
 
-
-        <div class="mb-5">
+        <div class="mb-5 {{displayCat}}">
           <h1>{{aea}}</h1>
-          <h5 class="font-weight-bold mb-3">Categorías</h5>
-        
+          <h5 class="font-weight-bold mb-3 ">Categorías</h5>
+
 
           <div class="divider-small mb-3"></div>
           <!--Accordion wrapper-->
@@ -60,34 +76,44 @@
           <!-- CATEGORIA ARBOL  -->
           {% load mptt_tags %}
           <div class="parentTree">
-          {% recursetree category %}
-          <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap  " data-toggle="buttons">
-            <div class=" d-flex justify-content-between align-items-center  flex-wrap w-100  {% if node.slug in request.path %}activate{% endif %}"><i
-                class="fa fa-angle-down mr-1"></i> <a tag-url="{% url 'products:byCategory' node.slug %}"
-                class="catFilter">{{ node.name }} </a>
-                  <span class="badge badge-info  indigo darken-1">
-              {{node.products_cumulative_count}}
+            {% recursetree category %}
+            <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap  " >
+              <div
+                class="custom-control custom-checkbox d-flex justify-content-between align-items-center  flex-wrap w-100 ">
+                <!-- <i class="fa fa-angle-down mr-1"></i> 
+            
+                  class="catFilter">{{ node.name }} </a> -->
+                <input type="checkbox" value="{{node.id}}" class="custom-control-input subcatCheck" name="category"
+                  id="defaultUnchecked{{node.id}}"
+                  {% if  node.id|to_str in request.GET.sc %}
+                  checked {% endif %}
+                  >
+                <label class="custom-control-label" for="defaultUnchecked{{node.id}}">{{node.name}}
+                </label>
+                <span class="badge badge-info  indigo darken-1">
+                  {{node.products_cumulative_count}}
 
-            </span></div>
-          
-            {% if  not node.is_leaf_node %}
+                </span>
+              </div>
 
-            <ul class="children">
-              {{ children }}
+              {% if  not node.is_leaf_node %}
+
+              <ul class="children">
+                {{ children }}
+              </ul>
+
+              {% endif %}
+
+
             </ul>
 
-            {% endif %}
+            {% endrecursetree %}
+          </div>
 
 
-          </ul>
-
-          {% endrecursetree %}
-</div>
-
-
-          <!-- <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
-            {% if  request.GET.category or request.GET.subcategory  %} {%else%}disabled{%endif%}>Limpiar
-            filtro</button> -->
+          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
+            {% if  request.GET.sc %} {%else%}disabled{%endif%}>Limpiar
+            filtro</button>
 
 
 
@@ -103,7 +129,7 @@
 
         </div>
         <!-- Filter panel -->
-        <div class="mb-5">
+        <div class="mb-5 {{displayBrand}}" >
 
           <h5 class="font-weight-bold mb-3">Marcas</h5>
           <div class="divider-small mb-3"></div>
@@ -196,34 +222,38 @@
 
         <div class="row ">
           {% if tag2 %}
-              <h4 class="titleProducts font-weight-bold ml-3 ">{{tag2 |title}}</h4>
+          <h4 class="titleProducts font-weight-bold ml-3 ">{{tag2 |title}}</h4>
 
           {% elif tag3 %}
-          
-                  <h4 class="titleProducts font-weight-bold ml-3">Mostrando resultados de búsqueda.</h4>
+
+          <h4 class="titleProducts font-weight-bold ml-3">Mostrando resultados de búsqueda.</h4>
           {% elif tag %}
-          
-                  <h4 class="titleProducts font-weight-bold ml-3 ">Nuestro Productos</h4>
+
+          <h4 class="titleProducts font-weight-bold ml-3 ">Nuestro Productos</h4>
           {% endif %}
-      
+
         </div>
 
         <hr>
 
 
-<div class="row mb-2 align-items-center">
-    <div class="col-lg-8">
+        <div class="row mb-2 align-items-center">
+          <div class="col-lg-6  col-sm-12">
 
-        <!--Section: Products v.3-->
-        {% if tag3 %}
-                <section class="container results" > Mostrando {{ product.paginator.count }} resultados para "{{tag3}}." </section>
-count
-        {% else %}
-                        <section class="container results" > Mostrando {{ product.paginator.count }} resultados.</section>
+            <!--Section: Products v.3-->
+            {% if tag3 %}
+            <section class="results"> Mostrando {{ product.paginator.count }} resultados para "{{tag3}}."
+            </section>
+            
+            {% else %}
+            <section class="results"> Mostrando {{ product.paginator.count }} resultados.</section>
 
-        {% endif %}
-        </div>
-    <div class="col-lg-4">
+            {% endif %}
+          </div>
+          <div class="col-lg-2 col-sm-12">
+            <div class="font-weight-bold ">Ordernar por:</div>
+          </div>
+          <div class="col-lg-4  col-sm-12">
             <form id="formFilter2">
 
               <select class="browser-default custom-select" id="select" name="order">
@@ -238,8 +268,8 @@ count
 
 
           </div>
-</div>
-
+        </div>
+   
         <section class="ListProducts" id="ListProducts">
           {% if  product %}
 
@@ -280,7 +310,7 @@ count
               {% load thumbnail %}
 
               {% for item in product  %}
-              <div class="col-lg-4 col-md-6 mb-4">
+              <div class="col-lg-4 col-md-12 mb-4">
 
                 <div class="card animated fadeIn hoverable">
                   <!--Card image-->
@@ -338,7 +368,7 @@ count
 
             <div class="card">
               <div class="card-body">
-                No se encontraron productos 
+                No se encontraron productos
               </div>
             </div>
             <!--Card-->
@@ -348,7 +378,8 @@ count
           <!--Section: Products v.3-->
 
           <!--Pagination-->
-          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;" id="paginator">
+          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;"
+            id="paginator">
             <ul class="pagination pagination-circle pg-blue">
 
               <!--Arrow left-->
@@ -367,8 +398,7 @@ count
               {% for i in product.paginator  %}
               <li class="page-item {% if request.GET.page == i.number|to_str %}active{% endif %}
               {% ifchanged request.GET.page %}{% endifchanged %}
-              "> <a
-                  page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
+              "> <a page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
 
               {% endfor %}
 

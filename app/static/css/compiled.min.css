@@ -5683,7 +5683,7 @@ only screen and (max-width: 767px) {
 
 /*------- input box style css end -------*/
 /*-------- Custom Checkbox Style start --------*/
-.custom-checkbox label,
+/* .custom-checkbox label,
 .custom-checkbox .custom-control-label,
 .custom-radio label,
 .custom-radio .custom-control-label {
@@ -5764,7 +5764,7 @@ only screen and (max-width: 767px) {
 .custom-radio .custom-control-input:checked label:before {
     background-color: #d8373e;
     border-color: #d8373e;
-}
+} */
 
 /*-------- Custom Checkbox Style end --------*/
 /*------- Custom Radio Button Style start -------*/

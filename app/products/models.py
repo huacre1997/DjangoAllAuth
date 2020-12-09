@@ -97,30 +97,25 @@ class ProductQuerySet(models.QuerySet):
     def get_brands_product(self,brand):
         return self.values("id","name","marca__name","price","image").filter(marca__name=brand)
    
-    def get_category_product(self,category):
-        return self.values("id","name","marca__name","price","image").filter(subcategory__category__slug=category)
-    def filterMultiple(self,subcategory,brand):
+    def filterMultiple(self,category,brand):
         return self.values("id","name","marca__name","price","image").filter(
-    Q(subcategory__id__in=subcategory.split(",")) & Q(marca__name=brand)
+    Q(category__in=category.split(",")) & Q(marca__name=brand)
 )
 class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model,using=self._db)
     def get_brands_product(self,brand):
         return self.get_queryset().get_brands_product(brand)
+  
     def get_category_product(self,category):
-        return self.get_queryset().get_category_product(category)
-    def get_subcategory_product(self,subcategory):
-        return self.get_queryset().values("id","name","marca__name","price","image").filter(subcategory__id__in=subcategory.split(",")).distinct()   
+        return self.get_queryset().values("id","name","marca__name","price","image").filter(category__in=category.split(",")).distinct()   
     def orderLower(self):
         return self.get_queryset().values("id","name","marca__name","price","image").order_by("price")
     def orderHigher(self):
         return self.get_queryset().values("id","name","marca__name","price","image").order_by("price").reverse()
-    def filterMultiple(self,subcategory,brand):
-        return self.get_queryset().filterMultiple(subcategory,brand) 
-    def get_children(self):
-        print("aea")
-        pass
+    def filterMultiple(self,category,brand):
+        return self.get_queryset().filterMultiple(category,brand) 
+   
 from PIL import Image
 from io import BytesIO
 from django.core.files import File

@@ -41,17 +41,17 @@ def ProductList(request):
     if request.method == 'GET':
         brand=request.GET.get("brand")
         order=request.GET.get("order")
-        chesubcat=request.GET.get("subcategory")
+        chesubcat=request.GET.get("sc")
         if chesubcat==None and order==None and brand==None:
             response=Product.objects.values("id","name","price","marca__name","image").distinct()
 
         if chesubcat and order and brand==None:
             print("chekcsubcat and order and brand none")
             if order=="priceLower":
-                response=Product.objects.get_subcategory_product(chesubcat).order_by("price")
+                response=Product.objects.get_category_product(chesubcat).order_by("price")
             elif order=="priceHigher":
                 print("else")
-                response=Product.objects.get_subcategory_product(chesubcat).order_by("price").reverse()           
+                response=Product.objects.get_category_product(chesubcat).order_by("price").reverse()           
 
         elif chesubcat and brand and order:
             print("checksubcat and brand and order")
@@ -73,7 +73,7 @@ def ProductList(request):
             response=Product.objects.get_brands_product(brand).order_by("price").reverse()
         elif chesubcat:
             print("checksubcat")
-            response=Product.objects.get_subcategory_product(chesubcat)
+            response=Product.objects.get_category_product(chesubcat)
         elif brand:
             print("brand")
             response = Product.objects.get_brands_product(brand)
@@ -101,13 +101,13 @@ def ProductList(request):
     return render(request,"productList.html",context)
 
 
-def byCategory(request,cat):
+def byCategory(request,slug):
     if request.method=="GET":
         data = []
         brand=request.GET.get("brand")
         order=request.GET.get("order")
-
-        node = Category.objects.get(slug=cat)
+        
+        node = Category.objects.get(slug=slug)
 
         if node.is_child_node():
             category=Product.objects.values("id","name","price","marca__name","image").filter(category=node)
@@ -123,9 +123,6 @@ def byCategory(request,cat):
             print("brand")
 
             context=category.filter(marca__name=brand)
-        elif brand==None:
-            print("brand ==None")
-            context=category
         elif order:
             print("order")
 
@@ -133,20 +130,46 @@ def byCategory(request,cat):
                 context=category.order_by("price")
             else:
                 context=category.order_by("price").reverse()
-
+        context=category
         post = Paginator(context,1)
         if(request.GET.get("page")):
             page_obj = post.page(request.GET.get("page"))  
         else:
             page_obj = post.page(1)
-        return render(request,"productList.html",{"product":page_obj ,"tag":"Productos","tag2":node})
+        return render(request,"productList.html",{"product":page_obj ,"tag":"Productos","tag2":node,"displayCat":"none"})
 class byMarcas(TemplateView):
     template_name="productList.html"
     def get(self,request,*args, **kwargs):
         data = []
+        subcat=request.GET.get("sc")
         marca = kwargs['marca']
+        order=request.GET.get("order")
         marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__slug=marca)
-        return render(request,self.template_name,{"product":marcas ,"tag":"Marcas","tag2":marca,"productActive":"active"})
+
+        if subcat:
+            print("subcat")
+
+            context=marcas.filter(category__id__in=subcat.split(","))
+      
+        elif order=="priceLower" and subcat:
+            print("priceLower and subcat")
+            context=marcas.filter(category__id__in=subcat.split(",")).order_by("price")
+        elif order=="priceHigher" and subcat:
+            print("priceHigher and subcat")
+            context=marcas.filter(category__id__in=subcat.split(",")).order_by("price").reverse()
+        elif order=="priceLower" and subcat==None:
+            print("priceLower")
+            context=marcas.order_by("price")
+        elif order=="priceHigher"  and subcat==None:
+            print("proceHighuer")
+            context=marcas.orderHigher().order_by("price").reverse()
+        context=marcas
+        post = Paginator(context,1)
+        if(request.GET.get("page")):
+            page_obj = post.page(request.GET.get("page"))  
+        else:
+            page_obj = post.page(1)
+        return render(request,self.template_name,{"product":page_obj ,"tag":"Productos","tag2":marca,"productActive":"active","displayBrand":"none"})
 
 
 def getProduct(request,id):
@@ -163,25 +186,44 @@ class Search(TemplateView):
         search=request.GET.get("q")
         brand=request.GET.get("brand")
         categ=request.GET.get("in")
+        order=request.GET.get("order")
         print("search", search)
         print("brand", brand)
         print("categ" ,categ)
 
-    
-        if  search and categ:
-            print("categ and search")
-            context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,category=categ)
+        searchby=Product.objects.values("id","name","price","marca__name","image")
         
-        if brand and search and categ:
+        if  order and categ and search and brand:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,category=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,category=categ,marca__name=brand).order_by("price").reverse()
+        elif search and categ:
+            
+            print("categ and search")
+            context=searchby.filter(name__icontains=search,category=categ)
+        elif brand and search and categ:
             print("brand and search")
-            context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,marca__name=brand,category=categ)
+            context=searchby.filter(name__icontains=search,marca__name=brand,category=categ)
     
-        if search and categ=="" and brand==None:    
-            print(" search")
-            context=Product.objects.filter(name__icontains=search)
-        if search=="" and categ=="" :   
+        # elif search and categ=="" and brand==None:    
+        #     print(" search")
+        #     context=searchby.filter(name__icontains=search)
+        elif categ=="" and search:
+            context=searchby.filter(name__icontains=search)
+
+        elif search=="" and categ:    
             print(" search and categ")
-            context=Product.objects.values("id","name","price","marca__name","image")
+            context=searchby.filter(category=categ)
+        elif search=="" and categ=="" :   
+            print(" search and categ")
+            context=searchby
+        elif order=="priceLower" and categ==None:
+            print("priceLower")
+            context=marcas.order_by("price")
+        elif order=="priceHigher"  and categ==None:
+            print("proceHighuer")
+            context=marcas.orderHigher().order_by("price").reverse()
         post = Paginator(context,3)
         print(post)
         if(request.GET.get("page")):
@@ -189,5 +231,5 @@ class Search(TemplateView):
         else:
             page_obj = post.page(1)
                 
-        context={"product":page_obj,"tag3":search,"tag":"Productos","cont":context.count()}
+        context={"product":page_obj,"tag3":search,"tag":"Productos"}
         return render(request,"productList.html",context)

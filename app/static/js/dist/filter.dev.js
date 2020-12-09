@@ -10,7 +10,6 @@ $(document).ready(function () {
   window.onload = function () {};
 
   var imageLoad = function imageLoad() {
-    console.log("imageLoad");
     var x = document.getElementsByClassName("bk");
     var i;
 
@@ -25,7 +24,7 @@ $(document).ready(function () {
 
     function onProgress(imgLoad, image) {
       if (image.isLoaded) {
-        console.log("loaded");
+        // console.log("loaded")
         image.img.parentNode.className = "";
         image.img.parentNode.nextSibling.nextSibling.style.visibility = "visible"; // image.img.parentNode.firstChild.nextSibling.style.visibility = "visible";
         // image.img.parentNode.nextSibling.nextSibling.style.display="block";
@@ -45,8 +44,8 @@ $(document).ready(function () {
   var number = [];
   var url = new URL(window.location.href);
 
-  if (url.searchParams.get("subcategory")) {
-    var c = url.searchParams.get("subcategory").split(",");
+  if (url.searchParams.get("sc")) {
+    var c = url.searchParams.get("sc").split(",");
     c.forEach(function (element) {
       number.push(element);
     });
@@ -79,11 +78,9 @@ $(document).ready(function () {
         var parser = new DOMParser();
         var doc = parser.parseFromString(response, "text/html");
         var img = doc.querySelector(".ListProducts");
-        console.log(paginator);
         var title = doc.querySelector(".titleProducts").textContent;
         var subtitle = doc.querySelector(".subtitle").textContent;
         var results = doc.querySelector(".results").textContent;
-        console.log(title);
         $("#ListProducts").text("").append(img);
         window.history.pushState({
           page: "another"
@@ -91,8 +88,8 @@ $(document).ready(function () {
         var time = performance.now() - this.startTime;
         var seconds = time / 1000;
         seconds = seconds.toFixed(3);
-        var result = 'AJAX request took ' + seconds + ' seconds to complete.';
-        console.log(result);
+        var result = 'AJAX request took ' + seconds + ' seconds to complete.'; //  console.log(result);
+
         imageLoad();
         $("#loadingCharge").css("visibility", "hidden");
         $("#spinnner2").css("visibility", "hidden");
@@ -143,11 +140,11 @@ $(document).ready(function () {
         console.log("if includes order"); // newUrl = removeParam("order", oldURL);
 
         newUrl = removeParam("page", oldURL);
-        newUrl2 = removeParam("subcategory", oldURL);
+        newUrl2 = removeParam("sc", oldURL);
         return newUrl2;
       } else {
         console.log("no includes order");
-        newUrl = removeParam("subcategory", oldURL);
+        newUrl = removeParam("sc", oldURL);
         return newUrl;
       }
     } else {
@@ -156,14 +153,14 @@ $(document).ready(function () {
       if (window.location.href.includes("order")) {
         console.log("number >0 con order");
         var url = new URL(oldURL);
-        url.searchParams.set("subcategory", num.toString()); // setting your param
+        url.searchParams.set("sc", num.toString()); // setting your param
 
-        var newUrl = url.href;
+        var newUrl2 = url.href;
         return newUrl2.replace(/%2C/g, ",");
       }
 
       var url = new URL(oldURL);
-      url.searchParams.set("subcategory", num.toString()); // setting your param
+      url.searchParams.set("sc", num.toString()); // setting your param
 
       var newUrl = url.href;
       newUrl2 = removeParam("page", newUrl);
@@ -172,31 +169,11 @@ $(document).ready(function () {
   }; //   FUNCIONES CHECK ||
 
 
-  $(".subcatCheck").change(function (e) {
+  $(".parentTree >ul.tree>div>.subcatCheck").change(function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
     e.preventDefault();
-
-    if ($(this).prop("checked")) {
-      number.push($(this).val());
-    } else {
-      number.splice(getIndex($(this).val()), 1);
-    }
-
-    $(".catCheck").each(function (index, element) {
-      var a = 0;
-      var arreglo = $(element).parent().siblings("ul").find("input[type='checkbox']");
-      arreglo.each(function (index, elemente) {
-        $(elemente).prop("checked") ? a += 1 : "";
-      });
-      a > 0 ? $(element).prop("checked", true) : $(element).prop("checked", false);
-    });
-    callUrl(returnURL(number));
-  });
-  $(".catCheck").change(function (e) {
-    $("#loadingCharge").css("visibility", "visible");
-    $("#spinnner2").css("visibility", "visible");
-    var arra = $(this).parent().siblings("ul").find("input[type='checkbox']");
+    var arra = $(this).parent().next().find("input");
 
     if ($(this).prop("checked")) {
       arra.each(function (index, element) {
@@ -210,8 +187,48 @@ $(document).ready(function () {
       });
     }
 
+    console.log(number);
     callUrl(returnURL(number));
   });
+  $(".children >ul.tree>div>.subcatCheck").change(function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+    e.preventDefault();
+    $(this).parent().parent().find("input").each(function (index, element) {
+      if ($(element).prop("checked")) {
+        number.push($(element).val());
+      } else {
+        number.splice(getIndex($(element).val()), 1);
+      }
+    });
+    console.log(number);
+    $(".parentTree >ul.tree>div>.subcatCheck").each(function (index, element) {
+      var a = 0;
+      var arreglo = $(this).parent().next().find("input");
+      arreglo.each(function (index, elemente) {
+        $(elemente).prop("checked") ? a += 1 : "";
+      });
+      a > 0 ? $(element).prop("checked", true) : $(element).prop("checked", false);
+    });
+    callUrl(returnURL(number));
+  }); // $(".catCheck").change(function (e) {
+  //   $("#loadingCharge").css("visibility", "visible");
+  //   $("#spinnner2").css("visibility", "visible");
+  //   let arra = $(this).parent().siblings("ul").find("input[type='checkbox']");
+  //   if ($(this).prop("checked")) {
+  //     arra.each(function (index, element) {
+  //       if (!number.includes($(this).val())) number.push($(element).val());
+  //     });
+  //   } else {
+  //     arra.each(function (index, element) {
+  //       if (number.includes($(element).val())) {
+  //         number.splice(getIndex($(element).val()), 1);
+  //       }
+  //     });
+  //   }
+  //   callUrl(returnURL(number));
+  // });
+
   $("#select").on("change", function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
@@ -265,9 +282,10 @@ $(document).ready(function () {
   $("#cleanCheckFilter").click(function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
+    number.length = 0;
     e.preventDefault();
     oldURL = window.location.href;
-    newUrl2 = removeParam("subcategory", oldURL);
+    newUrl2 = removeParam("sc", oldURL);
     callUrl(newUrl2.replace(/%2C/g, ","));
     $(".custom-control-input").each(function (index, element) {
       $(element).prop("checked", false);
@@ -301,43 +319,42 @@ $(document).ready(function () {
   //    e.preventDefault();
   //    $(this).children("ul").toggle();
   //  });
-
-  $(document).on("click", ".children >ul.tree", function (e) {
-    if (!$(this).is('.activate')) {
-      $("#loadingCharge").css("visibility", "visible"); // window.location.href=$(this).attr("tag-url")
-
-      $("#spinnner2").css("visibility", "visible");
-      $(".catFilter").each(function (index, element) {
-        $(element).parent().parent().removeClass("activate");
-      });
-      $(".tree").each(function (index, element) {
-        $(element).children(":first").removeClass("activate");
-      });
-      callUrl($(this).children().find(".catFilter").attr("tag-url"));
-      $(this).toggleClass(function () {
-        return $(this).is('.activate') ? $(this).removeClass("activate animated bounceInRight") : $(this).addClass("activate");
-      });
-      console.log($(this).parent().attr("class"));
-    }
-  });
-  $(document).on("click", ".parentTree >ul.tree>div>.catFilter", function (e) {
-    if (!$(this).parent().parent().children(":first").is('.activate')) {
-      console.log("if");
-      callUrl($(this).attr("tag-url"));
-      console.log($(this).attr("tag-url"));
-      $("#loadingCharge").css("visibility", "visible"); // window.location.href=$(this).attr("tag-url")
-
-      $("#spinnner2").css("visibility", "visible");
-      $(".tree").each(function (index, element) {
-        $(element).children(":first").removeClass("activate");
-      });
-      $(".catFilter").each(function (index, element) {
-        $(element).parent().parent().removeClass("activate");
-      });
-      $(this).toggleClass(function () {
-        return $(this).parent().parent().children(":first").is('.activate') ? $(this).parent().parent().children(":first").removeClass("activate animated bounceInRight") : $(this).parent().parent().children(":first").addClass("activate");
-      });
-      console.log($(this).parent().attr("class"));
-    }
-  });
+  // $(document).on("click", ".children >ul.tree", function (e) {
+  //   if(!$(this).is('.activate')){
+  //   $("#loadingCharge").css("visibility", "visible");
+  //   // window.location.href=$(this).attr("tag-url")
+  //   $("#spinnner2").css("visibility", "visible");
+  //  $(".catFilter").each(function (index, element) {
+  //    $(element).parent().parent().removeClass("activate")
+  //  });
+  //  $(".tree").each(function (index, element) {
+  //   $(element).children(":first").removeClass("activate")
+  // });
+  //     callUrl($(this).children().find(".catFilter").attr("tag-url"));
+  //     $(this).toggleClass(function(){
+  //       return $(this).is('.activate') ? ($(this).removeClass("activate animated bounceInRight")):($(this).addClass("activate"))
+  //     })
+  //     console.log($(this).parent().attr("class"));
+  //   }
+  // });
+  // $(document).on("click", ".parentTree >ul.tree>div>.catFilter", function (e) {
+  //  if(!$(this).parent().parent().children(":first").is('.activate'))
+  //  {
+  //    console.log("if");
+  //   callUrl($(this).attr("tag-url"));
+  //  console.log($(this).attr("tag-url"))
+  //   $("#loadingCharge").css("visibility", "visible");
+  //   $("#spinnner2").css("visibility", "visible");
+  //  $(".tree").each(function (index, element) {
+  //    $(element).children(":first").removeClass("activate")
+  //  });
+  //  $(".catFilter").each(function (index, element) {
+  //   $(element).parent().parent().removeClass("activate")
+  // });
+  //     $(this).toggleClass(function(){
+  //       return $(this).parent().parent().children(":first").is('.activate') ? ($(this).parent().parent().children(":first").removeClass("activate animated bounceInRight")):($(this).parent().parent().children(":first").addClass("activate"))
+  //     })
+  //     console.log($(this).parent().attr("class"));
+  //   }
+  // });
 });

@@ -133,13 +133,11 @@ $(document).ready(function () {
       } else {
         list.addClass('active');
       }
-    });
-    $('select').on('change', function (e) {
-      placeholder.text(this.value);
-      $(this).animate({
-        width: placeholder.width() + 'px'
-      });
-    });
+    }); // $('select').on('change', function (e)
+    // {
+    // 	placeholder.text(this.value);
+    // 	$(this).animate({width: placeholder.width() + 'px' });
+    // });
   }
   /* 
   

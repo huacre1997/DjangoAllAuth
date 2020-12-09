@@ -53,8 +53,8 @@
 // });
 let a=0
 $(document).ready(function () {
-  $(".catCheck").each(function (index2, element2) {
-    let arr=  $(this).parent().siblings('ul').find("input[type='checkbox']")
+  $(".subcatCheck").each(function (index2, element2) {
+    let arr= $(this).parent().parent().find("input")
   arr.each(function (index, element) {
       if($(element).attr("checked")){
         console.log("chec");
