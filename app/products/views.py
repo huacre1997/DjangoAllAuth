@@ -144,19 +144,25 @@ class byMarcas(TemplateView):
         subcat=request.GET.get("sc")
         marca = kwargs['marca']
         order=request.GET.get("order")
-        marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__slug=marca)
 
+        if subcat==None or subcat=="":
+            subcat=subcat
+        else:
+            subcat=subcat.split(",")
+        marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__slug=marca)
+        print("Order es "+str(order))
+        print("categ es "+str(subcat))
         if subcat:
             print("subcat")
 
-            context=marcas.filter(category__id__in=subcat.split(","))
+            context=marcas.filter(category__id__in=subcat)
       
         elif order=="priceLower" and subcat:
             print("priceLower and subcat")
-            context=marcas.filter(category__id__in=subcat.split(",")).order_by("price")
+            context=marcas.filter(category__id__in=subcat).order_by("price")
         elif order=="priceHigher" and subcat:
             print("priceHigher and subcat")
-            context=marcas.filter(category__id__in=subcat.split(",")).order_by("price").reverse()
+            context=marcas.filter(category__id__in=subcat).order_by("price").reverse()
         elif order=="priceLower" and subcat==None:
             print("priceLower")
             context=marcas.order_by("price")
@@ -185,47 +191,96 @@ class Search(TemplateView):
     def get(self,request,*args, **kwargs):
         search=request.GET.get("q")
         brand=request.GET.get("brand")
-        categ=request.GET.get("in")
+        categ=request.GET.get("sc")
         order=request.GET.get("order")
-        print("search", search)
-        print("brand", brand)
-        print("categ" ,categ)
+        print("Order es "+str(order))
+
+        print("brand es "+str(brand))    
+        print("categ es "+str(categ))
+        print("search es "+str(search))
+        
+        if categ==None or categ=="":
+            categ=categ
+        else:
+            categ=categ.split(",")
 
         searchby=Product.objects.values("id","name","price","marca__name","image")
-        
-        if  order and categ and search and brand:
-            if order=="priceLower":
-                context=searchby.filter(name__icontains=search,category=categ,marca__name=brand).order_by("price")
-            elif order=="priceHigher":
-                context=searchby.filter(name__icontains=search,category=categ,marca__name=brand).order_by("price").reverse()
-        elif search and categ:
-            
-            print("categ and search")
-            context=searchby.filter(name__icontains=search,category=categ)
-        elif brand and search and categ:
-            print("brand and search")
-            context=searchby.filter(name__icontains=search,marca__name=brand,category=categ)
-    
-        # elif search and categ=="" and brand==None:    
-        #     print(" search")
-        #     context=searchby.filter(name__icontains=search)
-        elif categ=="" and search:
-            context=searchby.filter(name__icontains=search)
-
-        elif search=="" and categ:    
-            print(" search and categ")
-            context=searchby.filter(category=categ)
-        elif search=="" and categ=="" :   
-            print(" search and categ")
+        if order==None and brand==None and (categ==None or categ=="") and search=="":
             context=searchby
-        elif order=="priceLower" and categ==None:
-            print("priceLower")
-            context=marcas.order_by("price")
-        elif order=="priceHigher"  and categ==None:
-            print("proceHighuer")
-            context=marcas.orderHigher().order_by("price").reverse()
+        elif order==None and search=="" and brand and categ :
+            context=searchby.filter(marca__name=brand,category__in=categ)
+        elif order==None and search=="" and  brand==None and categ:    
+            context=searchby.filter(category__in=categ)
+        elif order==None and search=="" and brand and categ==None :
+            context=searchby.filter(marca__name=brand)
+        elif order==None and search and brand==None and categ :
+            context=searchby.filter(name__icontains=search,category__in=categ)      
+        elif order==None and search and brand==None and (categ==None or categ=="") :
+            context=searchby.filter(name__icontains=search)       
+        # elif order==None and search and categ=="" and  brand==None:    
+        #     context=searchby.filter(name__icontains=search)
+        elif order==None and search and (categ=="" or categ==None)  and brand :
+            context=searchby.filter(marca__name=brand,name__icontains=search)
+        # elif order==None and search and brand and categ==None :
+        #     context=searchby.filter(marca__name=brand,name__icontains=search) 
+      
+        elif  order and search=="" and categ   and brand:
+            if order=="priceLower":
+                context=searchby.filter(category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(category__in=categ,marca__name=brand).order_by("price").reverse() 
+        elif  order and search and (categ=="" or categ==None)  and brand:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price").reverse()  
+        # elif order and search and brand and categ==None :
+        #     if order=="priceLower":
+        #         context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price")
+        #     elif order=="priceHigher":
+        #         context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price").reverse()      
+        elif  order and search and (categ=="" or categ==None)  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search).order_by("price").reverse()       
+        # elif order and search and categ==None and brand==None:    
+        #     if order=="priceLower":
+        #         context=searchby.filter(name__icontains=search).order_by("price")
+        #     elif order=="priceHigher":
+        #         context=searchby.filter(name__icontains=search).order_by("price").reverse()      
+              
+        elif  order and search and categ and brand:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price").reverse()   
+        elif  order and search=="" and categ==None and brand:
+            if order=="priceLower":
+                context=searchby.filter(marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(marca__name=brand).order_by("price").reverse()           
+        elif  order and search and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,category__in=categ).order_by("price").reverse() 
+        elif  order and search=="" and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(category__in=categ).order_by("price").reverse()           
+        elif  order and search=="" and brand==None and categ =="" :
+            if order=="priceLower":
+                context=searchby.order_by("price")
+            elif order=="priceHigher":
+                context=searchby.order_by("price").reverse()   
+        elif  order and search=="" and categ==None  and brand==None:
+            if order=="priceLower":
+                context=searchby.order_by("price")
+            elif order=="priceHigher":
+                context=searchby.order_by("price").reverse()   
         post = Paginator(context,3)
-        print(post)
         if(request.GET.get("page")):
             page_obj = post.page(request.GET.get("page"))  
         else:
