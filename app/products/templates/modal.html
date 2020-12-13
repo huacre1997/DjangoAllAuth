@@ -1,8 +1,4 @@
-<div class="row">
-  <div class="col-lg-6">
-    <img src="../../media/{{product.image}}" style="width:80%">
-  </div>
-  <div class="col-lg-6">
+ 
     <!-- Classic tabs -->
     <!-- Classic tabs -->
     <div class="classic-tabs mx-2">
@@ -23,15 +19,17 @@
       <div class="tab-content card" id="myClassicTabContentShadow">
         <div class="tab-pane fade active show" id="profile-classic-shadow" role="tabpanel"
           aria-labelledby="profile-tab-classic-shadow">
-          <p>
-          <h2 class="h2-responsive">{{product.name}}</h2>
-          <div class="d-flex align-items-end">
-            <h2 class="font-weight-bold blue-text"><strong>S/.{{product.price}}</strong></h2>&nbsp;&nbsp;
-            <h4
-              class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
-          </h4>
-          </div>
-             <ul class="list-unstyled list-inline rating mb-0">
+          <div class="row">
+          
+          <div class="col-6">
+              <img src="../../media/{{product.image}}" style="width:80%">
+</div>
+          
+          <div class="col-6">
+
+          <h2 class="h2-responsive mb-2">{{product.name}}</h2>
+    
+          <ul class="list-unstyled list-inline rating mb-2">
             <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"> </i></li>
             <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
             <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
@@ -41,24 +39,44 @@
               <p class="text-muted">4.5 (413)</p>
             </li>
           </ul>
+           {% if product.amount >= 20 %}
+          <span class="badge badge-pill badge-success mb-4">Disponible</span>
+          {%elif product.amount < 20 %}
+          <span class="badge badge-pill badge-warning  mb-4">Disponible</span>
+          {%elif product.amount < 10 %}
+            <span class="badge badge-pill badge-danger  mb-4">No disponible</span>
+
+          {% endif %}
+          <div class="d-flex align-items-end mb-2">
+            <h2 class="font-weight-bold blue-text">S/.{{product.price}}        
+            </h2>&nbsp;&nbsp;
+            <h4
+              class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
+          </h4>
+          </div>
+         <h5 class="mb-2">
+            <strong>Modelo</strong>
+            <small class="text-muted">{{product.modelo}}</small>
+          </h5>
           
-          <h5>
+          <h5 class="mb-2">
             <strong>Marca</strong>
             <small class="text-muted">{{product.marca}}</small>
           </h5>
-          <h5>
+          <h5 class="mb-2">
             <strong>SKU</strong>
             <small class="text-muted">{{product.sku}}</small>
           </h5>
-          <h5>
+          <h5 class="mb-3">
             <strong>Categoría</strong>
-            <small class="text-muted">{{product.subcategory}}/{{product.subcategory.category}}</small>
+            <small class="text-muted">{{product.category}}/{{product.category.parent}}</small>
           </h5>
          
         
           <button type="button" class="btn btn-indigo btn-block carrbutton seeDetail waves-effect waves-light"> <img
               src="/static/icons/recibo.png" class="carrIconButton">&nbsp;&nbsp;Cotizar</button>
-          </p>
+          </div>
+          </div>
         </div>
         <div class="tab-pane fade" id="follow-classic-shadow" role="tabpanel"
           aria-labelledby="follow-tab-classic-shadow">
@@ -86,5 +104,3 @@
 
 
 
-  </div>
-</div>

@@ -22,10 +22,8 @@ def priceSeparate(val,arg):
     if val!="":
         toArr=val.split(",")
         if arg==0:
-            print("if")
             return toArr[0]
         else:
-            print("else")
             return toArr[1]
     return ""
 register.filter('url', to_url)

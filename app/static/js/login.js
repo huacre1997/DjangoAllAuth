@@ -118,7 +118,16 @@ $(function (e) {
     }
   );
 
-  
+  $(document).on("mouseenter",".cartEnter",
+  function () {
+    $("#cartCon").toggleClass("animated  rubberBand infinite");
+  }
+);
+$(document).on("mouseleave",".cartEnter",
+  function () {
+    $("#cartCon").removeClass("animated  rubberBand  infinite");
+  }
+);
  
   $("#logout").on("click", function () {
     url = $(this).attr("to");

@@ -8,11 +8,12 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Mery</title>
 
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dist/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  {% comment %}
+  <link rel="stylesheet" href="{% static 'css/modal.css' %}"> {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/compiled.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
 
@@ -106,9 +107,9 @@
             <div class="top_bar_contact_item">
               <div class="top_bar_icon"><img src="../../media/images/mail.png" alt=""></div>silvia.enciso71@gmail.com
             </div>
-            {% comment %} <div class="top_bar_content ml-auto">
+            <div class="top_bar_content ml-auto d-flex align-items-center">
               <div class="top_bar_menu">
-                <ul class="standard_dropdown top_bar_dropdown">
+                {% comment %} <ul class="standard_dropdown top_bar_dropdown">
                   <li>
                     <a href="#">Español<i class="fas fa-chevron-down"></i></a>
                     <ul>
@@ -123,14 +124,32 @@
 
                     </ul>
                   </li>
-                </ul>
+                </ul> {% endcomment %}
               </div>
-              <div class="top_bar_user">
+              <div class="top_bar_user d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                <div class="user_icon"><img src="../../media/images/user.svg" alt=""></div>
+                <div>Bienvenido {{request.user.first_name}}</div>
+
+
+
+                <li class="dropdown3 dropdown-3">
+                  <i class="fa fa-angle-down" id="userIcon"></i>
+                  <ul class="dropdown_menu dropdown_menu-3">
+                    <li class="dropdown_item-1 border">Mi cuenta</li>
+                    <li class="dropdown_item-2 border">Historial</li>
+                    <li class="dropdown_item-3 border" id="logout" to="{% url 'base:logout' %}">Cerrar Sesión </li>
+                  </ul>
+                </li>
+                {% else %}
                 <div class="user_icon"><img src="../media/images/user.svg" alt=""></div>
-                <div><a href="#">Registrarse</a></div>
-                <div><a href="#">Ingresar</a></div>
+                <div><a href="{% url 'base:register' %}">Registrarse</a></div>
+                <div><a id="btnLogin" hreft="{% url 'base:login' %}">Ingresar</a></div>
+
+                {% endif %}
+
               </div>
-            </div> {% endcomment %}
+            </div>
           </div>
         </div>
       </div>
@@ -157,7 +176,7 @@
                   <form action="{% url 'products:search'  %}" class="header_search_form clearfix">
                     <input name="q" type="search" class="header_search_input" placeholder="Buscar productos...">
                     <select class="browser-default custom-select" name="sc"
-                      style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 30px;">
+                      style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 50px;">
                       <option value="">Seleccione</option>
                       {% load mptt_tags %}
                       {% recursetree category %}
@@ -190,24 +209,24 @@
           <!-- Wishlist -->
           <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
             <div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
-              <div class="wishlist d-flex flex-row align-items-center justify-content-end">
+              {% comment %} <div class="wishlist d-flex flex-row align-items-center justify-content-end">
                 <div class="wishlist_icon"><img src="../../media/images/heart.png" alt=""></div>
                 <div class="wishlist_content">
                   <div class="wishlist_text"><a href="#">Wishlist</a></div>
                   <div class="wishlist_count">115</div>
                 </div>
-              </div>
+              </div> {% endcomment %}
 
               <!-- Cart -->
               <div class="cart">
-                <div class="cart_container d-flex flex-row align-items-center justify-content-end">
+                <div class="cartEnter cart_container d-flex flex-row align-items-center justify-content-end">
                   <div class="cart_icon">
-                    <img src="../../media/images/cart.png" alt="">
+                  <img src="{% static 'icons/carrito.png'%}" class="carrIconButton" id="cartCon">
                     <div class="cart_count indigo darken-1"><span>10</span></div>
                   </div>
                   <div class="cart_content">
-                    <div class="cart_text"><a href="#">Cart</a></div>
-                    <div class="cart_price">$85</div>
+                    <div class="cart_text"><a href="#">Mi carrito</a></div>
+                    <div class="cart_price">S/.197</div>
                   </div>
                 </div>
               </div>
@@ -261,14 +280,14 @@
               <div class="main_nav_menu ml-auto main-menu">
                 <ul style="height:100%">
                   <li><a href="{% url 'base:index' %}">Home</a></li>
-                 
-                 
+
+
                   <li class="hassubs">
                     <a href="{% url 'products:getProducList' %}">Productos</a>
 
                   </li>
                   <li class="static "><a href="#">Marcas <i class="fa fa-angle-down"></i></a>
-                    <ul class="megamenu dropdown">
+                    <ul class="megamenu dropdown border">
                       {% for item in marca  %}
                       <div class="col-lg-2">
 
@@ -277,8 +296,8 @@
                         </ul>
                       </div>
 
-                     {%endfor%}
-                      
+                      {%endfor%}
+
                     </ul>
                   </li>
                   <li><a href="{% url 'base:about'  %}">Nosotros</a></li>
@@ -909,7 +928,7 @@
 
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
-<script src="{% static 'js/mdb.js' %}"></script>
+<script src="{% static 'js/mdb.min.js' %}"></script>
 <script src="{% static 'js/filter.js' %}"></script>
 
 

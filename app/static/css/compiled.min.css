@@ -56,13 +56,13 @@ button:focus {
     transition: all 0.4s ease-out;
 }
 
-.form-control:focus {
+/* .form-control:focus {
     border-color: #fedc19;
     -webkit-box-shadow: none;
     box-shadow: none;
-}
+} */
 
-img {
+/* img {
     max-width: 100%;
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
@@ -72,7 +72,7 @@ img {
 
 .img-full img {
     width: 100%;
-}
+} */
 
 .img-container {
     position: relative;

@@ -69,17 +69,13 @@ class LoginFormView(LoginView):
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        print("Entro al post")
         data = {}
         form = LoginForm(data=request.POST)
-        print(form)
         if form.is_valid():
-            print("form valido")
             username = request.POST['login']
             password = request.POST['password']        
             user = authenticate(request, username=username, password=password) 
             if EmailAddress.objects.filter(user=user, verified=False).exists():
-                print("Email verified")
                 data = {
                 "error":"Su cuenta aún no se encuentra activada.",
                 'stat': False}
@@ -87,15 +83,13 @@ class LoginFormView(LoginView):
             
 
             if user is not None:
-                print("User none")
                 login(request, user)
                 data = {
                 'stat': True}
             else:
-                print("None")
+                pass
             return JsonResponse(data)
         else:
-            print("else")
             data = {
                 "error":form.errors["__all__"][0],
                 'stat': False,

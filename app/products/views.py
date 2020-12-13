@@ -211,7 +211,6 @@ class byMarcas(TemplateView):
 def getProduct(request,id):
     if request.method == 'GET':
         item=Product.objects.get(id=id)
-        print(item.price)
         data = {
                 'response': render_to_string("modal.html", {'product': item}, request=request)}
         return JsonResponse(data,safe=False)

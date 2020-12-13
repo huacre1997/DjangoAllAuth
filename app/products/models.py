@@ -54,7 +54,6 @@ class Category(MPTTModel):
     
     
     def clean_slug(self):
-        print(self.cleaned_data["slug"])
         return self.cleaned_data["slug"]
     def toJSON(self):
         item = model_to_dict(self)
