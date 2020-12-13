@@ -5768,7 +5768,7 @@ only screen and (max-width: 767px) {
 
 /*-------- Custom Checkbox Style end --------*/
 /*------- Custom Radio Button Style start -------*/
-.custom-radio label:before,
+/* .custom-radio label:before,
 .custom-radio .custom-control-label:before {
     border-radius: 50%;
     height: 14px;
@@ -5783,7 +5783,7 @@ only screen and (max-width: 767px) {
     top: 2px;
     height: 10px;
     width: 10px;
-}
+} */
 
 /*------- Custom Radio Button Style end -------*/
 /*--------- Cart Page Wrapper Start ---------*/

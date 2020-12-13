@@ -94,28 +94,36 @@ class Marcas(BaseModel):
         verbose_name_plural = 'Marcas'
 from django.db.models import Q
 class ProductQuerySet(models.QuerySet):
-    def get_brands_product(self,brand):
-        return self.values("id","name","marca__name","price","image").filter(marca__name=brand)
-   
-    def filterMultiple(self,category,brand):
-        return self.values("id","name","marca__name","price","image").filter(
-    Q(category__in=category.split(",")) & Q(marca__name=brand)
-)
+    def catxbrand(self,category,brand):
+        return self.values("id","name","marca__name","price","image").filter(category__in=category.split(","),marca__name=brand)  
+    def catxprice(self,category,price):
+        return self.values("id","name","marca__name","price","image").filter(category__in=category.split(","),price__lt=price[1],price__gt=price[0])  
+    def brandxprice(self,brand,price):
+        return self.values("id","name","marca__name","price","image").filter(marca__name=brand,price__lt=price[1],price__gt=price[0])  
+    def filterMultiple(self,category,brand,price):
+        return self.values("id","name","marca__name","price","image").filter(category__in=category.split(","),marca__name=brand,price__lt=price[1],price__gt=price[0])  
 class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model,using=self._db)
     def get_brands_product(self,brand):
-        return self.get_queryset().get_brands_product(brand)
-  
+        return self.get_queryset().values("id","name","marca__name","price","image").filter(marca__name=brand).distinct()
+    def get_price_product(self,price):
+        return self.values("id","name","marca__name","price","image").filter(price__lt=price[1],price__gt=price[0])    
     def get_category_product(self,category):
         return self.get_queryset().values("id","name","marca__name","price","image").filter(category__in=category.split(",")).distinct()   
     def orderLower(self):
         return self.get_queryset().values("id","name","marca__name","price","image").order_by("price")
     def orderHigher(self):
         return self.get_queryset().values("id","name","marca__name","price","image").order_by("price").reverse()
-    def filterMultiple(self,category,brand):
-        return self.get_queryset().filterMultiple(category,brand) 
-   
+    def filterMultiple(self,category,brand,price):
+        return self.get_queryset().filterMultiple(category,brand,price) 
+    def catxbrand(self,category,brand):
+        return self.get_queryset().catxbrand(category,brand) 
+    def catxprice(self,price,category):
+        return self.get_queryset().catxprice(category,price) 
+    def brandxprice(self,brand,price):
+        return self.get_queryset().brandxprice(brand,price) 
+
 from PIL import Image
 from io import BytesIO
 from django.core.files import File

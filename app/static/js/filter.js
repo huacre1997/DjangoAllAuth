@@ -321,7 +321,7 @@ $(document).ready(function () {
     newUrl2 = removeParam("sc", oldURL);
 
     callUrl(newUrl2.replace(/%2C/g, ","));
-    $(".custom-control-input").each(function (index, element) {
+    $(".subcatCheck").each(function (index, element) {
       $(element).prop("checked", false);
       $("#cleanCheckFilter").prop("disabled", true);
     });
@@ -351,6 +351,143 @@ $(document).ready(function () {
 
   
   });
+  
+ var  price=[]
+ if (url.searchParams.get("price")) {
+   var c = url.searchParams.get("price").split(",");
+   c.forEach((element) => {
+     price.push(element);
+   });
+ }
+  $(document).on("click","#priceFilter",function (e) { 
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+
+    e.preventDefault();
+    let tgl=$(this).attr("aria-pressed");
+   
+
+    if($(this).hasClass("active")){
+      price.push(parseInt($("#input-numberMin").val()))
+      price.push(parseInt($("#input-numberMax").val()))
+      console.log("else");      
+      oldURL = window.location.href;
+      var url = new URL(oldURL);
+      url.searchParams.set("price",price.toString()); 
+      var newUrl = url.href;
+     
+      console.log(newUrl)
+
+      $(this).text("Quitar filtro")
+
+      callUrl(newUrl.replace(/%2C/g, ","));
+    }else{
+   
+      console.log("if");      
+      oldURL = window.location.href;
+      newUrl2 = removeParam("price", oldURL);
+      console.log(newUrl2);
+      $(this).text("Aplicar filtro")
+
+      price.length=0
+      
+      callUrl(newUrl2.replace(/%2C/g, ","));
+    }
+    console.log(price)
+
+  });
+  let vale=()=>{
+      if (price.length==0){
+      return [0,4000]}
+      else{
+        return price
+      }
+  }
+
+ var priceSlider = document.getElementById('slider');
+	if (priceSlider) {
+		noUiSlider.create(priceSlider, {
+      connect: true,
+      start:vale(),
+			step: 1,
+			range: {
+				'min': 1,
+				'max': 4000
+			}
+		});
+
+
+	}
+  var inputNumberMin = document.getElementById('input-numberMin');
+  var inputNumberMax = document.getElementById('input-numberMax');
+  priceSlider.noUiSlider.on('update', function (values, handle) {
+
+    var value = values[handle];
+
+    if (handle) {
+        inputNumberMax.value = value;
+    } else {
+        inputNumberMin.value = value;
+    }
+});
+
+
+
+inputNumberMax.addEventListener('change', function () {
+  priceSlider.noUiSlider.set([null, this.value]);
+});
+inputNumberMin.addEventListener('change', function () {
+  priceSlider.noUiSlider.set([this.value, null]);
+});
+$('.input-number').each(function() {
+  var $this = $(this),
+  $input = $this.find('input[type="number"]'),
+  up = $this.find('.qty-up'),
+  down = $this.find('.qty-down');
+
+  down.on('click', function () {
+    var value = parseInt($input.val()) - 1;
+    value = value < 1 ? 1 : value;
+    $input.val(value);
+    $input.change();
+    updatePriceSlider($this , value)
+  })
+
+  up.on('click', function () {
+    var value = parseInt($input.val()) + 1;
+    $input.val(value);
+    $input.change();
+    updatePriceSlider($this , value)
+  })
+});
+var priceInputMax = document.getElementById('price-max'),
+    priceInputMin = document.getElementById('price-min');
+$("#price-max").change(function (e) { 
+  updatePriceSlider($(this).parent() , this.value)
+  
+});
+$("#price-min").change(function (e) { 
+  updatePriceSlider($(this).parent() , this.value)
+  
+});
+// priceInputMax.addEventListener('change', function(){
+//   updatePriceSlider($(this).parent() , this.value)
+// });
+
+// priceInputMin.addEventListener('change', function(){
+//   updatePriceSlider($(this).parent() , this.value)
+// });
+
+function updatePriceSlider(elem , value) {
+  if ( elem.hasClass('price-min') ) {
+    console.log('min')
+    priceSlider.noUiSlider.set([value, null]);
+  } else if ( elem.hasClass('price-max')) {
+    console.log('max')
+    priceSlider.noUiSlider.set([null, value]);
+  }
+}
+
   //  $(".cat_menu_container").on("click",function (e) { 
   //    console.log("si");
   //    e.preventDefault();

@@ -18,9 +18,18 @@ def type_of(value):
 def to_url(value):
     """converts int to string"""
     return '%s%s' % (settings.MEDIA_URL, value)
-
-
+def priceSeparate(val,arg):
+    if val!="":
+        toArr=val.split(",")
+        if arg==0:
+            print("if")
+            return toArr[0]
+        else:
+            print("else")
+            return toArr[1]
+    return ""
 register.filter('url', to_url)
+register.filter('priceSeparate', priceSeparate)
 
 register.filter('to_str', to_str)
 register.filter('type_of', type_of)

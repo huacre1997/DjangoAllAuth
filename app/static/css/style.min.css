@@ -272,3 +272,111 @@ html, body {
         .none{
           display: none !important;
         }
+
+        #price-slider {
+          margin-bottom: 15px;
+        }
+        
+        /* .noUi-target {
+          background-color: #FFF;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+          border: 1px solid #E4E7ED;
+          border-radius: 0px;
+        }
+        
+        .noUi-connect {
+          background-color: #D10024;
+        }
+        
+        .noUi-horizontal {
+          height: 6px;
+        }
+        
+        .noUi-horizontal .noUi-handle {
+          width: 12px;
+          height: 12px;
+          left: -6px;
+          top: -4px;
+          border: none;
+          background: #D10024;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+          border-radius: 50%;
+        }
+        
+        .noUi-handle:before, .noUi-handle:after {
+          display: none;
+        } */
+        
+        .price-filter .input-number {
+          display: inline-block;
+          width: calc(50% - 7px);
+        }
+        .noUi-connect {
+          background-color: #3f51b5 !important;
+        }
+        
+.noUi-horizontal {
+  height: 10px !important;
+}
+
+.noUi-horizontal .noUi-handle {
+  width: 28px !important;
+  height: 22px !important;
+
+  right: -12px !important;
+  top: -6px !important
+}
+
+
+        
+.input-number {
+  position: relative;
+}
+
+.input-number input[type="number"]::-webkit-inner-spin-button, .input-number input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-number input[type="number"] {
+  -moz-appearance: textfield;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #E4E7ED;
+  background-color: #FFF;
+  padding: 0px 35px 0px 15px;
+}
+
+.input-number .qty-up, .input-number .qty-down {
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #E4E7ED;
+  background-color: #FFF;
+  text-align: center;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.input-number .qty-up {
+  right: 0;
+  top: 0;
+  border-bottom: 0px;
+}
+
+.input-number .qty-down {
+  right: 0;
+  bottom: 0;
+}
+
+.input-number .qty-up:hover, .input-number .qty-down:hover {
+  background-color: #E4E7ED;
+  color: #D10024;
+}

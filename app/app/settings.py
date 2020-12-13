@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.sites',
-    'fast_pagination',
+    # 'fast_pagination',
     'easy_thumbnails',
     'mptt',
 

@@ -77,17 +77,14 @@
           {% load mptt_tags %}
           <div class="parentTree">
             {% recursetree category %}
-            <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap  " >
+            <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap  ">
               <div
                 class="custom-control custom-checkbox d-flex justify-content-between align-items-center  flex-wrap w-100 ">
                 <!-- <i class="fa fa-angle-down mr-1"></i> 
             
                   class="catFilter">{{ node.name }} </a> -->
                 <input type="checkbox" value="{{node.id}}" class="custom-control-input subcatCheck" name="category"
-                  id="defaultUnchecked{{node.id}}"
-                  {% if  node.id|to_str in request.GET.sc %}
-                  checked {% endif %}
-                  >
+                  id="defaultUnchecked{{node.id}}" {% if  node.id|to_str in request.GET.sc %} checked {% endif %}>
                 <label class="custom-control-label" for="defaultUnchecked{{node.id}}">{{node.name}}
                 </label>
                 <span class="badge badge-info  indigo darken-1">
@@ -129,15 +126,15 @@
 
         </div>
         <!-- Filter panel -->
-        <div class="mb-5 {{displayBrand}}" >
+        <div class="mb-5 {{displayBrand}}">
 
           <h5 class="font-weight-bold mb-3">Marcas</h5>
           <div class="divider-small mb-3"></div>
           {% for item in marca %}
-          <div class="form-check pl-0 mb-1  d-flex justify-content-between align-items-center">
+          <div class="custom-control custom-radio  mb-1  d-flex justify-content-between align-items-center">
             <input type="radio" value="{{item.name}}" {% if request.GET.brand == item.name %} checked {%endif%}
-              class="form-check-input marca" id="optionbrand{{item.id}}" name="brand">
-            <label class="form-check-label" for="optionbrand{{item.id}}">{{item.name}}</label>
+              class="custom-control-input marca" id="optionbrand{{item.id}}" name="brand">
+            <label class="custom-control-label" for="optionbrand{{item.id}}">{{item.name}}</label>
             <span class="badge badge-info  indigo darken-1">
               {{item.marca_count}}
             </span>
@@ -151,27 +148,33 @@
         </div>
         <!-- Filter panel -->
         <div class="mb-5">
-
-          <h5 class="font-weight-bold mb-3">{{aea}}{{num}}</h5>
-
+          <h5 class="font-weight-bold mb-3">Precio</h5>
           <div class="divider-small mb-3"></div>
+          <div id="slider" class="mb-3 container"></div>
+              <div class="row ">
+                <div class=" col-lg-6 col-sm-12">
+                  <div class="input-number price-min">
+                    <input id="input-numberMin" type="number" value="{{request.GET.price|priceSeparate:0}}">
+                    <span class="qty-up">+</span>
+                    <span class="qty-down">-</span>
+                  </div>
+                </div>
+                <div class=" col-lg-6 col-sm-12">
+                  <div class="input-number price-max ">
+                    <input id="input-numberMax" type="number" value="{{request.GET.price|priceSeparate:1}}">
+                    <span class="qty-up">+</span>
+                    <span class="qty-down">-</span>
+                  </div>
 
-          <input type="range" min="0" max="319" />
 
-          <div class="row justify-content-center">
+                </div>
 
-            <!-- Grid column -->
-            <div class="col-md-6 text-left">
-              <p class="dark-grey-text"><strong id="resellerEarnings">0$</strong></p>
+                
             </div>
-            <!-- Grid column -->
+            <button id="priceFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3 {%if request.GET.price %}active{%endif%}" data-toggle="button" aria-pressed="false" autocomplete="off"
+            >{% if request.GET.price %}Quitar filtro {%else%} Aplicar filtro {%endif%}</button>
 
-            <!-- Grid column -->
-            <div class="col-md-6 text-right">
-              <p class="dark-grey-text"><strong id="clientPrice">319$</strong></p>
-            </div>
-            <!-- Grid column -->
-          </div>
+      
 
         </div>
         <!-- Filter panel -->
@@ -244,7 +247,7 @@
             {% if tag3 %}
             <section class="results"> Mostrando {{ product.paginator.count }} resultados para "{{tag3}}."
             </section>
-            
+
             {% else %}
             <section class="results"> Mostrando {{ product.paginator.count }} resultados.</section>
 
@@ -269,7 +272,7 @@
 
           </div>
         </div>
-   
+
         <section class="ListProducts" id="ListProducts">
           {% if  product %}
 

@@ -14,83 +14,82 @@ from django.core.paginator import Paginator
 from django.core.paginator import (
     InvalidPage, PageNotAnInteger, EmptyPage, Paginator)
 from django.template.loader import render_to_string
-from fast_pagination.helpers import FastPaginator
 from django.views.decorators.cache import cache_page
 
-# def ProductList(request):
-#     model=Product
-#     template_name="productList.html"
-#     context_object_name = "product"
-#     paginate_by=3
-#     def dispatch(self, request, *args, **kwargs):
-#         return super().dispatch(request, *args, **kwargs)
-    
- 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["marca"]=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
-#         context["category"]=Category.objects.values("id","name","slug")
-#         context["subcategory"]=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
-
-#         return context
-
-
-# @cache_page(60 * 15)
+@cache_page(60 * 15)
 def ProductList(request):
     
     if request.method == 'GET':
         brand=request.GET.get("brand")
         order=request.GET.get("order")
         chesubcat=request.GET.get("sc")
-        if chesubcat==None and order==None and brand==None:
-            response=Product.objects.values("id","name","price","marca__name","image").distinct()
+        price=request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
 
-        if chesubcat and order and brand==None:
-            print("chekcsubcat and order and brand none")
+        if price and chesubcat==None and order==None and brand==None:
+            response=Product.objects.get_price_product(price)
+        elif price and chesubcat and order==None and brand:
+            response=Product.objects.filterMultiple(chesubcat,brand,price)
+        elif price and chesubcat and order==None and brand==None:
+            response=Product.objects.catxprice(price,chesubcat)
+        elif price and chesubcat and order and brand==None:
+            if order=="priceLower":
+                response=Product.objects.catxprice(price,chesubcat).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.catxprice(price,chesubcat).order_by("price").reverse()    
+        elif price and chesubcat and order and brand:
+            if order=="priceLower":
+                response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price").reverse()
+        elif price and chesubcat==None and order==None and brand:
+            response=Product.objects.brandxprice(brand,price)
+        elif price and chesubcat==None and order and brand==None:
+            if order=="priceLower":
+                response=Product.objects.get_price_product(price).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.get_price_product(price).order_by("price").reverse()
+        elif price and chesubcat==None and order and brand:
+            if order=="priceLower":
+                response=Product.objects.brandxprice(brand,price).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.brandxprice(brand,price).order_by("price").reverse()
+        
+       
+        
+        
+        elif price==None and chesubcat==None and order==None and brand==None:
+            response=Product.objects.values("id","name","price","marca__name","image").distinct()
+        elif price==None and chesubcat and order and brand==None:
             if order=="priceLower":
                 response=Product.objects.get_category_product(chesubcat).order_by("price")
             elif order=="priceHigher":
-                print("else")
                 response=Product.objects.get_category_product(chesubcat).order_by("price").reverse()           
-
-        elif chesubcat and brand and order:
-            print("checksubcat and brand and order")
+        elif price==None and chesubcat and brand and order:
             if order=="priceLower":
-                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price")
+                response=Product.objects.catxbrand(chesubcat,brand).order_by("price")
             elif order=="priceHigher":
-                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price").reverse()
-            response=Product.objects.filterMultiple(chesubcat,brand) 
-        
-        elif chesubcat and brand:
-            print("checksubcat and brand ")
-            response=Product.objects.filterMultiple(chesubcat,brand)             
-        elif order=="priceLower" and brand:
-            print("priceLower and brand")
-            response=Product.objects.get_brands_product(brand).order_by("price")
-            
-        elif order=="priceHigher" and brand:
-            print("pricehiguer and brand")
-            response=Product.objects.get_brands_product(brand).order_by("price").reverse()
-        elif chesubcat:
-            print("checksubcat")
+                response=Product.objects.catxbrand(chesubcat,brand).order_by("price").reverse()
+        elif price==None and order and brand and chesubcat==None: 
+            if order=="priceLower":
+                response=Product.objects.get_brands_product(brand).order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.get_brands_product(brand).order_by("price").reverse()      
+        elif price==None and order==None and brand and chesubcat:
+            response=Product.objects.catxbrand(chesubcat,brand)
+        elif price==None and order==None and brand and chesubcat==None:
+            response=Product.objects.get_brands_product(brand)
+        elif price==None and order==None and brand==None and chesubcat:
             response=Product.objects.get_category_product(chesubcat)
-        elif brand:
-            print("brand")
-            response = Product.objects.get_brands_product(brand)
-        elif order=="priceLower":
-            response=Product.objects.orderLower()
-        elif order=="priceHigher":
-            response=Product.objects.orderHigher()
-
-        # marca=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
-        # category=Category.objects.values("id","name","slug")
-        # subcategory=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
-        # product=Product.objects.select_related("marca").values("id","name","price","image")
-    
+        elif price==None and order and brand==None and chesubcat==None:
+            if order=="priceLower":
+                response=Product.objects.order_by("price")
+            elif order=="priceHigher":
+                response=Product.objects.order_by("price").reverse()
        
-        # page_obj = paginator2.get_page(page_number)
-    else:
-        print("else")
     post = Paginator(response,4)
     if(request.GET.get("page")):
         page_obj = post.page(request.GET.get("page"))  
@@ -103,34 +102,49 @@ def ProductList(request):
 
 def byCategory(request,slug):
     if request.method=="GET":
-        data = []
         brand=request.GET.get("brand")
         order=request.GET.get("order")
-        
         node = Category.objects.get(slug=slug)
-
+        price=request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
         if node.is_child_node():
             category=Product.objects.values("id","name","price","marca__name","image").filter(category=node)
         else:
-            category=Product.objects.values("id","name","price","marca__name","image").filter(category__parent=node.get_root().id)
-        if order=="priceLower" and brand:
-            print("priceLower and brand")
-            context=category.filter(marca__name=brand).order_by("price")
-        elif order=="priceHigher" and brand:
-            print("priceHigher and brand")
-            context=category.filter(marca__name=brand).order_by("price").reverse()
-        elif brand:
-            print("brand")
+            category=Product.objects.values("id","name","price","marca__name","image").filter(category__parent=node.get_root().id)  
+        if price and brand==None and order==None :
+            context=category.filter(price__lt=price[1],price__gt=price[0])  
+        elif price and brand and order==None:
+            context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0])    
+        elif price and brand and order:
+            if order=="priceLower":
+                context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0]).order_by("price")
+            elif order=="priceHigher":
+                context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0]).order_by("price").reverse()          
+        elif price and brand==None and order:
+            if order=="priceLower":
+                context=category.filter(price__lt=price[1],price__gt=price[0]).order_by("price")    
+            elif order=="priceHigher":
+                context=category.filter(price__lt=price[1],price__gt=price[0]).order_by("price").reverse()
+        elif price and brand and order==None:
+            context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0])
 
+        elif price==None and order==None and brand==None:
+            context=category    
+        elif price==None and order==None and brand:
             context=category.filter(marca__name=brand)
-        elif order:
-            print("order")
-
-            if  order=="priceLower":
+        elif price==None and order and brand==None:
+            if order=="priceLower" :
                 context=category.order_by("price")
-            else:
+            elif order=="priceHigher":
                 context=category.order_by("price").reverse()
-        context=category
+        elif price==None and order and brand:
+            if order=="priceLower" :
+                context=category.filter(marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=category.filter(marca__name=brand).order_by("price").reverse()
         post = Paginator(context,1)
         if(request.GET.get("page")):
             page_obj = post.page(request.GET.get("page"))  
@@ -144,32 +158,48 @@ class byMarcas(TemplateView):
         subcat=request.GET.get("sc")
         marca = kwargs['marca']
         order=request.GET.get("order")
-
+        price=request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
         if subcat==None or subcat=="":
-            subcat=subcat
+            pass
         else:
             subcat=subcat.split(",")
         marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__slug=marca)
-        print("Order es "+str(order))
-        print("categ es "+str(subcat))
-        if subcat:
-            print("subcat")
 
-            context=marcas.filter(category__id__in=subcat)
-      
-        elif order=="priceLower" and subcat:
-            print("priceLower and subcat")
-            context=marcas.filter(category__id__in=subcat).order_by("price")
-        elif order=="priceHigher" and subcat:
-            print("priceHigher and subcat")
-            context=marcas.filter(category__id__in=subcat).order_by("price").reverse()
-        elif order=="priceLower" and subcat==None:
-            print("priceLower")
-            context=marcas.order_by("price")
-        elif order=="priceHigher"  and subcat==None:
-            print("proceHighuer")
-            context=marcas.orderHigher().order_by("price").reverse()
-        context=marcas
+        if price and subcat==None and order==None :
+            context=marcas.filter(price__lt=price[1],price__gt=price[0])  
+        elif price and subcat and order==None:
+            context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0])    
+        elif price and subcat and order:
+            if order=="priceLower":
+                context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0]).order_by("price")
+            elif order=="priceHigher":
+                context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0]).order_by("price").reverse()          
+        elif price and subcat==None and order:
+            if order=="priceLower":
+                context=marcas.filter(price__lt=price[1],price__gt=price[0]).order_by("price")    
+            elif order=="priceHigher":
+                context=marcas.filter(price__lt=price[1],price__gt=price[0]).order_by("price").reverse()
+        elif price and subcat and order==None:
+            context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0])  
+        elif price==None and order==None and subcat :
+            context=marcas.filter(category__in=subcat)
+        elif price==None and order==None and subcat==None:
+            context=marcas
+        elif price==None and order and subcat ==None:
+            if order=="priceLower":
+                context=marcas.order_by("price")
+            elif order=="priceHigher":
+                context=marcas.order_by("price").reverse()
+        elif price==None and order and subcat:
+            if order=="priceLower":
+                context=marcas.filter(category__id__in=subcat).order_by("price")
+            elif order=="priceHigher":
+                context=marcas.filter(category__id__in=subcat).order_by("price").reverse()
+
         post = Paginator(context,1)
         if(request.GET.get("page")):
             page_obj = post.page(request.GET.get("page"))  
@@ -193,93 +223,134 @@ class Search(TemplateView):
         brand=request.GET.get("brand")
         categ=request.GET.get("sc")
         order=request.GET.get("order")
-        print("Order es "+str(order))
-
-        print("brand es "+str(brand))    
-        print("categ es "+str(categ))
-        print("search es "+str(search))
-        
+      
         if categ==None or categ=="":
             categ=categ
         else:
             categ=categ.split(",")
-
+        price=request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
         searchby=Product.objects.values("id","name","price","marca__name","image")
-        if order==None and brand==None and (categ==None or categ=="") and search=="":
+        if price and order==None and brand==None and categ and search=="":
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ)
+        elif price and order==None and search=="" and brand and categ:
+            context=searchby.filter(marca__name=brand,category__in=categ,price__lt=price[1],price__gt=price[0])
+        elif price and order==None and search=="" and  brand==None and categ:    
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ)
+        elif price and order==None and search=="" and brand and categ==None :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand)
+        elif price and order==None and search and brand==None and categ :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ)      
+        elif price and order==None and search and brand==None and (categ==None or categ=="") :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search)       
+        elif price and order==None and search and (categ=="" or categ==None)  and brand :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand,name__icontains=search)
+        elif price and order==None and search and categ  and brand :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand,name__icontains=search,category__in=categ)
+
+        elif  price and order and search=="" and categ   and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ,marca__name=brand).order_by("price").reverse() 
+        elif  price and order and search and (categ=="" or categ==None)  and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,marca__name=brand).order_by("price").reverse()  
+
+        elif price and order and search and (categ=="" or categ==None)  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search).order_by("price").reverse()       
+
+        elif  price and order and search and categ and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price").reverse()   
+        elif  price and order and search=="" and categ==None and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand).order_by("price").reverse()           
+        elif price and  order and search and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ).order_by("price").reverse() 
+        elif  price and order and search=="" and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(category__in=categ).order_by("price").reverse()           
+        elif  price and order and search=="" and brand==None and (categ =="" or categ==None):
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0]).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0]).order_by("price").reverse()   
+        
+        elif price==None and  order==None and brand==None and (categ==None or categ=="") and search=="":
             context=searchby
-        elif order==None and search=="" and brand and categ :
+        elif price==None and  order==None and search=="" and brand and categ :
             context=searchby.filter(marca__name=brand,category__in=categ)
-        elif order==None and search=="" and  brand==None and categ:    
+        elif price==None and  order==None and search=="" and  brand==None and categ:    
             context=searchby.filter(category__in=categ)
-        elif order==None and search=="" and brand and categ==None :
+        elif price==None and  order==None and search=="" and brand and categ==None :
             context=searchby.filter(marca__name=brand)
-        elif order==None and search and brand==None and categ :
+        elif price==None and  order==None and search and brand==None and categ :
             context=searchby.filter(name__icontains=search,category__in=categ)      
-        elif order==None and search and brand==None and (categ==None or categ=="") :
+        elif price==None and  order==None and search and brand==None and (categ==None or categ=="") :
             context=searchby.filter(name__icontains=search)       
-        # elif order==None and search and categ=="" and  brand==None:    
-        #     context=searchby.filter(name__icontains=search)
-        elif order==None and search and (categ=="" or categ==None)  and brand :
+        elif price==None and  order==None and search and (categ=="" or categ==None)  and brand :
             context=searchby.filter(marca__name=brand,name__icontains=search)
-        # elif order==None and search and brand and categ==None :
-        #     context=searchby.filter(marca__name=brand,name__icontains=search) 
-      
-        elif  order and search=="" and categ   and brand:
+        elif price==None and order==None and search and categ  and brand :
+            context=searchby.filter(marca__name=brand,name__icontains=search,category__in=categ)
+        elif  price==None and  order and search=="" and categ   and brand:
             if order=="priceLower":
                 context=searchby.filter(category__in=categ,marca__name=brand).order_by("price")
             elif order=="priceHigher":
                 context=searchby.filter(category__in=categ,marca__name=brand).order_by("price").reverse() 
-        elif  order and search and (categ=="" or categ==None)  and brand:
+        elif price==None and   order and search and (categ=="" or categ==None)  and brand:
             if order=="priceLower":
                 context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price")
             elif order=="priceHigher":
                 context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price").reverse()  
-        # elif order and search and brand and categ==None :
-        #     if order=="priceLower":
-        #         context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price")
-        #     elif order=="priceHigher":
-        #         context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price").reverse()      
-        elif  order and search and (categ=="" or categ==None)  and brand==None:
+        elif price==None and   order and search and (categ=="" or categ==None)  and brand==None:
             if order=="priceLower":
                 context=searchby.filter(name__icontains=search).order_by("price")
             elif order=="priceHigher":
-                context=searchby.filter(name__icontains=search).order_by("price").reverse()       
-        # elif order and search and categ==None and brand==None:    
-        #     if order=="priceLower":
-        #         context=searchby.filter(name__icontains=search).order_by("price")
-        #     elif order=="priceHigher":
-        #         context=searchby.filter(name__icontains=search).order_by("price").reverse()      
-              
-        elif  order and search and categ and brand:
+                context=searchby.filter(name__icontains=search).order_by("price").reverse()                     
+        elif price==None and   order and search and categ and brand:
             if order=="priceLower":
                 context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price")
             elif order=="priceHigher":
                 context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price").reverse()   
-        elif  order and search=="" and categ==None and brand:
+        elif price==None and  order and search=="" and categ==None and brand:
             if order=="priceLower":
                 context=searchby.filter(marca__name=brand).order_by("price")
             elif order=="priceHigher":
                 context=searchby.filter(marca__name=brand).order_by("price").reverse()           
-        elif  order and search and categ  and brand==None:
+        elif price==None and  order and search and categ  and brand==None:
             if order=="priceLower":
                 context=searchby.filter(name__icontains=search,category__in=categ).order_by("price")
             elif order=="priceHigher":
                 context=searchby.filter(name__icontains=search,category__in=categ).order_by("price").reverse() 
-        elif  order and search=="" and categ  and brand==None:
+        elif price==None and  order and search=="" and categ  and brand==None:
             if order=="priceLower":
                 context=searchby.filter(category__in=categ).order_by("price")
             elif order=="priceHigher":
                 context=searchby.filter(category__in=categ).order_by("price").reverse()           
-        elif  order and search=="" and brand==None and categ =="" :
+        elif price==None and  order and search=="" and brand==None and (categ =="" or categ==None) :
             if order=="priceLower":
                 context=searchby.order_by("price")
             elif order=="priceHigher":
                 context=searchby.order_by("price").reverse()   
-        elif  order and search=="" and categ==None  and brand==None:
-            if order=="priceLower":
-                context=searchby.order_by("price")
-            elif order=="priceHigher":
-                context=searchby.order_by("price").reverse()   
+   
         post = Paginator(context,3)
         if(request.GET.get("page")):
             page_obj = post.page(request.GET.get("page"))  

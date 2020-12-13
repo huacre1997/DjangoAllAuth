@@ -52,6 +52,7 @@
 //     })
 // });
 let a=0
+
 $(document).ready(function () {
   $(".subcatCheck").each(function (index2, element2) {
     let arr= $(this).parent().parent().find("input")
