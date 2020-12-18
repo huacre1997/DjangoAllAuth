@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView
 from .models import *
 from django.http import JsonResponse
-from django.shortcuts import redirect,HttpResponse
+from django.shortcuts import redirect,HttpResponse,HttpResponseRedirect
 from django.views import View
 from django.db.models import Q
 import json
@@ -31,17 +31,17 @@ class ProductDetailView(DetailView):
             
             data=Comment()
             data.author=form.cleaned_data["author"]
-            data.comment=form.cleaned_data["comment"]
+            data.comment=form.cleaned_data["comment"]       
             data.ip=request.META.get("REMOTE_ADDR")
             data.rate=form.cleaned_data["rate"]
             data.product_id=self.object.id
             data.save()
-            context = super(ProductDetailView, self).get_context_data(**kwargs)
-            return self.render_to_response(context=context)
-
-        else:
-            print("else")
-            return HttpResponse(form.errors)
+            if form.is_valid():
+                context = self.get_context_data(**kwargs)
+                return self.render_to_response(context)   
+            else:
+                return self.form_invalid(form, **kwargs)
+       
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["image"] = Productimage.objects.filter(product=self.object.id)

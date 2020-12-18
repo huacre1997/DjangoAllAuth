@@ -135,7 +135,7 @@
                             <!-- product tab content -->
                             <div class="tab-content">
                                 <!-- tab1  -->
-                                <div id="tab1" class="tab-pane fade in active">
+                                <div id="tab1" class="tab-pane fade in">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="force-overflow">
@@ -172,20 +172,26 @@
                                 <!-- /tab2  -->
 
                                 <!-- tab3  -->
-                                <div id="tab3" class="tab-pane fade in">
+                                <div id="tab3" class="tab-pane fade in active">
                                     <div class="row">
                                         <!-- Rating -->
                                         <div class="col-md-3">
                                             <div id="rating">
                                                 <div class="rating-avg">
                                                     <span>4.5</span>
-                                                    <div class="rating-stars">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
+                                                       <div class="ratingAvg">
+                                                                    <input type="radio" id="rating55" value="5" checked>
+                                                                    <label for="rating-5"></label>
+                                                                    <input type="radio" id="rating44" value="4" checked>
+                                                                    <label for="rating-4"></label>
+                                                                    <input type="radio"  id="rating33" value="3" checked>
+                                                                    <label for="rating-3"></label>
+                                                                    <input type="radio"  id="rating22" value="2" checked>
+                                                                    <label for="rating-2"></label>
+                                                                    <input type="radio"  id="rating11" value="1" checked>
+                                                                    <label for="rating-1"></label>
+
+                                                                </div>
                                                 </div>
                                                 <ul>
                                                     <li class="d-flex justify-content-between">
@@ -253,61 +259,44 @@
                                         <!-- Reviews -->
                                         <div class="col-md-6">
                                             <div id="reviews">
-                                                <ul class="reviews">
-                                                    {% for i  in comment  %}
-                                                    <li class="mb-1">
-                                                        <div class="review-heading d-flex flex-wrap justify-content-between">
-                                                            <h5 class="name" style="width: 100%;">{{i.author}}</h5>
-                                                            
-                                                            <p class="date">{{i.created_date}}</p>
-                                                          {% if i.rate == 5 %}
-                                                          <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
+                                                <ul class="reviews " >
+                                            {% for i  in comment  %}
+        
+                                                    <div class="post mb-3">
+                                                        <div class="user-block row align-items-center">
+                                                         <div class="col-sm-9" > 
+
+                                                          <img class="img-circle img-bordered-sm" src="{% static 'img/account.png' %}" width="28px" alt="user image">
+                                                          <span class="username">
+                                                            <a href="#">{{i.author}}</a>
+                                                          </span>
+                                                          <span class="description"> {{i.created_date|date:'N d,Y H:i A'}} </span></div>
+                                                             <div class="review-rating col-sm-3">
+                                                           
+                                                            <div class="ratingPost">
+                                                                    <input type="radio"  id="rating5{{object.id}}"   {% if i.rate == 1 %}checked{% endif %}>
+                                                                    <label for="rating5{{object.id}}"></label>
+                                                                    <input type="radio"  id="rating4{{object.id}}"   {% if i.rate == 2 %}checked{% endif %}>
+                                                                    <label for="rating4{{object.id}}"></label>
+                                                                    <input type="radio"  id="rating3{{object.id}}"   {% if i.rate == 3 %}checked{% endif %}>
+                                                                    <label for="rating3{{object.id}}"></label>
+                                                                    <input type="radio"  id="rating2{{object.id}}"   {% if i.rate == 4 %}checked{% endif %}>
+                                                                    <label for="rating2{{object.id}}"></label>
+                                                                    <input type="radio"  id="rating1{{object.id}}"  {% if i.rate == 5 %}checked{% endif %}>
+                                                                    <label for="rating1{{object.id}}"></label>
+
+                                                                </div>
                                                         </div>
-                                                            {% elif i.rate == 4 %}
-                                                            <div class="review-rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                            </div>
-                                                            {% elif i.rate == 3  %}
-                                                            <div class="review-rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                            </div>
-                                                            {% elif i.rate == 2 %}
-                                                            <div class="review-rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                            </div>
-                                                            {% elif i.rate == 1 %}
-                                                            <div class="review-rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                                <i class="fa fa-star-o empty"></i>
-                                                            </div>
-                                                          {% endif %}
-                                                            
                                                         </div>
-                                                        <div class="review-body">
-                                                            <p>{{i.comment}}</p>
-                                                        </div>
-                                                    </li>
-                                                    {% endfor %}
+                                                        <!-- /.user-block -->
+                                                        <p>
+                                                          {{i.comment}}
+                                                        </p>
+                                  
+                                                       
+                                                      </div>
+                                                      {%endfor%}
+                          
                                              
 
 
