@@ -28,6 +28,7 @@ $(document).ready(function () {
 
         // image.img.parentNode.firstChild.nextSibling.style.visibility = "visible";
         // image.img.parentNode.nextSibling.nextSibling.style.display="block";
+
       } else {
         console.log("no loaded")
 
@@ -38,12 +39,13 @@ $(document).ready(function () {
         image.img.setAttribute("src", "../static/img/no-imagen.jpg");
       }
      
+      $(".loader").css("visibility", "hidden");
 
     }
 
     function onAlways() {
       console.log("cargo");
-      
+
     }
   };
   const number = [];
