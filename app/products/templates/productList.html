@@ -351,8 +351,8 @@
                     <h4 class="blue-text">
                       <strong>S/.{{item.price}}</strong>
                     </h4>
-                    <button type="button" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
-                        src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Cotizar</button>
+                    <a href="{% url 'products:product_detail'  item.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                        src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
 
                   </div>
                 </div>

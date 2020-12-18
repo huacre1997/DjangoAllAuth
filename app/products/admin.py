@@ -54,7 +54,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines=[ProductImageAdmin]
     list_display = ('name','category','marca', 'created_by','created','modified_by','modified',"status")
 
-    exclude = ('created_by','modified_by','slug')
+    exclude = ('created_by','modified_by','slug',"meta_keywords","meta_description")
 
 
 

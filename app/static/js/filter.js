@@ -431,8 +431,6 @@ $(document).ready(function () {
     }
 });
 
-
-
 inputNumberMax.addEventListener('change', function () {
   priceSlider.noUiSlider.set([null, this.value]);
 });

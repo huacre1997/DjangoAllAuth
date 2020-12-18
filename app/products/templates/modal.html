@@ -1,24 +1,10 @@
  
     <!-- Classic tabs -->
     <!-- Classic tabs -->
-    <div class="classic-tabs mx-2">
 
-      <ul class="nav indigo darken-4" id="myClassicTabShadow" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link  waves-light active show" id="profile-tab-classic-shadow" data-toggle="tab"
-            href="#profile-classic-shadow" role="tab" aria-controls="profile-classic-shadow"
-            aria-selected="true">Características</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link waves-light" id="follow-tab-classic-shadow" data-toggle="tab" href="#follow-classic-shadow"
-            role="tab" aria-controls="follow-classic-shadow" aria-selected="false">Descripción</a>
-        </li>
+ 
 
-      </ul>
-
-      <div class="tab-content card" id="myClassicTabContentShadow">
-        <div class="tab-pane fade active show" id="profile-classic-shadow" role="tabpanel"
-          aria-labelledby="profile-tab-classic-shadow">
+        
           <div class="row">
           
           <div class="col-6">
@@ -67,20 +53,21 @@
             <strong>SKU</strong>
             <small class="text-muted">{{product.sku}}</small>
           </h5>
-          <h5 class="mb-3">
+          <h5 class="mb-2">
             <strong>Categoría</strong>
             <small class="text-muted">{{product.category}}/{{product.category.parent}}</small>
           </h5>
+          <h5 class="mb-2">
+            <strong>Descripcion</strong><br>
+            <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit alias dolorum necessitatibus similique consequatur, non exercitationem quidem commodi nisi! Iure voluptatem pariatur, enim quasi voluptate maxime aperiam reprehenderit soluta nam.Nihil odit repellat et consectetur corporis aut magni aspernatur sapiente quaerat, quasi libero voluptatem maiores molestiae expedita pariatur temporibus, quidem provident iure? Laboriosam dolorum illum quibusdam numquam sint hic unde.</p>
+          </h5>
          
         
-          <button type="button" class="btn btn-indigo btn-block carrbutton seeDetail waves-effect waves-light"> <img
-              src="/static/icons/recibo.png" class="carrIconButton">&nbsp;&nbsp;Cotizar</button>
+     
           </div>
           </div>
-        </div>
-        <div class="tab-pane fade" id="follow-classic-shadow" role="tabpanel"
-          aria-labelledby="follow-tab-classic-shadow">
-          <div class="scrollbar scrollbar-primary">
+      
+          {% comment %} <div class="scrollbar scrollbar-primary">
             <div class="force-overflow">
           <article class="article">
             <h5 class="article__title"><strong>Descripcion</strong></h5>
@@ -94,12 +81,9 @@
             </div>
           </article>
         </div>
-      </div>
-        </div>
+      </div> {% endcomment %}
 
-      </div>
 
-    </div>
     <!-- Classic tabs -->
 
 

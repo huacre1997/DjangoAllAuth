@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView
 from .models import *
 from django.http import JsonResponse
-from  base.mixins import CustomMixin
 from django.shortcuts import redirect,HttpResponse
 from django.views import View
 from django.db.models import Q
@@ -15,7 +14,20 @@ from django.core.paginator import (
     InvalidPage, PageNotAnInteger, EmptyPage, Paginator)
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
-
+class ProductDetailView(DetailView):
+    model=Product
+    template_name="product_detail.html"
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        qs=Product.objects.defer("meta_description","meta_keywords","created","modified","created_by_id","modified_by_id","status")
+        return qs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["image"] = Productimage.objects.filter(product=self.object.id)
+        return context
+    
 @cache_page(60 * 15)
 def ProductList(request):
     
@@ -62,7 +74,7 @@ def ProductList(request):
         
         
         elif price==None and chesubcat==None and order==None and brand==None:
-            response=Product.objects.values("id","name","price","marca__name","image").distinct()
+            response=Product.objects.values("id","name","price","marca__name","slug","image")
         elif price==None and chesubcat and order and brand==None:
             if order=="priceLower":
                 response=Product.objects.get_category_product(chesubcat).order_by("price")
@@ -100,20 +112,20 @@ def ProductList(request):
     return render(request,"productList.html",context)
 
 
-def byCategory(request,slug):
+def byCategory(request,id,slug):
     if request.method=="GET":
         brand=request.GET.get("brand")
         order=request.GET.get("order")
-        node = Category.objects.get(slug=slug)
+        node = Category.objects.get(id=id)
         price=request.GET.get("price")
         if price==None:
             pass
         else:
             price=price.split(",")
         if node.is_child_node():
-            category=Product.objects.values("id","name","price","marca__name","image").filter(category=node)
+            category=Product.objects.values("id","slug","name","price","marca__name","image").filter(category=node)
         else:
-            category=Product.objects.values("id","name","price","marca__name","image").filter(category__parent=node.get_root().id)  
+            category=Product.objects.values("id","slug","name","price","marca__name","image").filter(category__parent=node.get_root().id)  
         if price and brand==None and order==None :
             context=category.filter(price__lt=price[1],price__gt=price[0])  
         elif price and brand and order==None:
@@ -154,9 +166,8 @@ def byCategory(request,slug):
 class byMarcas(TemplateView):
     template_name="productList.html"
     def get(self,request,*args, **kwargs):
-        data = []
         subcat=request.GET.get("sc")
-        marca = kwargs['marca']
+        marca = kwargs['id']
         order=request.GET.get("order")
         price=request.GET.get("price")
         if price==None:
@@ -167,7 +178,7 @@ class byMarcas(TemplateView):
             pass
         else:
             subcat=subcat.split(",")
-        marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__slug=marca)
+        marcas=Product.objects.values("id","slug","name","price","marca__name","image").filter(marca=marca)
 
         if price and subcat==None and order==None :
             context=marcas.filter(price__lt=price[1],price__gt=price[0])  
@@ -232,7 +243,7 @@ class Search(TemplateView):
             pass
         else:
             price=price.split(",")
-        searchby=Product.objects.values("id","name","price","marca__name","image")
+        searchby=Product.objects.values("id","slug","name","price","marca__name","image")
         if price and order==None and brand==None and categ and search=="":
             context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ)
         elif price and order==None and search=="" and brand and categ:

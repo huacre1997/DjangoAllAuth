@@ -92,6 +92,8 @@ class Marcas(BaseModel):
         verbose_name = 'Marca'
         verbose_name_plural = 'Marcas'
 from django.db.models import Q
+from django.urls import reverse
+
 class ProductQuerySet(models.QuerySet):
     def catxbrand(self,category,brand):
         return self.values("id","name","marca__name","price","image").filter(category__in=category.split(","),marca__name=brand)  
@@ -133,7 +135,8 @@ class Product(BaseModel):
     before = models.DecimalField("Precio anterior",max_digits=9,decimal_places=2,blank=True)   
     category=TreeForeignKey("Category", verbose_name="Categoría", on_delete=models.CASCADE,related_name="children") 
     marca=models.ForeignKey(Marcas, verbose_name="Marcas del producto", on_delete=models.CASCADE,related_name="marca_id")
-    description= RichTextField(blank=True,null=True)
+    descripcion=models.CharField(verbose_name="Descripcion",max_length=200,default="")
+    caracteristicas= RichTextField(blank=True,null=True)
     modelo=models.CharField("Modelo",max_length=50)
     amount=models.IntegerField("Stock")
     slug = models.SlugField(max_length=255, unique=True,help_text='Unique value for product page URL, created from name.') 
@@ -142,7 +145,9 @@ class Product(BaseModel):
     image=models.ImageField("Imagen Principal",blank=True,upload_to="uploads/")
 
     objects=ProductManager()
-   
+    @property
+    def get_absolute_url(self):      
+        return reverse('products:product_detail', kwargs={'slug': self.slug})
     def save(self, *args, **kwargs):
         user = get_current_user()
         if user and not user.pk:
@@ -151,6 +156,9 @@ class Product(BaseModel):
             self.created_by = user
         self.modified_by = user
         self.slug = slugify(self.name)
+        self.meta_keywords = self.name
+        self.meta_description = self.descripcion
+
         super(Product, self).save(*args, **kwargs)
     class Meta:
         verbose_name ="Producto"
@@ -178,3 +186,17 @@ def generate_thumbnails_async(sender, fieldfile, **kwargs):
     tasks.generate_thumbnails.delay(
         model=sender, pk=fieldfile.instance.pk,
         field=fieldfile.field.name)
+class Comment(models.Model):
+    STATUS=(("Nuevo","Nuevo"),("True","True"),("False","False"))
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    author = models.CharField(max_length=200)
+    comment = models.TextField()
+    rate=models.IntegerField(default=1)
+    ip=models.CharField(max_length=20,blank=True)
+    created_date = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=10,choices=STATUS,default="New")
+
+
+    def __str__(self):
+        return self.comment

@@ -1,0 +1,376 @@
+{% extends "index.html" %}
+{% load static %}
+{% block categories %}cat_menu none
+{% endblock categories %}
+{% block content %}
+<div class="section">
+    <!-- container -->
+    <div class="container">
+
+        <div class="card">
+            <div class="card-body">
+                <!-- row -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
+                        <li class="breadcrumb-item subtitle active">{{object.name}}</li>
+
+                    </ol>
+                </nav>
+                <div class="row">
+                    <!-- Product main img -->
+                    <div class="col-md-5 col-md-push-2">
+
+                        <div id="product-main-img">
+
+                            <img src="../../media/{{object.image}}" style="width:80%">
+
+
+
+
+
+                        </div>
+                    </div>
+                    <!-- /Product main img -->
+
+                    <!-- Product thumb imgs -->
+                    <div class="col-md-1  col-md-pull-6">
+                        <div id="product-imgs">
+                            {% for  i in image  %}
+                            <div class="product-preview">
+                                <img src="../../media/{{i.image}}" style="width:80%">
+                            </div>
+                            {% endfor %}
+
+
+
+                        </div>
+                    </div>
+                    <!-- /Product thumb imgs -->
+
+                    <!-- Product details -->
+                    <div class="col-md-6">
+                        <div class="product-details">
+                            <h2 class="product-name">{{object.name}}</h2>
+                            <div>
+                                <div class="product-rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <a class="review-link" href="#">10 opiniones | Agregar opinión</a>
+                            </div>
+                            <div>
+                                <h3 class="product-price">S/.{{object.price}} <del
+                                        class="product-old-price">S/.{{object.before}}</del></h3>
+                                {% if object.amount >= 20 %}
+                                <span class="badge badge-pill badge-success mb-4">Disponible</span>
+                                {%elif object.amount < 20 %}
+                                <span class="badge badge-pill badge-warning  mb-4">Disponible</span>
+                                {%elif object.amount < 10 %}
+                                <span class="badge badge-pill badge-danger  mb-4">No disponible</span>
+
+                                {% endif %}
+
+                            </div>
+                            <dl class="row">
+                                <dt class="col-sm-3">SKU:</dt>
+                                <dd class="col-sm-9">{{object.sku}}</dd>
+
+
+                                <dt class="col-sm-3">Marca:</dt>
+                                <dd class="col-sm-9">{{object.marca}}</dd>
+                                <dt class="col-sm-3">Modelo:</dt>
+                                <dd class="col-sm-9">{{object.modelo}}</dd>
+                                <dt class="col-sm-3">Categorías:</dt>
+                                <dd class="col-sm-9">
+                                    <p><a
+                                            href="{% url 'products:byCategory' object.category.id object.category.slug %}">{{object.category}}</a>
+                                    </p>
+                                    <p><a
+                                            href="{% url 'products:byCategory' object.category.parent.id object.category.parent.slug %}">{{object.category.parent}}</a>
+                                    </p>
+                                </dd>
+
+                                <dt class="col-sm-3 text-truncate">Descripción:</dt>
+                                <dd class="col-sm-9">{{object.descripcion}}</dd>
+
+
+                            </dl>
+
+
+
+
+                            <a href="#" class="btn btn-indigo  carrbutton seeDetail"> <img
+                                    src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Cotizar</a>
+
+
+
+
+                            {% comment %} <ul class="product-links">
+                                <li>Share:</li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+                            </ul> {% endcomment %}
+
+                        </div>
+                    </div>
+                    <!-- /Product details -->
+
+                    <!-- Product tab -->
+                    <div class="col-md-12">
+                        <div id="product-tab">
+                            <!-- product tab nav -->
+                            <ul class="tab-nav">
+                                <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+                                <li><a data-toggle="tab" href="#tab2">Details</a></li>
+                                <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
+                            </ul>
+                            <!-- /product tab nav -->
+
+                            <!-- product tab content -->
+                            <div class="tab-content">
+                                <!-- tab1  -->
+                                <div id="tab1" class="tab-pane fade in active">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="force-overflow">
+                                                <article class="article">
+                                                    <div class="article__content">
+
+
+                                                        {% autoescape off %}
+                                                        {{object.caracteristicas}}
+                                                        {% endautoescape %}
+
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /tab1  -->
+
+                                <!-- tab2  -->
+                                <div id="tab2" class="tab-pane fade in">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                                                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                                                occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                                                mollit anim id est laborum.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /tab2  -->
+
+                                <!-- tab3  -->
+                                <div id="tab3" class="tab-pane fade in">
+                                    <div class="row">
+                                        <!-- Rating -->
+                                        <div class="col-md-3">
+                                            <div id="rating">
+                                                <div class="rating-avg">
+                                                    <span>4.5</span>
+                                                    <div class="rating-stars">
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </div>
+                                                </div>
+                                                <ul class="rating">
+                                                    <li>
+                                                        <div class="rating-stars">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                          </div>
+                                                        <span class="sum">3</span>
+                                                    </li>
+                                                    <li>
+                                                        <div class="rating-stars">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                          </div>
+                                                        <span class="sum">2</span>
+                                                    </li>
+                                                    <li>
+                                                        <div class="rating-stars">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                          </div>
+                                                        <span class="sum">0</span>
+                                                    </li>
+                                                    <li>
+                                                        <div class="rating-stars">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                          </div>
+                                                        <span class="sum">0</span>
+                                                    </li>
+                                                    <li>
+                                                        <div class="rating-stars">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                          </div>
+                                                        <span class="sum">0</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- /Rating -->
+
+                                        <!-- Reviews -->
+                                        <div class="col-md-6">
+                                            <div id="reviews">
+                                                <ul class="reviews">
+                                                    <li>
+                                                        <div class="review-heading">
+                                                            <h5 class="name">John</h5>
+                                                            <p class="date">27 DEC 2018, 8:0 PM</p>
+                                                            <div class="review-rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="review-body">
+                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                                                sed do eiusmod tempor incididunt ut labore et dolore
+                                                                magna aliqua</p>
+                                                        </div>
+                                                    </li>
+                                                 
+                                                
+                                                    <li>
+                                                        <div class="review-heading">
+                                                            <h5 class="name">John</h5>
+                                                            <p class="date">27 DEC 2018, 8:0 PM</p>
+                                                            <div class="review-rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="review-body">
+                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                                                sed do eiusmod tempor incididunt ut labore et dolore
+                                                                magna aliqua</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <ul class="reviews-pagination">
+                                                    <li class="active">1</li>
+                                                    <li><a href="#">2</a></li>
+                                                    <li><a href="#">3</a></li>
+                                                    <li><a href="#">4</a></li>
+                                                    <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- /Reviews -->
+
+                                        <!-- Review Form -->
+                                        <div class="col-md-3">
+                                            <div id="review-form">
+                                                <form class="review-form">
+                                                    <div class="form-outline">
+                                                        <input type="text" id="form1" class="form-control" />
+                                                        <label class="form-label" for="form1">Tu nombre</label>
+                                                      </div>                                                    
+                                                      <div class="form-outline">
+                                                        <textarea class="form-control" id="textAreaExample" rows="4"></textarea>
+                                                        <label class="form-label" for="textAreaExample">Escribe una opinión</label>
+                                                      </div>
+                                                    <div class="input-rating">
+                                                        <span>Your Rating: </span>
+
+                                                        <div class="container">
+                                                            <div class="feedback">
+                                                                <div class="rating">
+                                                                    <input type="radio" name="rating" id="rating-5">
+                                                                    <label for="rating-5"></label>
+                                                                    <input type="radio" name="rating" id="rating-4">
+                                                                    <label for="rating-4"></label>
+                                                                    <input type="radio" name="rating" id="rating-3">
+                                                                    <label for="rating-3"></label>
+                                                                    <input type="radio" name="rating" id="rating-2">
+                                                                    <label for="rating-2"></label>
+                                                                    <input type="radio" name="rating" id="rating-1">
+                                                                    <label for="rating-1"></label>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                            </div>
+
+
+                                            <button class="primary-btn">Submit</button>
+
+
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- /Review Form -->
+                            </div>
+                        </div>
+                        <!-- /tab3  -->
+                    </div>
+                    <!-- /product tab content  -->
+                </div>
+            </div>
+            <!-- /product tab -->
+        </div>
+        <!-- /row -->
+    </div>
+</div>
+</div>
+<!-- /container -->
+</div>
+{% endblock content %}
