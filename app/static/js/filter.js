@@ -21,26 +21,12 @@ $(document).ready(function () {
     imgLoad.on("progress", onProgress);
     imgLoad.on("always", onAlways);
     function onProgress(imgLoad, image) {
-      if (image.isLoaded) {
-        // console.log("loaded")
-        image.img.parentNode.className = "";
-        image.img.parentNode.nextSibling.nextSibling.style.visibility="visible"
-
-        // image.img.parentNode.firstChild.nextSibling.style.visibility = "visible";
-        // image.img.parentNode.nextSibling.nextSibling.style.display="block";
-
-      } else {
-        console.log("no loaded")
-
-
-        image.img.parentNode.nextSibling.nextSibling.style.display = "none";
-
-        // image.img.parentNode.className = "";
-        image.img.setAttribute("src", "../static/img/no-imagen.jpg");
+ 
+      var $item = $( image.img ).parent();
+      $item.removeClass('is-loading');
+      if ( !image.isLoaded ) {
+        $item.addClass('is-broken');
       }
-     
-      $(".loader").css("visibility", "hidden");
-
     }
 
     function onAlways() {
@@ -334,13 +320,13 @@ $(document).ready(function () {
 
     var x=document.getElementsByClassName("imgProduct");
     var i;
-    for (i = 0; i < x.length; i++) {
-      x[i].src = "";
-      x[i].parentNode.className="image_container"
-      x[i].parentNode.nextSibling.nextSibling.style.display = "block";
-      x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
+    // for (i = 0; i < x.length; i++) {
+    //   x[i].src = "";
+    //   x[i].parentNode.className="image_container"
+    //   x[i].parentNode.nextSibling.nextSibling.style.display = "block";
+    //   x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
 
-    }
+    // }
     if ($(this).text()) {
       oldURL = window.location.href;
       console.log(oldURL);

@@ -310,7 +310,7 @@
               <!--Grid column-->
               <!--Card-->
 
-              {% load thumbnail %}
+              {% load imagefit %}
 
               {% for item in product  %}
               <div class="col-lg-4 col-md-12 mb-4">
@@ -318,19 +318,19 @@
                 <div class="card animated fadeIn hoverable">
                   <!--Card image-->
                   <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' item.id %}">
-                    <div class="image_container ">
-                      <div class="loader " style="visibility: visible;">Loading...</div>
+                    <li class="image_container is-loading">
+                      <!-- <div class="loader " style="visibility: visible;">Loading...</div> -->
 
-                      <img src="{{item.image|thumbnail_url:'avatar' }}" style="width:100%;"
-                        class="img-fluid imgProduct">
+                      <img src="../media/{{item.image}}"  
+                        class="imgProduct"  >
 
-                    </div>
-                    <a class="bk product{{item.id}}">
+                    </li>
+                    <!-- <a class="bk product{{item.id}}">
                       <div class="mask flex-center rgba-black-strong">
                         <i class="fas fa-search-plus" style="color: white; font-size: 1.4em;">&nbsp;</i>
                         <p class="white-text">Ver Detalles</p>
                       </div>
-                    </a>
+                    </a> -->
                   </div>
                   <!--Card image-->
                   <!--Card content-->

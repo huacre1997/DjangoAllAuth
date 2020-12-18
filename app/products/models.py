@@ -181,11 +181,7 @@ class Productimage(models.Model):
 
     def __str__(self):
         return self.product.name
-@receiver(saved_file)
-def generate_thumbnails_async(sender, fieldfile, **kwargs):
-    tasks.generate_thumbnails.delay(
-        model=sender, pk=fieldfile.instance.pk,
-        field=fieldfile.field.name)
+
 class Comment(models.Model):
     STATUS=(("Nuevo","Nuevo"),("True","True"),("False","False"))
 

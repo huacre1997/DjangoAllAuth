@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # 'fast_pagination',
     'easy_thumbnails',
     'mptt',
+    'imagefit',
 
     "debug_toolbar",
     'allauth',
@@ -64,17 +65,15 @@ INSTALLED_APPS = [
     "products"
 
 ]
+IMAGEFIT_ROOT = "media"
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
-THUMBNAIL_ALIASES = {
-    '': {
-        'avatar': {'size': (250, 300), 'crop': False},
-    },
-    }
+
 ACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSignupForm'}
 
 SOCIALACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSocialSignupForm'}
