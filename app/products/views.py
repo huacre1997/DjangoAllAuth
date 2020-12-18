@@ -14,20 +14,46 @@ from django.core.paginator import (
     InvalidPage, PageNotAnInteger, EmptyPage, Paginator)
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
+from .forms import RatingForm
 class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
+    form_class=RatingForm
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     def get_queryset(self):
         qs=Product.objects.defer("meta_description","meta_keywords","created","modified","created_by_id","modified_by_id","status")
         return qs
-    
+    def post(self, request, *args, **kwargs):
+        form=RatingForm(request.POST)    
+        self.object = self.get_object()
+        if form.is_valid():
+            
+            data=Comment()
+            data.author=form.cleaned_data["author"]
+            data.comment=form.cleaned_data["comment"]
+            data.ip=request.META.get("REMOTE_ADDR")
+            data.rate=form.cleaned_data["rate"]
+            data.product_id=self.object.id
+            data.save()
+            context = super(ProductDetailView, self).get_context_data(**kwargs)
+            return self.render_to_response(context=context)
+
+        else:
+            print("else")
+            return HttpResponse(form.errors)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["image"] = Productimage.objects.filter(product=self.object.id)
+        post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),4)
+        if  self.request.GET.get('page'):
+            page_obj = post.page( self.request.GET.get('page'))  
+        else:
+            page_obj = post.page(1)
+        context["comment"]=page_obj
         return context
-    
+
+
 @cache_page(60 * 15)
 def ProductList(request):
     

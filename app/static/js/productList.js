@@ -98,5 +98,22 @@ $(document).ready(function () {
       console.log(result);
     });
   });
-  
+  $("#postComment").click(function (e) { 
+    e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url:$("#commentForm").attr("action"),
+        data: $("#commentForm").serialize(),
+        success: function (response) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(response, "text/html");
+       
+          var results=doc.querySelector(".aeaman").textContent
+          console.log(results);
+        }
+      });
+      
+
+
+  });
 });

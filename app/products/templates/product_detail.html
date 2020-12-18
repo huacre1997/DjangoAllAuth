@@ -3,7 +3,7 @@
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
-<div class="section">
+<div class="section aeaman" id="loadDetail">
     <!-- container -->
     <div class="container">
 
@@ -254,10 +254,21 @@
                                         <div class="col-md-6">
                                             <div id="reviews">
                                                 <ul class="reviews">
-                                                    <li>
-                                                        <div class="review-heading">
-                                                            <h5 class="name">John</h5>
-                                                            <p class="date">27 DEC 2018, 8:0 PM</p>
+                                                    {% for i  in comment  %}
+                                                    <li class="mb-1">
+                                                        <div class="review-heading d-flex flex-wrap justify-content-between">
+                                                            <h5 class="name" style="width: 100%;">{{i.author}}</h5>
+                                                            
+                                                            <p class="date">{{i.created_date}}</p>
+                                                          {% if i.rate == 5 %}
+                                                          <div class="review-rating">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </div>
+                                                            {% elif i.rate == 4 %}
                                                             <div class="review-rating">
                                                                 <i class="fa fa-star"></i>
                                                                 <i class="fa fa-star"></i>
@@ -265,41 +276,59 @@
                                                                 <i class="fa fa-star"></i>
                                                                 <i class="fa fa-star-o empty"></i>
                                                             </div>
-                                                        </div>
-                                                        <div class="review-body">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                                                sed do eiusmod tempor incididunt ut labore et dolore
-                                                                magna aliqua</p>
-                                                        </div>
-                                                    </li>
-
-
-                                                    <li>
-                                                        <div class="review-heading">
-                                                            <h5 class="name">John</h5>
-                                                            <p class="date">27 DEC 2018, 8:0 PM</p>
+                                                            {% elif i.rate == 3  %}
                                                             <div class="review-rating">
                                                                 <i class="fa fa-star"></i>
                                                                 <i class="fa fa-star"></i>
                                                                 <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o empty"></i>
                                                                 <i class="fa fa-star-o empty"></i>
                                                             </div>
+                                                            {% elif i.rate == 2 %}
+                                                            <div class="review-rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                            </div>
+                                                            {% elif i.rate == 1 %}
+                                                            <div class="review-rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                                <i class="fa fa-star-o empty"></i>
+                                                            </div>
+                                                          {% endif %}
+                                                            
                                                         </div>
                                                         <div class="review-body">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                                                sed do eiusmod tempor incididunt ut labore et dolore
-                                                                magna aliqua</p>
+                                                            <p>{{i.comment}}</p>
                                                         </div>
                                                     </li>
+                                                    {% endfor %}
+                                             
+
+
                                                 </ul>
-                                                <ul class="reviews-pagination">
-                                                    <li class="active">1</li>
-                                                    <li><a href="#">2</a></li>
-                                                    <li><a href="#">3</a></li>
-                                                    <li><a href="#">4</a></li>
-                                                    <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-                                                </ul>
+                                                <div class="pagination">
+                                                    <span class="step-links">
+                                                        {% if comment.has_previous %}
+                                                            <a href="?page=1">&laquo; first</a>
+                                                            <a href="?page={{ comments.previous_page_number }}">previous</a>
+                                                        {% endif %}
+                                                
+                                                        <span class="current">
+                                                            Page {{ comment.number }} of {{ comment.paginator.num_pages }}.
+                                                        </span>
+                                                
+                                                        {% if comment.has_next %}
+                                                            <a href="?page={{ comment.next_page_number }}">next</a>
+                                                            <a href="?page={{ comment.paginator.num_pages }}">last &raquo;</a>
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- /Reviews -->
@@ -307,32 +336,33 @@
                                         <!-- Review Form -->
                                         <div class="col-md-3">
                                             <div id="review-form">
-                                                <form class="review-form">
+                                                <form class="review-form" id="commentForm" action="{% url 'products:product_detail' object.slug %}">
+                                                    {% csrf_token %}
                                                     <div class="form-outline">
-                                                        <input type="text" id="form1" class="form-control" />
+                                                        <input type="text" id="form1" class="form-control" name="author" />
                                                         <label class="form-label" for="form1">Tu nombre</label>
                                                     </div>
                                                     <div class="form-outline">
-                                                        <textarea class="form-control" id="textAreaExample"
+                                                        <textarea class="form-control" id="textAreaExample" name="comment"
                                                             rows="4"></textarea>
-                                                        <label class="form-label" for="textAreaExample">Escribe una
-                                                            opinión</label>
+                                                        <label class="form-label" for="textAreaExample">Escribe un
+                                                            comentario</label>
                                                     </div>
                                                     <div class="input-rating">
-                                                        <span>Your Rating: </span>
+                                                        <span>Tu puntuación: </span>
 
                                                         <div class="container">
                                                             <div class="feedback">
                                                                 <div class="rating">
-                                                                    <input type="radio" name="rating" id="rating-5">
+                                                                    <input type="radio" name="rate" id="rating-5" value="5">
                                                                     <label for="rating-5"></label>
-                                                                    <input type="radio" name="rating" id="rating-4">
+                                                                    <input type="radio" name="rate" id="rating-4" value="4">
                                                                     <label for="rating-4"></label>
-                                                                    <input type="radio" name="rating" id="rating-3">
+                                                                    <input type="radio" name="rate" id="rating-3" value="3">
                                                                     <label for="rating-3"></label>
-                                                                    <input type="radio" name="rating" id="rating-2">
+                                                                    <input type="radio" name="rate" id="rating-2" value="2">
                                                                     <label for="rating-2"></label>
-                                                                    <input type="radio" name="rating" id="rating-1">
+                                                                    <input type="radio" name="rate" id="rating-1" value="1">
                                                                     <label for="rating-1"></label>
 
                                                                 </div>
@@ -343,8 +373,8 @@
                                             </div>
 
 
-                                            <button class="primary-btn">Submit</button>
-
+                                            <a href="#" class="btn btn-indigo " id="postComment">Publicar</a>
+            
 
                                         </div>
                                         </form>

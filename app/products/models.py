@@ -186,8 +186,8 @@ class Comment(models.Model):
     STATUS=(("Nuevo","Nuevo"),("True","True"),("False","False"))
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
-    author = models.CharField(max_length=200)
-    comment = models.TextField()
+    author = models.CharField(max_length=30)
+    comment = models.TextField(max_length=200)
     rate=models.IntegerField(default=1)
     ip=models.CharField(max_length=20,blank=True)
     created_date = models.DateTimeField(auto_now=True)
