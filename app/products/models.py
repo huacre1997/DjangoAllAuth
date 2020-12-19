@@ -184,11 +184,11 @@ class Productimage(models.Model):
 
 class Comment(models.Model):
     STATUS=(("Nuevo","Nuevo"),("True","True"),("False","False"))
-
+    RATE=(("1",1),("2",2),("3",3),("4",4),("5",5))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     author = models.CharField(max_length=30)
     comment = models.TextField(max_length=200)
-    rate=models.IntegerField(default=1)
+    rate=models.IntegerField(choices=RATE)
     ip=models.CharField(max_length=20,blank=True)
     created_date = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10,choices=STATUS,default="New")

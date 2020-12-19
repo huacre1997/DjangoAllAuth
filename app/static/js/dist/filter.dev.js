@@ -23,16 +23,11 @@ $(document).ready(function () {
     imgLoad.on("always", onAlways);
 
     function onProgress(imgLoad, image) {
-      if (image.isLoaded) {
-        // console.log("loaded")
-        image.img.parentNode.className = "";
-        image.img.parentNode.nextSibling.nextSibling.style.visibility = "visible"; // image.img.parentNode.firstChild.nextSibling.style.visibility = "visible";
-        // image.img.parentNode.nextSibling.nextSibling.style.display="block";
-      } else {
-        console.log("no loaded");
-        image.img.parentNode.nextSibling.nextSibling.style.display = "none"; // image.img.parentNode.className = "";
+      var $item = $(image.img).parent();
+      $item.removeClass('is-loading');
 
-        image.img.setAttribute("src", "../static/img/no-imagen.jpg");
+      if (!image.isLoaded) {
+        $item.addClass('is-broken');
       }
     }
 
@@ -100,6 +95,24 @@ $(document).ready(function () {
         body.stop().animate({
           scrollTop: 150
         }, 500, "swing");
+      }
+    });
+  };
+
+  var callUrlComment = function callUrlComment(url) {
+    $.ajax({
+      type: "get",
+      url: url,
+      startTime: performance.now(),
+      success: function success(response) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(response, "text/html");
+        var img = doc.querySelector(".reviews");
+        $(".reviews").text("").html(img);
+        var time = performance.now() - this.startTime;
+        var seconds = time / 1000;
+        seconds = seconds.toFixed(3);
+        var result = 'AJAX request took ' + seconds + ' seconds to complete.';
       }
     });
     ;
@@ -292,27 +305,46 @@ $(document).ready(function () {
       $("#cleanCheckFilter").prop("disabled", true);
     });
   });
-  $(document).on("click", ".page-link", function (e) {
-    $("#loadingCharge").css("visibility", "visible");
-    $("#spinnner2").css("visibility", "visible");
+  $(document).on("click", "page-item_list>.page-link", function (e) {
+    // $("#loadingCharge").css("visibility", "visible");
+    // $("#spinnner2").css("visibility", "visible");
     var x = document.getElementsByClassName("imgProduct");
-    var i;
-
-    for (i = 0; i < x.length; i++) {
-      x[i].src = "";
-      x[i].parentNode.className = "image_container";
-      x[i].parentNode.nextSibling.nextSibling.style.display = "block";
-      x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
-    }
+    var i; // for (i = 0; i < x.length; i++) {
+    //   x[i].src = "";
+    //   x[i].parentNode.className="image_container"
+    //   x[i].parentNode.nextSibling.nextSibling.style.display = "block";
+    //   x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
+    // }
 
     if ($(this).text()) {
       oldURL = window.location.href;
-      console.log(oldURL);
       var url = new URL(oldURL);
       url.searchParams.set("page", $(this).text()); // setting your param
 
       var newUrl = url.href;
+      console.log(newUrl);
       callUrl(newUrl.replace(/%2C/g, ","));
+    }
+  });
+  $(document).on("click", ".page-item_comment>.page-link", function (e) {
+    // $("#loadingCharge").css("visibility", "visible");
+    // $("#spinnner2").css("visibility", "visible");
+    if (!$(this).is('.active')) {
+      $(".page-item").each(function (index, element) {
+        $(element).removeClass("active");
+      });
+    }
+
+    $(this).parent().addClass("active");
+
+    if ($(this).text()) {
+      oldURL = window.location.href;
+      var url = new URL(oldURL);
+      url.searchParams.set("page", $(this).attr("page_number")); // setting your param
+
+      var newUrl = url.href;
+      console.log(newUrl);
+      callUrlComment(newUrl.replace(/%2C/g, ","));
     }
   });
   var price = [];

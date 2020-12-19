@@ -26,6 +26,12 @@ def priceSeparate(val,arg):
         else:
             return toArr[1]
     return ""
+
+
+@register.filter
+def get_item(dictionary, key):
+  
+    return dictionary[key].get("rate__count")
 register.filter('url', to_url)
 register.filter('priceSeparate', priceSeparate)
 

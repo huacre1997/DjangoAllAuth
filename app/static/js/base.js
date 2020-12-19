@@ -2,7 +2,7 @@ $(function() {
 
   
   new WOW().init();
-  $(".pagination li:nth-child(3)").addClass("active")
+  // $(".pagination li:nth-child(3)").addClass("active")
     $(".children").find("i").remove()
     $('#navbar.navbar-right ul li a').click(function() {
       //clear active status of any parent LI's

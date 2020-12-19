@@ -1,5 +1,7 @@
 {% extends "index.html" %}
 {% load static %}
+{% load poll_extras %}
+
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
@@ -61,7 +63,7 @@
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star-o"></i>
                                 </div>
-                                <a class="review-link" href="#">10 opiniones | Agregar opinión</a>
+                                <a class="review-link" href="#">{{ comment.paginator.count }} comentarios | Agregar comentario</a>
                             </div>
                             <div>
                                 <h3 class="product-price">S/.{{object.price}} <del
@@ -128,7 +130,7 @@
                             <!-- product tab nav -->
                             <ul class="tab-nav">
                                 <li><a data-toggle="tab" href="#tab1">Características</a></li>
-                                <li class="active"><a data-toggle="tab" href="#tab3">Opiniones (3)</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab3">Opiniones ({{ comment.paginator.count }})</a></li>
                             </ul>
                             <!-- /product tab nav -->
 
@@ -178,79 +180,45 @@
                                         <div class="col-md-3">
                                             <div id="rating">
                                                 <div class="rating-avg">
-                                                    <span>4.5</span>
-                                                       <div class="ratingAvg">
-                                                                    <input type="radio" id="rating55" value="5" checked>
-                                                                    <label for="rating-5"></label>
-                                                                    <input type="radio" id="rating44" value="4" checked>
-                                                                    <label for="rating-4"></label>
-                                                                    <input type="radio"  id="rating33" value="3" checked>
-                                                                    <label for="rating-3"></label>
-                                                                    <input type="radio"  id="rating22" value="2" checked>
-                                                                    <label for="rating-2"></label>
-                                                                    <input type="radio"  id="rating11" value="1" checked>
-                                                                    <label for="rating-1"></label>
+                                                    <span>{{starsAvg}}</span>
+                                                    <div class="ratingAvg">
+                                                        <input type="radio" id="rating55">
+                                                        <label for="rating-5"></label>
+                                                        <input type="radio" id="rating44">
+                                                        <label for="rating-4"></label>
+                                                        <input type="radio" id="rating33">
+                                                        <label for="rating-3"></label>
+                                                        <input type="radio" id="rating22">
+                                                        <label for="rating-2"></label>
+                                                        <input type="radio" id="rating11">
+                                                        <label for="rating-1"></label>
 
-                                                                </div>
+                                                    </div>
                                                 </div>
                                                 <ul>
+                                                    {% for i in starsCount %}
+                                                    
                                                     <li class="d-flex justify-content-between">
-                                                        <div class="rating-stars">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
+                                                        <div class="ratingTot">
+                                                            <input type="radio" {% if forloop.counter == 5  %}checked{% endif %}>
+                                                            <label></label>
+                                                            <input type="radio"  {% if forloop.counter == 4  %}checked{% endif %}>
+                                                            <label for="rating-4"></label>
+                                                            <input type="radio"  {% if forloop.counter == 3  %}checked{% endif %}>
+                                                            <label for="rating-3"></label>
+                                                            <input type="radio"  {% if forloop.counter == 2  %}checked{% endif %}>
+                                                            <label for="rating-2"></label>
+                                                            <input type="radio"  {% if forloop.counter == 1  %}checked{% endif %} >
+                                                            <label for="rating-1"></label>
+
                                                         </div>
-                                                          
-                                                            <span class="sum">3</span>
-                                                   
+
+                                                        <span class="sum"> {{i}}   </span>
+
                                                     </li>
-                                                    <li class="d-flex justify-content-between">
-                                                        <div class="rating-stars">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                       
-                                                        <span class="sum">2</span>
-                                                    </li>
-                                                    <li class="d-flex justify-content-between">
-                                                        <div class="rating-stars">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                     
-                                                        <span class="sum">0</span>
-                                                    </li>
-                                                    <li class="d-flex justify-content-between">
-                                                        <div class="rating-stars">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                       
-                                                     
-                                                        <span class="sum">0</span>
-                                                    </li>
-                                                    <li class="d-flex justify-content-between">
-                                                        <div class="rating-stars">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </div>
-                                                   
-                                                        <span class="sum">0</span>
-                                                    </li>
+                                                    {% endfor %}
+                                              
+                                                 
                                                 </ul>
                                             </div>
                                         </div>
@@ -259,63 +227,72 @@
                                         <!-- Reviews -->
                                         <div class="col-md-6">
                                             <div id="reviews">
-                                                <ul class="reviews " >
-                                            {% for i  in comment  %}
-        
+                                                <ul class="reviews ">
+                                                    {% for i  in comment  %}
+
                                                     <div class="post mb-3">
                                                         <div class="user-block row align-items-center">
-                                                         <div class="col-sm-9" > 
+                                                            <div class="col-sm-9">
 
-                                                          <img class="img-circle img-bordered-sm" src="{% static 'img/account.png' %}" width="28px" alt="user image">
-                                                          <span class="username">
-                                                            <a href="#">{{i.author}}</a>
-                                                          </span>
-                                                          <span class="description"> {{i.created_date|date:'N d,Y H:i A'}} </span></div>
-                                                             <div class="review-rating col-sm-3">
-                                                           
-                                                            <div class="ratingPost">
-                                                                    <input type="radio"  id="rating5{{object.id}}"   {% if i.rate == 1 %}checked{% endif %}>
+                                                                <img class="img-circle img-bordered-sm"
+                                                                    src="{% static 'img/account.png' %}" width="28px"
+                                                                    alt="user image">
+                                                                <span class="username">
+                                                                    <a href="#">{{i.author}}</a>
+                                                                </span>
+                                                                <span class="description">
+                                                                    {{i.created_date|date:'N d,Y H:i A'}} </span></div>
+                                                            <div class="review-rating col-sm-3">
+
+                                                                <div class="ratingPost">
+                                                                    <input type="radio" id="rating5{{object.id}}"
+                                                                        {% if i.rate == 1 %}checked{% endif %}>
                                                                     <label for="rating5{{object.id}}"></label>
-                                                                    <input type="radio"  id="rating4{{object.id}}"   {% if i.rate == 2 %}checked{% endif %}>
+                                                                    <input type="radio" id="rating4{{object.id}}"
+                                                                        {% if i.rate == 2 %}checked{% endif %}>
                                                                     <label for="rating4{{object.id}}"></label>
-                                                                    <input type="radio"  id="rating3{{object.id}}"   {% if i.rate == 3 %}checked{% endif %}>
+                                                                    <input type="radio" id="rating3{{object.id}}"
+                                                                        {% if i.rate == 3 %}checked{% endif %}>
                                                                     <label for="rating3{{object.id}}"></label>
-                                                                    <input type="radio"  id="rating2{{object.id}}"   {% if i.rate == 4 %}checked{% endif %}>
+                                                                    <input type="radio" id="rating2{{object.id}}"
+                                                                        {% if i.rate == 4 %}checked{% endif %}>
                                                                     <label for="rating2{{object.id}}"></label>
-                                                                    <input type="radio"  id="rating1{{object.id}}"  {% if i.rate == 5 %}checked{% endif %}>
+                                                                    <input type="radio" id="rating1{{object.id}}"
+                                                                        {% if i.rate == 5 %}checked{% endif %}>
                                                                     <label for="rating1{{object.id}}"></label>
 
                                                                 </div>
-                                                        </div>
+                                                            </div>
                                                         </div>
                                                         <!-- /.user-block -->
                                                         <p>
-                                                          {{i.comment}}
+                                                            {{i.comment}}
                                                         </p>
-                                  
-                                                       
-                                                      </div>
-                                                      {%endfor%}
-                          
-                                             
+
+
+                                                    </div>
+                                                    {%endfor%}
+
+
 
 
                                                 </ul>
                                                 <div class="pagination">
-                                                    <span class="step-links">
-                                                        {% if comment.has_previous %}
-                                                            <a href="?page=1">&laquo; first</a>
-                                                            <a href="?page={{ comments.previous_page_number }}">previous</a>
-                                                        {% endif %}
-                                                
-                                                        <span class="current">
-                                                            Page {{ comment.number }} of {{ comment.paginator.num_pages }}.
-                                                        </span>
-                                                
-                                                        {% if comment.has_next %}
-                                                            <a href="?page={{ comment.next_page_number }}">next</a>
-                                                            <a href="?page={{ comment.paginator.num_pages }}">last &raquo;</a>
-                                                        {% endif %}
+                                                    <span class="step-links d-flex pagination_comment">
+                                                     
+                                                  
+                                                        {% for i in comment.paginator  %}
+                                                        <li
+                                                            class="page-item page-item_comment {% if i.number == 1 %}
+                                                              active 
+                                                            {% endif %}">
+                                                            <a page_number="{{i.number}}"
+                                                                class="page-link ">{{i.number}}</a>
+                                                        </li>
+
+                                                        {% endfor %}
+
+                                               
                                                     </span>
                                                 </div>
                                             </div>
@@ -325,15 +302,17 @@
                                         <!-- Review Form -->
                                         <div class="col-md-3">
                                             <div id="review-form">
-                                                <form class="review-form" id="commentForm" action="{% url 'products:product_detail' object.slug %}">
+                                                <form class="review-form" id="commentForm"
+                                                    action="{% url 'products:product_detail' object.slug %}">
                                                     {% csrf_token %}
                                                     <div class="form-outline">
-                                                        <input type="text" id="form1" class="form-control" name="author" />
+                                                        <input type="text" id="form1" class="form-control"
+                                                            name="author" />
                                                         <label class="form-label" for="form1">Tu nombre</label>
                                                     </div>
                                                     <div class="form-outline">
-                                                        <textarea class="form-control" id="textAreaExample" name="comment"
-                                                            rows="4"></textarea>
+                                                        <textarea class="form-control" id="textAreaExample"
+                                                            name="comment" rows="4"></textarea>
                                                         <label class="form-label" for="textAreaExample">Escribe un
                                                             comentario</label>
                                                     </div>
@@ -343,15 +322,20 @@
                                                         <div class="container">
                                                             <div class="feedback">
                                                                 <div class="rating">
-                                                                    <input type="radio" name="rate" id="rating-5" value="5">
+                                                                    <input type="radio" name="rate" id="rating-5"
+                                                                        value="5">
                                                                     <label for="rating-5"></label>
-                                                                    <input type="radio" name="rate" id="rating-4" value="4">
+                                                                    <input type="radio" name="rate" id="rating-4"
+                                                                        value="4">
                                                                     <label for="rating-4"></label>
-                                                                    <input type="radio" name="rate" id="rating-3" value="3">
+                                                                    <input type="radio" name="rate" id="rating-3"
+                                                                        value="3">
                                                                     <label for="rating-3"></label>
-                                                                    <input type="radio" name="rate" id="rating-2" value="2">
+                                                                    <input type="radio" name="rate" id="rating-2"
+                                                                        value="2">
                                                                     <label for="rating-2"></label>
-                                                                    <input type="radio" name="rate" id="rating-1" value="1">
+                                                                    <input type="radio" name="rate" id="rating-1"
+                                                                        value="1">
                                                                     <label for="rating-1"></label>
 
                                                                 </div>
@@ -363,7 +347,7 @@
 
 
                                             <a href="#" class="btn btn-indigo " id="postComment">Publicar</a>
-            
+
 
                                         </div>
                                         </form>

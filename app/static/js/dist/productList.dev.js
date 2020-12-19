@@ -89,7 +89,6 @@ $(document).ready(function () {
         var parser = new DOMParser();
         var doc = parser.parseFromString(response, "text/html");
         var results = doc.getElementById("tab3").children;
-        console.log(results);
         $("#tab3").text();
         $("#tab3").html(results);
         $("input[name='author']").text("");

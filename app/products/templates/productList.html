@@ -399,7 +399,7 @@
                 </a>
               </li>
               {% for i in product.paginator  %}
-              <li class="page-item {% if request.GET.page == i.number|to_str %}active{% endif %}
+              <li class="page-item page-item_list {% if request.GET.page == i.number|to_str %}active{% endif %}
               {% ifchanged request.GET.page %}{% endifchanged %}
               "> <a page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
 

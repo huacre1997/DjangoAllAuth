@@ -15,6 +15,8 @@ from django.core.paginator import (
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 from .forms import RatingForm
+from django.db.models import Q, Count,Avg
+from django.db import connection
 class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
@@ -43,8 +45,28 @@ class ProductDetailView(DetailView):
                 return self.form_invalid(form, **kwargs)
        
     def get_context_data(self, **kwargs):
+        data=[0,0,0,0,0]
+        total=0
         context = super().get_context_data(**kwargs)
         context["image"] = Productimage.objects.filter(product=self.object.id)
+        q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
+        # with connection.cursor() as cursor:
+        #     cursor.execute("select * from rating")
+        #     row = cursor.fetchall()
+
+       
+        # print(row)
+        for k,i in enumerate(q):
+            data[k]=i["rate__count"]
+        print(data)
+        for k,i in enumerate(data[::-1]):
+            total+=i*(k+1)
+
+            print(total)
+        from functools import reduce
+        suma=reduce((lambda a,b: a+b),data)  
+        context["starsAvg"]=round(total/suma,1)
+        context["starsCount"]=data
         post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),4)
         if  self.request.GET.get('page'):
             page_obj = post.page( self.request.GET.get('page'))  
