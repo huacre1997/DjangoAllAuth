@@ -335,10 +335,9 @@ $(document).ready(function () {
       $("#cleanCheckFilter").prop("disabled", true);
     });
   });
-  $(document).on("click", "page-item_list>.page-link", function (e) {
-    // $("#loadingCharge").css("visibility", "visible");
-    // $("#spinnner2").css("visibility", "visible");
-
+  $(document).on("click", ".page-item_list>.page-link", function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
     var x=document.getElementsByClassName("imgProduct");
     var i;
     // for (i = 0; i < x.length; i++) {

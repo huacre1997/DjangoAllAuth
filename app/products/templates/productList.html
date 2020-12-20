@@ -315,7 +315,7 @@
               {% for item in product  %}
               <div class="col-lg-4 col-md-12 mb-4">
 
-                <div class="card animated fadeIn hoverable">
+                <div class="card animated fadeIn hoverable shadow-2-strong">
                   <!--Card image-->
                   <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' item.id %}">
                     <li class="image_container is-loading">
@@ -334,19 +334,19 @@
                   </div>
                   <!--Card image-->
                   <!--Card content-->
-                  <div class="card-body text-center">
+                  <div class="card-body text-center pt-1">
                     <!--Category & Title-->
                     <a href="" class="grey-text">
                       {{item.marca__name}}
                     </a>
                     <h5 class="h5-responsive">
                       <strong>
-                        <a href="" class="dark-grey-text">{{item.name}}
-                          {% comment %} <span class="badge badge-pill danger-color animated pulse infinite">NEW</span>
-                          {% endcomment %}
-                        </a>
+                        {{item.name}}
+                      
+                   
                       </strong>
                     </h5>
+                      <span class="badge rounded-pill bg-danger animated pulse infinite">NEW</span>
 
                     <h4 class="blue-text">
                       <strong>S/.{{item.price}}</strong>

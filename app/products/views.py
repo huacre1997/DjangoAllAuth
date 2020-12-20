@@ -38,35 +38,35 @@ class ProductDetailView(DetailView):
             data.rate=form.cleaned_data["rate"]
             data.product_id=self.object.id
             data.save()
-            if form.is_valid():
-                context = self.get_context_data(**kwargs)
-                return self.render_to_response(context)   
-            else:
-                return self.form_invalid(form, **kwargs)
-       
+            with connection.cursor() as cursor:
+                cursor.execute("select * from avgRating("+str(self.object.id)+")")
+                row = cursor.fetchone() 
+            self.object.updateRate(row[0])
+            context = self.get_context_data(**kwargs)
+            return self.render_to_response(context)   
+        else:
+            return HttpResponse(form.errors)
     def get_context_data(self, **kwargs):
-        data=[0,0,0,0,0]
+        data=[]
         total=0
         context = super().get_context_data(**kwargs)
         context["image"] = Productimage.objects.filter(product=self.object.id)
         q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
-        # with connection.cursor() as cursor:
-        #     cursor.execute("select * from rating")
-        #     row = cursor.fetchall()
-
-       
-        # print(row)
-        for k,i in enumerate(q):
-            data[k]=i["rate__count"]
-        print(data)
-        for k,i in enumerate(data[::-1]):
+        with connection.cursor() as cursor:
+            cursor.execute("select * from getRating("+str(self.object.id)+")")
+            row = cursor.fetchall()       
+        for i in row:
+            data.append(i[1])
+               
+        for k,i in enumerate(data):
             total+=i*(k+1)
-
-            print(total)
         from functools import reduce
-        suma=reduce((lambda a,b: a+b),data)  
-        context["starsAvg"]=round(total/suma,1)
-        context["starsCount"]=data
+        staravg=0
+        suma=reduce((lambda a,b: a+b),data) 
+        if suma!=0:
+            staravg=round(total/suma,1)
+        context["starsAvg"]=staravg
+        context["starsCount"]=data[::-1]
         post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),4)
         if  self.request.GET.get('page'):
             page_obj = post.page( self.request.GET.get('page'))  
@@ -267,11 +267,15 @@ class byMarcas(TemplateView):
         return render(request,self.template_name,{"product":page_obj ,"tag":"Productos","tag2":marca,"productActive":"active","displayBrand":"none"})
 
 
-def getProduct(request,id):
+def getProduct(request,pk):
     if request.method == 'GET':
-        item=Product.objects.get(id=id)
+        item=Product.objects.get(id=pk)
+        with connection.cursor() as cursor:
+            cursor.execute("select * from nRatings("+str(pk)+")")
+            row = cursor.fetchone() 
+        print(row)
         data = {
-                'response': render_to_string("modal.html", {'product': item}, request=request)}
+                'response': render_to_string("modal.html", {'product': item,"n":row[0]}, request=request)}
         return JsonResponse(data,safe=False)
 class Search(TemplateView):
     template_name="productList.html"

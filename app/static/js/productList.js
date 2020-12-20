@@ -105,12 +105,13 @@ $(document).ready(function () {
         url:$("#commentForm").attr("action"),
         data: $("#commentForm").serialize(),
         success: function (response) {
+          console.log(response);
           var parser = new DOMParser();
           var doc = parser.parseFromString(response, "text/html");
        
-          var results=doc.getElementById("tab3").children
-          $("#tab3").text()
-          $("#tab3").html(results)
+          var results=doc.getElementById("loadDetail").children
+          $("#taloadDetailb3").text()
+          $("#loadDetail").html(results)
           $("input[name='author']").text("")
           $("input[name='comment']").text("")
           $("input[name='rate']").val()

@@ -28,10 +28,14 @@ def priceSeparate(val,arg):
     return ""
 
 
-@register.filter
-def get_item(dictionary, key):
+# @register.filter
+# def get_item(dictionary, key):
   
-    return dictionary[key].get("rate__count")
+#     return dictionary[key].get("rate__count")
+@register.filter
+def percent(num):
+    
+    return int(num/5*100)
 register.filter('url', to_url)
 register.filter('priceSeparate', priceSeparate)
 

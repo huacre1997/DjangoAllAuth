@@ -143,7 +143,7 @@ class Product(BaseModel):
     meta_keywords = models.CharField(max_length=255,help_text='Comma-delimited set of SEO keywords for meta tag')
     meta_description = models.CharField(max_length=255,help_text='Content for description meta tag')
     image=models.ImageField("Imagen Principal",blank=True,upload_to="uploads/")
-
+    rating=models.FloatField(default=0)
     objects=ProductManager()
     @property
     def get_absolute_url(self):      
@@ -174,7 +174,9 @@ class Product(BaseModel):
         item["image"]=self.image.url
         item["price"]=format(self.price,".2f")
         return item
-    
+    def updateRate(self,val):
+        self.rating=val
+        self.save()
 class Productimage(models.Model):
     product=models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
     image=models.ImageField(upload_to="images/")
@@ -184,11 +186,10 @@ class Productimage(models.Model):
 
 class Comment(models.Model):
     STATUS=(("Nuevo","Nuevo"),("True","True"),("False","False"))
-    RATE=(("1",1),("2",2),("3",3),("4",4),("5",5))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     author = models.CharField(max_length=30)
     comment = models.TextField(max_length=200)
-    rate=models.IntegerField(choices=RATE)
+    rate=models.IntegerField(default=1)
     ip=models.CharField(max_length=20,blank=True)
     created_date = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10,choices=STATUS,default="New")
