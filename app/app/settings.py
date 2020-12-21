@@ -49,17 +49,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.sites',
-    # 'fast_pagination',
     'easy_thumbnails',
     'mptt',
     'imagefit',
-
     "debug_toolbar",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'ckeditor',
+    "el_pagination",
+
     "base",
     "accounts",
     "products"
@@ -210,3 +210,4 @@ ACCOUNT_UNIQUE_EMAIL=True
 LOGIN_REDIRECT_URL="/"
 
 ACCOUNT_SIGNUP_REDIRECT_URL="/"
+EL_PAGINATION_PER_PAGE=2   

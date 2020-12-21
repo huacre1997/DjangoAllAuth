@@ -50,7 +50,8 @@
                         </div>
                     </div>
                     <!-- /Product thumb imgs -->
-
+                
+                      
                     <!-- Product details -->
                     <div class="col-md-6">
                         <div class="product-details">
@@ -63,9 +64,67 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modalComment left fade" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog-comment " role="document">
+                                    <div class="modal-content-comment">
+                                        <div class="d-flex flex-row-reverse">    <a  id="closeModal"><img src="{% static 'icons/cancel.png' %}" alt=""></a>
+                                        </div>
+                                        <div class="modal-body">
+                                          
+                                        <div id="review-form ">
+                                               
+                                            <form class="review-form" id="commentForm"
+                                                action="{% url 'products:product_detail' object.slug %}">
+                                                {% csrf_token %}
+                                                <div class="form-outline">
+                                                    <h3>Califica nuestro producto</h3>
+                                                    <label class="form-label" for="form1">Tu nombre</label>
 
-                            <a class="review-link" href="#">{{ comment.paginator.count }} comentarios | Agregar
-                                comentario</a>
+                                                    <input type="text" id="form1" class="form-control" name="author" />
+                                                </div>
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="textAreaExample">Escribe un
+                                                        comentario</label>
+                                                    <textarea class="form-control" id="textAreaExample" name="comment"
+                                                        rows="4"></textarea>
+                                                  
+                                                </div>
+                                                <div class="input-rating">
+                                                    <span>Tu puntuación: </span>
+
+                                                    <div class="container">
+                                                        <div class="feedback">
+                                                            <div class="rating">
+                                                                <input type="radio" name="rate" id="rating-5" value="5">
+                                                                <label for="rating-5"></label>
+                                                                <input type="radio" name="rate" id="rating-4" value="4">
+                                                                <label for="rating-4"></label>
+                                                                <input type="radio" name="rate" id="rating-3" value="3">
+                                                                <label for="rating-3"></label>
+                                                                <input type="radio" name="rate" id="rating-2" value="2">
+                                                                <label for="rating-2"></label>
+                                                                <input type="radio" name="rate" id="rating-1" value="1">
+                                                                <label for="rating-1"></label>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                        </div>
+
+
+                                        <a href="#" class="btn btn-indigo btn-block " id="postComment">Publicar</a>
+
+
+                                        </div>
+                                     
+                                    </div>
+                                </div>
+                            </div> 
+                            <a class="review-link" href="#">{{ comment.paginator.count }} calificaciones </a>| <a  class="text-primary" id="openModal">
+                                Agregar
+                                opinion</a>
                             <div>
                                 <h3 class="fw-bold">S/.{{object.price}} <del
                                         class="product-old-price text-secondary">S/.{{object.before}}</del></h3>
@@ -107,8 +166,8 @@
 
 
 
-                            <a href="#" class="btn btn-indigo  carrbutton seeDetail"> <img
-                                    src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Cotizar</a>
+                            <a href="#" class="btn btn-indigo  carrbutton seeDetail "> <img
+                                    src="{% static 'icons/recibo.png'%}" class="carrIconButton ">&nbsp;&nbsp;Cotizar</a>
 
 
 
@@ -131,7 +190,7 @@
                             <!-- product tab nav -->
                             <ul class="tab-nav">
                                 <li><a data-toggle="tab" href="#tab1">Características</a></li>
-                                <li class="active"><a data-toggle="tab" href="#tab3">Opiniones
+                                <li class="active"><a data-toggle="tab" href="#tab3">Calificaciones
                                         ({{ comment.paginator.count }})</a></li>
                             </ul>
                             <!-- /product tab nav -->
@@ -186,6 +245,7 @@
                                                     <div id="wrapper">
                                                         <div class="star-rating">
                                                             <span style="width:{{starsAvg|percent}}%"></span>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -225,8 +285,11 @@
 
                                         <!-- Reviews -->
                                         <div class="col-md-9">
+                                            <h4>Opiniones de nuestros clientes</h4>
                                             <div id="reviews" class="comments-container">
+                                                {% if comment %}
                                                 <ul id="comments-list" class="comments-list reviews">
+                                              
                                                     {% for i  in comment  %}
                                                     <li>
                                                         <div class="comment-main-level">
@@ -236,8 +299,7 @@
                                                                 width="28px" alt="user image">
                                                             <div class="comment-box">
                                                                 <div class="comment-head d-flex justify-content-between align-items-center">
-                                                                    <div class="d-flex align-items-center"><h6 class="comment-name by-author"><a
-                                                                        href="http://creaticode.com/blog">{{i.author}}</a></h6>
+                                                                    <div class="d-flex align-items-center"><h6 class="comment-name by-author">{{i.author}}</h6>
                                                                 <span> {{i.created_date|date:'N d,Y H:i A'}} </span></div>
                                                                     
                                                                     <div class="ratingPost d-flex align-items-center">
@@ -268,9 +330,7 @@
                                          
                                             </li>
                                             {%endfor%}
-
-
-
+     
 
                                             </ul>
                                             <div class="pagination">
@@ -290,55 +350,17 @@
 
                                                 </span>
                                             </div>
+                                            {%else%}
+                                            <div class="card ">
+                                                <div class="card-body">Aun no hay comentarios para este producto .</div>
+                                              </div>
+                                            {%endif%}
                                         </div>
                                     </div>
                                     <!-- /Reviews -->
 
                                     <!-- Review Form -->
-                                    <!-- <div class="col-md-3">
-                                        <div id="review-form">
-                                            <form class="review-form" id="commentForm"
-                                                action="{% url 'products:product_detail' object.slug %}">
-                                                {% csrf_token %}
-                                                <div class="form-outline">
-                                                    <input type="text" id="form1" class="form-control" name="author" />
-                                                    <label class="form-label" for="form1">Tu nombre</label>
-                                                </div>
-                                                <div class="form-outline">
-                                                    <textarea class="form-control" id="textAreaExample" name="comment"
-                                                        rows="4"></textarea>
-                                                    <label class="form-label" for="textAreaExample">Escribe un
-                                                        comentario</label>
-                                                </div>
-                                                <div class="input-rating">
-                                                    <span>Tu puntuación: </span>
-
-                                                    <div class="container">
-                                                        <div class="feedback">
-                                                            <div class="rating">
-                                                                <input type="radio" name="rate" id="rating-5" value="5">
-                                                                <label for="rating-5"></label>
-                                                                <input type="radio" name="rate" id="rating-4" value="4">
-                                                                <label for="rating-4"></label>
-                                                                <input type="radio" name="rate" id="rating-3" value="3">
-                                                                <label for="rating-3"></label>
-                                                                <input type="radio" name="rate" id="rating-2" value="2">
-                                                                <label for="rating-2"></label>
-                                                                <input type="radio" name="rate" id="rating-1" value="1">
-                                                                <label for="rating-1"></label>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                        </div>
-
-
-                                        <a href="#" class="btn btn-indigo btn-block " id="postComment">Publicar</a>
-
-
-                                    </div> -->
+                        
                                     </form>
                                 </div>
                             </div>

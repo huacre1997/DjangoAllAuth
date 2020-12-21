@@ -88,7 +88,10 @@
                 <label class="custom-control-label" for="defaultUnchecked{{node.id}}">{{node.name}}
                 </label>
                 <span class="badge badge-info  indigo darken-1">
+                  {% comment %}
                   {{node.products_cumulative_count}}
+
+                  {% endcomment %}
 
                 </span>
               </div>
@@ -274,7 +277,7 @@
         </div>
 
         <section class="ListProducts" id="ListProducts">
-          {% if  product %}
+          {% if  entries %}
 
           <section class="text-center mb-4">
 
@@ -311,17 +314,18 @@
               <!--Card-->
 
               {% load imagefit %}
+            
 
-              {% for item in product  %}
+              {% for entry in entries  %}
               <div class="col-lg-4 col-md-12 mb-4">
 
                 <div class="card animated fadeIn hoverable shadow-2-strong">
                   <!--Card image-->
-                  <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' item.id %}">
+                  <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' entry.id %}">
                     <li class="image_container is-loading">
                       <!-- <div class="loader " style="visibility: visible;">Loading...</div> -->
 
-                      <img src="../media/{{item.image}}"  
+                      <img src="../media/{{entry.image}}"  
                         class="imgProduct"  >
 
                     </li>
@@ -337,11 +341,11 @@
                   <div class="card-body text-center pt-1">
                     <!--Category & Title-->
                     <a href="" class="grey-text">
-                      {{item.marca__name}}
+                      {{entry.marca__name}}
                     </a>
                     <h5 class="h5-responsive">
                       <strong>
-                        {{item.name}}
+                        {{entry.name}}
                       
                    
                       </strong>
@@ -349,9 +353,9 @@
                       <span class="badge rounded-pill bg-danger animated pulse infinite">NEW</span>
 
                     <h4 class="blue-text">
-                      <strong>S/.{{item.price}}</strong>
+                      <strong>S/.{{entry.price}}</strong>
                     </h4>
-                    <a href="{% url 'products:product_detail'  item.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                    <a href="{% url 'products:product_detail'  entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
                         src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
 
                   </div>
@@ -361,7 +365,7 @@
               </div>
 
               {% endfor %}
-
+          
 
 
 
@@ -379,34 +383,35 @@
             {% endif %}
           </section>
           <!--Section: Products v.3-->
-
+        
           <!--Pagination-->
+   
+         
           <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;"
             id="paginator">
             <ul class="pagination pagination-circle pg-blue">
 
               <!--Arrow left-->
 
-              <li class="page-item  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link"
+              <li class="page-item page-item_list  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link"
                   page_number="1">Primero</a>
               </li>
 
-              <li class="page-item ">
+              <li class="page-item page-item_list  ">
                 <a class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous"
                   page_number="{% if page_obj.has_previous %}{{product.previous_page_number}}{% endif %}">
                   <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
                   <span class="sr-only">Anterior</span>
                 </a>
               </li>
-              {% for i in product.paginator  %}
-              <li class="page-item page-item_list {% if request.GET.page == i.number|to_str %}active{% endif %}
-              {% ifchanged request.GET.page %}{% endifchanged %}
-              "> <a page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
+              
+              {% for i in entries.paginator  %}
+              <li class="page-item page-item_list {% if request.GET.page == i.number|to_str  %}active{% endif %}"> <a page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
 
               {% endfor %}
 
               {% if page_obj.has_next %}
-              <li class="page-item">
+              <li class="page-item page-item_list ">
                 <a class="page-link" aria-label="Next" page_number="{{ page_obj.next_page_number }}">
                   <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
                   <span class="sr-only">Next</span>
@@ -424,8 +429,10 @@
 
             </ul>
           </nav>
+         
 
         </section>
+   
         <!--Pagination-->
 
       </div>

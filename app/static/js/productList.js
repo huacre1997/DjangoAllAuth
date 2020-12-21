@@ -115,7 +115,8 @@ $(document).ready(function () {
           $("input[name='author']").text("")
           $("input[name='comment']").text("")
           $("input[name='rate']").val()
-
+          $(".modal-backdrop").removeClass("modal-backdrop fade show ")
+          $("#exampleModal").css("opacity","0")
         }
       });
       

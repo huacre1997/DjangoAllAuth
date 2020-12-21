@@ -683,6 +683,12 @@ html, body {
  -moz-border-radius: 3px;
  border-radius: 3px;
 }
+.crop-circle{
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 50%;
+}
 
 /** =====================
 * Responsive
@@ -699,10 +705,81 @@ html, body {
  .reply-list .comment-box {
    width: 320px;
  }
+
 }
-.crop-circle{
-  width: 65px;
-  height: 65px;
-  object-fit: cover;
-  border-radius: 50%;
+.modalComment.left .modal-dialog-comment {
+  position:fixed;
+  background: white;
+  right: 0;
+  bottom: 30%;
+	margin: auto;
+  width: auto ;
+height: 450px;	-webkit-transform: translate3d(0%, 0, 0);
+	-ms-transform: translate3d(0%, 0, 0);
+	-o-transform: translate3d(0%, 0, 0);
+  transform: translate3d(0%, 0, 0);
+  z-index: 11111;
+}
+
+.modalComment.left .modal-content-comment {
+	height: 100%;
+	overflow-y: auto;
+}
+
+.modalComment.right .modal-body-comment {
+	padding: 15px 15px 80px;
+}
+
+.modalComment.right.fade .modal-dialog-comment {
+	left: -320px;
+	-webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+	-moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+	-o-transition: opacity 0.3s linear, left 0.3s ease-out;
+	transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+
+.modalComment.right.fade.show .modal-dialog-comment {
+	right: 0;
+}
+
+/* ----- MODAL STYLE ----- */
+.modal-content-comment {
+	border-radius: 0;
+	border: none;
+}
+
+.modal-header {
+	border-bottom-color: #eeeeee;
+	background-color: #fafafa;
+}
+
+/* ----- v CAN BE DELETED v ----- */
+
+.demo {
+	padding-top: 60px;
+	padding-bottom: 110px;
+}
+
+.btn-demo {
+	margin: 15px;
+	padding: 10px 15px;
+	border-radius: 0;
+	font-size: 16px;
+	background-color: #ffffff;
+}
+
+.btn-demo:focus {
+	outline: 0;
+}
+
+.image_container img{
+  width: 100%;
+  height: auto;
+}
+@supports(object-fit: cover){
+    .image_container img{
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
 }

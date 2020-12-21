@@ -2,7 +2,17 @@ $(function() {
 
   
   new WOW().init();
-  // $(".pagination li:nth-child(3)").addClass("active")
+  $(document).on("click","#closeModal",function () { 
+    $(".modal-backdrop").removeClass("modal-backdrop fade show ")
+    $("#exampleModal").css("opacity","0")
+  });
+  $(document).on("click","#openModal",function () { 
+  
+
+    $( "<div class='modal-backdrop  show animate__animated animate__fadeIn'></div>" ).insertAfter( "body" );
+    $("#exampleModal").css("opacity","1")
+  });
+  $(".pagination .page-item_list:nth-child(3)").addClass("active")
     $(".children").find("i").remove()
     $('#navbar.navbar-right ul li a').click(function() {
       //clear active status of any parent LI's

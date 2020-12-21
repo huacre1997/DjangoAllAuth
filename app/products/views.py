@@ -17,6 +17,8 @@ from django.views.decorators.cache import cache_page
 from .forms import RatingForm
 from django.db.models import Q, Count,Avg
 from django.db import connection
+from .ModelPagination import ModelPagination
+
 class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
@@ -149,14 +151,16 @@ def ProductList(request):
                 response=Product.objects.order_by("price")
             elif order=="priceHigher":
                 response=Product.objects.order_by("price").reverse()
-       
-    post = Paginator(response,4)
+    post = Paginator(response, 4)
     if(request.GET.get("page")):
         page_obj = post.page(request.GET.get("page"))  
     else:
         page_obj = post.page(1)
             
-    context={"product":page_obj,"text":'Nuestros productos.',"tag":"Productos","productActive":"active"}
+    context={"entries":page_obj,"text":'Nuestros productos.',"tag":"Productos","productActive":"active",
+
+    
+    }
     return render(request,"productList.html",context)
 
 

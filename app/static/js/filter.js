@@ -3,9 +3,10 @@ $(document).ready(function () {
    $("#loadingCharge").css("visibility", "hidden");
     $("#spinnner2").css("visibility", "hidden");
    $( ".endless_page_link").each(function (index, element) {
-     $(element).attr("href","")
+     $(element).removeAttr("href")
      
    });
+
   window.onload = function () {
  
   };
@@ -65,6 +66,7 @@ $(document).ready(function () {
     $.ajax({  
       type: "get",
       url: url,
+      dataType: "html",
       startTime: performance.now(),
       success: function (response) {
         var parser = new DOMParser();
@@ -83,7 +85,7 @@ $(document).ready(function () {
          seconds = seconds.toFixed(3);
   
          var result = 'AJAX request took ' + seconds + ' seconds to complete.';
-        //  console.log(result);
+         console.log(result);
          imageLoad();
          $("#loadingCharge").css("visibility", "hidden");
          $("#spinnner2").css("visibility", "hidden");
@@ -338,15 +340,13 @@ $(document).ready(function () {
   $(document).on("click", ".page-item_list>.page-link", function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
-    var x=document.getElementsByClassName("imgProduct");
-    var i;
-    // for (i = 0; i < x.length; i++) {
-    //   x[i].src = "";
-    //   x[i].parentNode.className="image_container"
-    //   x[i].parentNode.nextSibling.nextSibling.style.display = "block";
-    //   x[i].parentNode.firstChild.nextSibling.style.visibility = "visible";
+    if(!$(this).is('.active')){
+    $(".page-item").each(function (index, element) {
+      $(element).removeClass("active")
+      
+    });}
+    $(this).parent().addClass("active")
 
-    // }
     if ($(this).text()) {
       oldURL = window.location.href;
       var url = new URL(oldURL);
@@ -356,7 +356,22 @@ $(document).ready(function () {
       callUrl(newUrl.replace(/%2C/g, ","));
     }
 
-  
+    
+  });
+  $(document).on("click", ".endless_page_link" , function (e) {
+    $("#loadingCharge").css("visibility", "visible");
+    $("#spinnner2").css("visibility", "visible");
+    console.log("ae3a");
+    if ($(this).text()) {
+      oldURL = window.location.href;
+      var url = new URL(oldURL);
+      url.searchParams.set("page", $(this).text()); // setting your param
+      var newUrl = url.href;
+      console.log(newUrl);
+      callUrl(newUrl.replace(/%2C/g, ","));
+    }
+
+    
   });
   $(document).on("click",".page-item_comment>.page-link", function (e) {
     // $("#loadingCharge").css("visibility", "visible");
