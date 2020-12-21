@@ -17,8 +17,6 @@ from django.views.decorators.cache import cache_page
 from .forms import RatingForm
 from django.db.models import Q, Count,Avg
 from django.db import connection
-from .ModelPagination import ModelPagination
-
 class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
@@ -76,92 +74,104 @@ class ProductDetailView(DetailView):
             page_obj = post.page(1)
         context["comment"]=page_obj
         return context
+from render_block import render_block_to_string
 
-
-@cache_page(60 * 15)
-def ProductList(request):
-    
-    if request.method == 'GET':
-        brand=request.GET.get("brand")
-        order=request.GET.get("order")
-        chesubcat=request.GET.get("sc")
-        price=request.GET.get("price")
-        if price==None:
-            pass
+class ProductList(TemplateView):
+    model=Product
+    template_name="productList.html"
+   
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        response =  Product.objects.values("id","name","price","marca__name","slug","image")
+        post = Paginator(response, 4)
+        if(self.request.GET.get("page")):
+            page_obj = post.page(self.request.GET.get("page"))  
         else:
-            price=price.split(",")
+            page_obj = post.page(1)
+        context["entries"]=page_obj
+        return context
+    def post(self, context, **response_kwargs) :
+            print(self.request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
+            brand=self.request.GET.get("brand")
+            order=self.request.GET.get("order")
+            chesubcat=self.request.GET.get("sc")
+            price=self.request.GET.get("price")
+            if price==None:
+                pass
+            else:
+                price=price.split(",")
 
-        if price and chesubcat==None and order==None and brand==None:
-            response=Product.objects.get_price_product(price)
-        elif price and chesubcat and order==None and brand:
-            response=Product.objects.filterMultiple(chesubcat,brand,price)
-        elif price and chesubcat and order==None and brand==None:
-            response=Product.objects.catxprice(price,chesubcat)
-        elif price and chesubcat and order and brand==None:
-            if order=="priceLower":
-                response=Product.objects.catxprice(price,chesubcat).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.catxprice(price,chesubcat).order_by("price").reverse()    
-        elif price and chesubcat and order and brand:
-            if order=="priceLower":
-                response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price").reverse()
-        elif price and chesubcat==None and order==None and brand:
-            response=Product.objects.brandxprice(brand,price)
-        elif price and chesubcat==None and order and brand==None:
-            if order=="priceLower":
-                response=Product.objects.get_price_product(price).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.get_price_product(price).order_by("price").reverse()
-        elif price and chesubcat==None and order and brand:
-            if order=="priceLower":
-                response=Product.objects.brandxprice(brand,price).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.brandxprice(brand,price).order_by("price").reverse()
-        
-       
-        
-        
-        elif price==None and chesubcat==None and order==None and brand==None:
-            response=Product.objects.values("id","name","price","marca__name","slug","image")
-        elif price==None and chesubcat and order and brand==None:
-            if order=="priceLower":
-                response=Product.objects.get_category_product(chesubcat).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.get_category_product(chesubcat).order_by("price").reverse()           
-        elif price==None and chesubcat and brand and order:
-            if order=="priceLower":
-                response=Product.objects.catxbrand(chesubcat,brand).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.catxbrand(chesubcat,brand).order_by("price").reverse()
-        elif price==None and order and brand and chesubcat==None: 
-            if order=="priceLower":
-                response=Product.objects.get_brands_product(brand).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.get_brands_product(brand).order_by("price").reverse()      
-        elif price==None and order==None and brand and chesubcat:
-            response=Product.objects.catxbrand(chesubcat,brand)
-        elif price==None and order==None and brand and chesubcat==None:
-            response=Product.objects.get_brands_product(brand)
-        elif price==None and order==None and brand==None and chesubcat:
-            response=Product.objects.get_category_product(chesubcat)
-        elif price==None and order and brand==None and chesubcat==None:
-            if order=="priceLower":
-                response=Product.objects.order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.order_by("price").reverse()
-    post = Paginator(response, 4)
-    if(request.GET.get("page")):
-        page_obj = post.page(request.GET.get("page"))  
-    else:
-        page_obj = post.page(1)
+            if price and chesubcat==None and order==None and brand==None:
+                response=Product.objects.get_price_product(price)
+            elif price and chesubcat and order==None and brand:
+                response=Product.objects.filterMultiple(chesubcat,brand,price)
+            elif price and chesubcat and order==None and brand==None:
+                response=Product.objects.catxprice(price,chesubcat)
+            elif price and chesubcat and order and brand==None:
+                if order=="priceLower":
+                    response=Product.objects.catxprice(price,chesubcat).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.catxprice(price,chesubcat).order_by("price").reverse()    
+            elif price and chesubcat and order and brand:
+                if order=="priceLower":
+                    response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price").reverse()
+            elif price and chesubcat==None and order==None and brand:
+                response=Product.objects.brandxprice(brand,price)
+            elif price and chesubcat==None and order and brand==None:
+                if order=="priceLower":
+                    response=Product.objects.get_price_product(price).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.get_price_product(price).order_by("price").reverse()
+            elif price and chesubcat==None and order and brand:
+                if order=="priceLower":
+                    response=Product.objects.brandxprice(brand,price).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.brandxprice(brand,price).order_by("price").reverse()
             
-    context={"entries":page_obj,"text":'Nuestros productos.',"tag":"Productos","productActive":"active",
+        
+            
+            
+            elif price==None and chesubcat==None and order==None and brand==None:
+                response=Product.objects.values("id","name","price","marca__name","slug","image")
+            elif price==None and chesubcat and order and brand==None:
+                if order=="priceLower":
+                    response=Product.objects.get_category_product(chesubcat).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.get_category_product(chesubcat).order_by("price").reverse()           
+            elif price==None and chesubcat and brand and order:
+                if order=="priceLower":
+                    response=Product.objects.catxbrand(chesubcat,brand).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.catxbrand(chesubcat,brand).order_by("price").reverse()
+            elif price==None and order and brand and chesubcat==None: 
+                if order=="priceLower":
+                    response=Product.objects.get_brands_product(brand).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.get_brands_product(brand).order_by("price").reverse()      
+            elif price==None and order==None and brand and chesubcat:
+                response=Product.objects.catxbrand(chesubcat,brand)
+            elif price==None and order==None and brand and chesubcat==None:
+                response=Product.objects.get_brands_product(brand)
+            elif price==None and order==None and brand==None and chesubcat:
+                response=Product.objects.get_category_product(chesubcat)
+            elif price==None and order and brand==None and chesubcat==None:
+                if order=="priceLower":
+                    response=Product.objects.order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.order_by("price").reverse()
+            post = Paginator(response, 4)
+            if(self.request.GET.get("page")):
+                page_obj = post.page(self.request.GET.get("page"))  
+            else:
+                page_obj = post.page(1)
+            context={"entries":page_obj,"text":'Nuestros productos.',"tag":"Productos","productActive":"active",
 
-    
-    }
-    return render(request,"productList.html",context)
+            
+            }
+            return HttpResponse(render_block_to_string("productList.html","content",context=context,request=self.request))
+        
 
 
 def byCategory(request,id,slug):
