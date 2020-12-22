@@ -1,5 +1,4 @@
 $(function() {
-
   
   new WOW().init();
   $(document).on("click","#closeModal",function () { 
@@ -12,7 +11,9 @@ $(function() {
     $( "<div class='modal-backdrop  show animate__animated animate__fadeIn'></div>" ).insertAfter( "body" );
     $("#exampleModal").css("opacity","1")
   });
-  $(".pagination .page-item_list:nth-child(3)").addClass("active")
+  if (!window.location.href.includes("page") || window.location.href.includes("order") || window.location.href.includes("sc") || window.location.href.includes("price") || !window.location.href.includes()=="") {
+    console.log(window.location.href);
+  $(".pagination .page-item_list:nth-child(3)").addClass("active")}
     $(".children").find("i").remove()
     $('#navbar.navbar-right ul li a').click(function() {
       //clear active status of any parent LI's

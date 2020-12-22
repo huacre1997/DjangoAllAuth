@@ -44,30 +44,8 @@ $(document).ready(function () {
     });
   }
   imageLoad();
-  const renderPage=(dataHtml,url)=>{
 
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(dataHtml, "text/html");
-    var img = doc.querySelector(".ListProducts");
-    document.getElementById("ListProducts").innerHTML = "";
-    document.getElementById("ListProducts").appendChild(img);
-    window.history.pushState({ page: "another" }, "another page", url);
-  }
   const callUrl =  (url) => {
-    //  fetch(url,{
-    //   headers:{
-    //            "X-Requested-With":"XMLHttpRequest"
-    //          }
-    //  }).then(function(response){
-    //   console.log(response);
-    // });
-    
-    // $.get(url, 
-    //   function (data, textStatus, jqXHR) {
-   
-    //   },
-    //   "html"
-    // );
     function getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
@@ -92,16 +70,17 @@ $(document).ready(function () {
         "X-CSRFToken":getCookie('csrftoken'),
         "X-Requested-With":"XMLHttpRequest"
       },
+      data:{"aea":"aeaa"},
       startTime: performance.now(),
       success: function (response) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(response, "text/html");
-        var img = doc.querySelector(".ListProducts");
-        var title=doc.querySelector(".titleProducts").textContent
-        var subtitle=doc.querySelector(".subtitle").textContent
-        var results=doc.querySelector(".results").textContent
+        var img = doc.querySelector(".ListProducts").children;
+        // var title=doc.querySelector(".titleProducts").textContent
+        // var subtitle=doc.querySelector(".subtitle").textContent
+        // var results=doc.querySelector(".results").textContent
 
-        $("#ListProducts").html(img)
+        $("#ListProducts").text("").append(img)
         window.history.pushState({ page: "another" }, "another page", url);
          var time = performance.now() - this.startTime;
  
@@ -114,9 +93,9 @@ $(document).ready(function () {
          imageLoad();
          $("#loadingCharge").css("visibility", "hidden");
          $("#spinnner2").css("visibility", "hidden");
-          $(".titleProducts").text(title)
-          $(".subtitle").text(subtitle)
-          $(".results").text(results)
+          // $(".titleProducts").text(title)
+          // $(".subtitle").text(subtitle)
+          // $(".results").text(results)
 
          var body = $("html, body");
          body.stop().animate({ scrollTop: 150 }, 500, "swing");
@@ -127,15 +106,16 @@ $(document).ready(function () {
   }
   const callUrlComment =  (url) => {
     $.ajax({  
-      type: "get",
+      type: "post",
       url: url,
+      data:{"action":"next"},
       startTime: performance.now(),
       success: function (response) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(response, "text/html");
         var img = doc.querySelector(".reviews");
 
-        $(".reviews").text("").html(img)
+        $(".reviews").html(img)
          var time = performance.now() - this.startTime;
  
          var seconds = time / 1000;
@@ -143,7 +123,8 @@ $(document).ready(function () {
          seconds = seconds.toFixed(3);
   
          var result = 'AJAX request took ' + seconds + ' seconds to complete.';
-     
+         console.log(result);
+
       }
     
   });;
@@ -376,7 +357,7 @@ $(document).ready(function () {
     if ($(this).text()) {
       oldURL = window.location.href;
       var url = new URL(oldURL);
-      url.searchParams.set("page", $(this).text()); // setting your param
+      url.searchParams.set("page", $(this).attr("page_number")); // setting your param
       var newUrl = url.href;
       console.log(newUrl);
       callUrl(newUrl.replace(/%2C/g, ","));
@@ -414,7 +395,6 @@ $(document).ready(function () {
       var url = new URL(oldURL);
       url.searchParams.set("page", $(this).attr("page_number")); // setting your param
       var newUrl = url.href;
-      console.log(newUrl);
       callUrlComment(newUrl.replace(/%2C/g, ","));
 
     }
