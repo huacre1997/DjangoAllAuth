@@ -9,7 +9,7 @@ from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     # path('', ProductsView, name="productView"),
-     path('products/<int:id>/<str:slug>/',byCategory,name="byCategory"),
+     path('products/<int:id>/<str:slug>/',byCategory.as_view(),name="byCategory"),
      path('products/<int:id>/<str:marca>',byMarcas.as_view(),name="byMarcas"),
 
      path('products/',cache_page(60 * 15)(ProductList.as_view()),name="getProducList"),

@@ -287,7 +287,7 @@
                                         <div class="col-md-9">
                                             <h4>Opiniones de nuestros clientes</h4>
                                             <div id="reviews" class="comments-container">
-                                                {% if comment %}
+                                            {% if comment %}
                                                 <ul id="comments-list" class="comments-list reviews">
                                               
                                                     {% for i  in comment  %}
@@ -303,21 +303,21 @@
                                                                 <span> {{i.created_date|date:'N d,Y H:i A'}} </span></div>
                                                                     
                                                                     <div class="ratingPost d-flex align-items-center">
-                                                                        <input type="radio" id="rating5{{object.id}}"
+                                                                        <input type="radio" 
                                                                             {% if i.rate == 1 %}checked{% endif %}>
-                                                                        <label for="rating5{{object.id}}"></label>
-                                                                        <input type="radio" id="rating4{{object.id}}"
+                                                                        <label ></label>
+                                                                        <input type="radio"
                                                                             {% if i.rate == 2 %}checked{% endif %}>
-                                                                        <label for="rating4{{object.id}}"></label>
-                                                                        <input type="radio" id="rating3{{object.id}}"
+                                                                        <label></label>
+                                                                        <input type="radio"
                                                                             {% if i.rate == 3 %}checked{% endif %}>
-                                                                        <label for="rating3{{object.id}}"></label>
-                                                                        <input type="radio" id="rating2{{object.id}}"
+                                                                        <label></label>
+                                                                        <input type="radio"
                                                                             {% if i.rate == 4 %}checked{% endif %}>
-                                                                        <label for="rating2{{object.id}}"></label>
-                                                                        <input type="radio" id="rating1{{object.id}}"
+                                                                        <label ></label>
+                                                                        <input type="radio" 
                                                                             {% if i.rate == 5 %}checked{% endif %}>
-                                                                        <label for="rating1{{object.id}}"></label>
+                                                                        <label ></label>
 
                                                                     </div>
                                                                 </div>
@@ -355,6 +355,8 @@
                                                 <div class="card-body">Aun no hay comentarios para este producto .</div>
                                               </div>
                                             {%endif%}
+
+                                           
                                         </div>
                                     </div>
                                     <!-- /Reviews -->

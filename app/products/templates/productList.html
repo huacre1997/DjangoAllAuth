@@ -13,7 +13,16 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">{{tag|title}}</a></li>
+        {% if tag == 1 %}
+        <li class="breadcrumb-item">Categorías</li>
+        {% elif tag == 2 %}
+          <li class="breadcrumb-item">Marcas</li>
+
+        
+        {% elif tag == 3 %}
+                  <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
+
+        {% endif %}
         <li class="breadcrumb-item subtitle active">{{tag2 |title}}</li>
 
       </ol>
@@ -88,10 +97,7 @@
                 <label class="custom-control-label" for="defaultUnchecked{{node.id}}">{{node.name}}
                 </label>
                 <span class="badge badge-info  indigo darken-1">
-                  {% comment %}
                   {{node.products_cumulative_count}}
-
-                  {% endcomment %}
 
                 </span>
               </div>
@@ -248,11 +254,11 @@
 
             <!--Section: Products v.3-->
             {% if tag3 %}
-            <section class="results"> Mostrando {{ product.paginator.count }} resultados para "{{tag3}}."
+            <section class="results"> Mostrando {{ entries.paginator.count }} resultados para "{{tag3}}."
             </section>
 
             {% else %}
-            <section class="results"> Mostrando {{ product.paginator.count }} resultados.</section>
+            <section class="results"> Mostrando {{ entries.paginator.count }} resultados.</section>
 
             {% endif %}
           </div>
@@ -370,6 +376,50 @@
 
 
             </div>
+            {% if entries.paginator.count < 9 %}
+              <nav class="d-flex justify-content-center wow fadeIn " 
+            id="paginator">
+            <ul class="pagination ">
+
+              <!--Arrow left-->
+
+              <li class="page-item page-item_list  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link"
+                  page_number="1">Primero</a>
+              </li>
+
+              <li class="page-item page-item_list  ">
+                <a class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous"
+                  page_number="{% if entries.has_previous %}{{entries.previous_page_number}}{% endif %}">
+                  <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                  <span class="sr-only">Anterior</span>
+                </a>
+              </li>
+              
+              {% for i in entries.paginator  %}
+              <li class="page-item page-item_list {% if request.GET.page == i.number|to_str  %}active{% endif %}"> <a page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
+
+              {% endfor %}
+
+              {% if entries.has_next %}
+              <li class="page-item page-item_list ">
+                <a class="page-link" aria-label="Next" page_number="{{ entries.next_page_number }}">
+                  <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                  <span class="sr-only">></span>
+                </a>
+              </li>
+
+              <li class="page-item"><a class="page-link" page_number="{{ entries.paginator.num_pages }}">Último</a></li>
+
+              {% endif %}
+
+
+
+
+
+
+            </ul>
+          </nav>
+         {% endif %}
             <!--Grid row-->
             {% else %}
 
@@ -387,49 +437,7 @@
           <!--Pagination-->
    
          
-          <nav class="d-flex justify-content-center wow fadeIn " style="position: absolute;bottom: 0; left: 30%;"
-            id="paginator">
-            <ul class="pagination pagination-circle pg-blue">
-
-              <!--Arrow left-->
-
-              <li class="page-item page-item_list  {% if request.GET.page == 1 %}active {% endif %}"><a class="page-link"
-                  page_number="1">Primero</a>
-              </li>
-
-              <li class="page-item page-item_list  ">
-                <a class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous"
-                  page_number="{% if page_obj.has_previous %}{{product.previous_page_number}}{% endif %}">
-                  <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
-                  <span class="sr-only">Anterior</span>
-                </a>
-              </li>
-              
-              {% for i in entries.paginator  %}
-              <li class="page-item page-item_list {% if request.GET.page == i.number|to_str  %}active{% endif %}"> <a page_number="{{i.number}}" class="page-link number_page">{{i.number}}</a></li>
-
-              {% endfor %}
-
-              {% if page_obj.has_next %}
-              <li class="page-item page-item_list ">
-                <a class="page-link" aria-label="Next" page_number="{{ page_obj.next_page_number }}">
-                  <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-
-              <li class="page-item"><a class="page-link" page_number="{{ page_obj.paginator.num_pages }}">Last</a></li>
-
-              {% endif %}
-
-
-
-
-
-
-            </ul>
-          </nav>
-         
+        
 
         </section>
    
@@ -458,5 +466,8 @@
     });
     
   });
+  
+   
+    
 </script>
 {% endblock js_page %}
