@@ -89,6 +89,8 @@ class ProductList(TemplateView):
         else:
             page_obj = post.page(1)
         context["entries"]=page_obj
+        context["text"]='Nuestros productos.'
+        context["tag"]="Productos"
         return context
     def post(self, context, **response_kwargs) :
             print(self.request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
