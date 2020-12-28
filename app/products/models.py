@@ -4,16 +4,12 @@ from crum import get_current_user
 from django.forms.models import model_to_dict
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
-from django.db.utils import IntegrityError
 
 from mptt.models import MPTTModel, TreeForeignKey
 
 from django.dispatch import receiver
-from easy_thumbnails.signals import saved_file
 from products import tasks
 
-from easy_thumbnails.signals import saved_file
-from easy_thumbnails.signal_handlers import generate_aliases_global
 
 
 class Category(MPTTModel):
@@ -96,26 +92,26 @@ from django.urls import reverse
 
 class ProductQuerySet(models.QuerySet):
     def catxbrand(self,category,brand):
-        return self.values("id","name","marca__name","price","image","slug").filter(category__in=category.split(","),marca__name=brand)  
+        return self.values("id","name","rating","price","image","slug").filter(category__in=category.split(","),marca__name=brand)  
     def catxprice(self,category,price):
-        return self.values("id","name","marca__name","price","image","slug").filter(category__in=category.split(","),price__lt=price[1],price__gt=price[0])  
+        return self.values("id","name","rating","price","image","slug").filter(category__in=category.split(","),price__lt=price[1],price__gt=price[0])  
     def brandxprice(self,brand,price):
-        return self.values("id","name","marca__name","price","image","slug").filter(marca__name=brand,price__lt=price[1],price__gt=price[0])  
+        return self.values("id","name","rating","price","image","slug").filter(marca__name=brand,price__lt=price[1],price__gt=price[0])  
     def filterMultiple(self,category,brand,price):
-        return self.values("id","name","marca__name","price","image","slug").filter(category__in=category.split(","),marca__name=brand,price__lt=price[1],price__gt=price[0])  
+        return self.values("id","name","rating","price","image","slug").filter(category__in=category.split(","),marca__name=brand,price__lt=price[1],price__gt=price[0])  
 class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model,using=self._db)
     def get_brands_product(self,brand):
-        return self.get_queryset().values("id","name","marca__name","price","image","slug").filter(marca__name=brand).distinct()
+        return self.get_queryset().values("id","name","rating","price","image","slug").filter(marca__name=brand).distinct()
     def get_price_product(self,price):
-        return self.values("id","name","marca__name","price","image","slug").filter(price__lt=price[1],price__gt=price[0])    
+        return self.values("id","name","rating","price","image","slug").filter(price__lt=price[1],price__gt=price[0])    
     def get_category_product(self,category):
-        return self.get_queryset().values("id","name","marca__name","price","image","slug").filter(category__in=category.split(",")).distinct()   
+        return self.get_queryset().values("id","name","rating","price","image","slug").filter(category__in=category.split(",")).distinct()   
     def orderLower(self):
-        return self.get_queryset().values("id","name","marca__name","price","image","slug").order_by("price")
+        return self.get_queryset().values("id","name","rating","price","image","slug").order_by("price")
     def orderHigher(self):
-        return self.get_queryset().values("id","name","marca__name","price","image","slug").order_by("price").reverse()
+        return self.get_queryset().values("id","name","rating","price","image","slug").order_by("price").reverse()
     def filterMultiple(self,category,brand,price):
         return self.get_queryset().filterMultiple(category,brand,price) 
     def catxbrand(self,category,brand):

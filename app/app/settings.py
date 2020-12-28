@@ -47,17 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
 
     'django.contrib.staticfiles',
-
+    
     'django.contrib.sites',
     'mptt',
-    'imagefit',
     "debug_toolbar",
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'ckeditor',
-    "columns",
     "base",
     "accounts",
     "products"

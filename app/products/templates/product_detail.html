@@ -1,7 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
 {% load poll_extras %}
-{% load columns %}
 
 {% block categories %}cat_menu none
 {% endblock categories %}
@@ -29,7 +28,7 @@
       -webkit-box-align: center;
       -ms-flex-align: center;
       -webkit-align-items: center;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .swiper-pagination-bullet {
@@ -55,13 +54,22 @@
 
         <div class="card">
             <div class="card-body">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                      <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
+                            <li class="breadcrumb-item subtitle active">{{object.name}}</li>
+    
+                        </ol>
+                      </nav>
+                    </div>
+                  </nav>
                 <!-- row -->
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
-                        <li class="breadcrumb-item subtitle active">{{object.name}}</li>
-
+                     
                     </ol>
                 </nav>
                 <div class="row">
@@ -109,7 +117,7 @@
                                 </div>
                             </div>
 
-                            <a class="review-link" href="#">{{ comment.paginator.count }} calificaciones </a>| <a
+                            <a class="review-link" href="#">{{ comment.count }} calificaciones </a>| <a
                                 class="text-primary" id="openModal">
                                 Agregar
                                 opinion</a>
@@ -179,7 +187,7 @@
                             <ul class="tab-nav">
                                 <li><a data-toggle="tab" href="#tab1">Características</a></li>
                                 <li class="active"><a data-toggle="tab" href="#tab3">Calificaciones
-                                        ({{ comment.paginator.count }})</a></li>
+                                        ({{ comment.count }})</a></li>
                             </ul>
                             <!-- /product tab nav -->
 
@@ -276,7 +284,7 @@
                                             <h4>Opiniones de nuestros clientes</h4>
                                             <div id="reviews" class="comments-container">
                                                 {% if comment %}
-                                                <div id="comments-list" class="animated fadeIn fast" style="height: 630px;">
+                                                <div id="comments-list" class="animated fadeIn fast mt-3" style="height: 630px;">
                                                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             {% for chunk in comment|chunks:5 %}

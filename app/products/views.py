@@ -98,7 +98,7 @@ class ProductList(TemplateView):
         if self.request.GET:
             return render(self.request,self.template_name,self.getFilter())
         else:
-            response =  Product.objects.values("id","name","price","marca__name","slug","image")
+            response =  Product.objects.values("id","name","price","rating","slug","image")
             post = Paginator(response, 1)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
@@ -152,7 +152,7 @@ class ProductList(TemplateView):
             
             
             elif price==None and chesubcat==None and order==None and brand==None:
-                response=Product.objects.values("id","name","price","marca__name","slug","image")
+                response=Product.objects.values("id","name","price","rating","slug","image")
             elif price==None and chesubcat and order and brand==None:
                 if order=="priceLower":
                     response=Product.objects.get_category_product(chesubcat).order_by("price")
@@ -204,9 +204,9 @@ class byCategory(ListView):
             node = Category.objects.get(id=kwargs["id"])
 
             if node.is_child_node():
-                category=Product.objects.values("id","slug","name","price","marca__name","image").filter(category=node)
+                category=Product.objects.values("id","slug","name","price","rating","image").filter(category=node)
             else:
-                category=Product.objects.values("id","slug","name","price","marca__name","image").filter(category__parent=node.get_root().id)  
+                category=Product.objects.values("id","slug","name","price","rating","image").filter(category__parent=node.get_root().id)  
             post = Paginator(category, 1)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
@@ -229,9 +229,9 @@ class byCategory(ListView):
         else:
             price=price.split(",")
         if node.is_child_node():
-            category=Product.objects.values("id","slug","name","price","marca__name","image").filter(category=node)
+            category=Product.objects.values("id","slug","name","price","rating","image").filter(category=node)
         else:
-            category=Product.objects.values("id","slug","name","price","marca__name","image").filter(category__parent=node.get_root().id)  
+            category=Product.objects.values("id","slug","name","price","rating","image").filter(category__parent=node.get_root().id)  
         if price and brand==None and order==None :
             context=category.filter(price__lt=price[1],price__gt=price[0])  
         elif price and brand and order==None:
@@ -276,7 +276,7 @@ class byMarcas(TemplateView):
         if self.request.GET:
             return render(self.request,self.template_name,self.getMarca(kwargs["id"],kwargs["marca"]))
         else:
-            marcas=Product.objects.values("id","slug","name","price","marca__name","image").filter(marca=kwargs["id"])
+            marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca=kwargs["id"])
             post = Paginator(marcas, 1)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
@@ -301,7 +301,7 @@ class byMarcas(TemplateView):
             pass
         else:
             subcat=subcat.split(",")
-        marcas=Product.objects.values("id","slug","name","price","marca__name","image").filter(marca=marca)
+        marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca=marca)
 
         if price and subcat==None and order==None :
             context=marcas.filter(price__lt=price[1],price__gt=price[0])  
@@ -370,7 +370,7 @@ class Search(TemplateView):
             pass
         else:
             price=price.split(",")
-        searchby=Product.objects.values("id","slug","name","price","marca__name","image")
+        searchby=Product.objects.values("id","slug","name","price","rating","image")
         if price and order==None and brand==None and categ and search=="":
             context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ)
         elif price and order==None and search=="" and brand and categ:

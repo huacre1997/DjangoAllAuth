@@ -4,12 +4,11 @@
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
-
-<div class="container pt-3  z-depth-1" style="background-color: white;">
+<div class="container">
+<div class="card " >
 
   <!--Section: Content-->
-  <section class="">
-
+  <div class="card-body">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
@@ -27,6 +26,8 @@
 
       </ol>
     </nav>
+  
+ 
     <style>
       .link-black a {
         color: black;
@@ -52,7 +53,7 @@
 
     <div class="row d-flex justify-content-center">
       <!--Grid column-->
-      <div class="col-lg-3 col-md-5 col-sm-12 border p-4">
+      <div class="col-lg-3 col-md-4 col-sm-12 border p-4">
 
         <!-- Filter panel -->
         <!-- <div class="mb-5" >
@@ -75,7 +76,6 @@
 
 
         <div class="mb-5 {{displayCat}}">
-          <h1>{{aea}}</h1>
           <h5 class="font-weight-bold mb-3 ">Categorías</h5>
 
 
@@ -96,7 +96,7 @@
                   id="defaultUnchecked{{node.id}}" {% if  node.id|to_str in request.GET.sc %} checked {% endif %}>
                 <label class="custom-control-label" for="defaultUnchecked{{node.id}}">{{node.name}}
                 </label>
-                <span class="badge badge-info  indigo darken-1">
+                <span class="badge  bg-primary">
                   {% with total=node.products_cumulative_count %}
     {{ total }} 
 {% endwith %}
@@ -147,7 +147,7 @@
             <input type="radio" value="{{item.name}}" {% if request.GET.brand == item.name %} checked {%endif%}
               class="custom-control-input marca" id="optionbrand{{item.id}}" name="brand">
             <label class="custom-control-label" for="optionbrand{{item.id}}">{{item.name}}</label>
-            <span class="badge badge-info  indigo darken-1">
+            <span class="badge bg-primary indigo ">
               {% with total2=item.marca_count %}
     {{ total2 }} 
 {% endwith %}
@@ -234,7 +234,7 @@
       </div>
       <!--Grid column-->
 
-      <div class="col-lg-9 col-md-5 col-sm-12 border p-4 ListProducts" id="ListProducts">
+      <div class="col-lg-9 col-md-8 col-sm-12 border p-4 ListProducts" id="ListProducts">
         <!-- <div id="loader" class="loader " style="visibility: visible;">Loading...</div> -->
 
 
@@ -299,7 +299,7 @@
         <section  >
           {% if  entries %}
 
-          <section class="text-center mb-4">
+          <section class=" mb-4">
 
 
             <!--Grid row-->
@@ -329,12 +329,9 @@
                   </div>
                 </div>
               </div>
-              <h1>{{aea}}</h1>
               <!--Grid column-->
               <!--Card-->
 
-              {% load imagefit %}
-            
 
               {% for entry in entries  %}
               <div class="col-lg-4 col-md-12 mb-4">
@@ -358,21 +355,27 @@
                   </div>
                   <!--Card image-->
                   <!--Card content-->
-                  <div class="card-body text-center pt-1">
+                  <div class="card-body  pt-1">
                     <!--Category & Title-->
-                    <a href="" class="grey-text">
-                      {{entry.marca__name}}
-                    </a>
-                    <h5 class="h5-responsive">
+                 
+                    <h5 class="h5-responsive mb-2">
                       <strong>
                         {{entry.name}}
                       
                    
                       </strong>
                     </h5>
-                      <span class="badge rounded-pill bg-danger animated pulse infinite">NEW</span>
+                    <div   class="d-flex justify-content-between mb-2">
+                      <div id="wrapper2">
+                        <div class="star-rating_Title">
+                            <span style="width:{{entry.rating|percent}}%"></span>
+                        </div>
+                    </div>
+                    <span class="badge rounded-pill bg-danger animated pulse infinite">NEW</span>
 
-                    <h4 class="blue-text">
+                  </div>
+
+                    <h4 class="blue-text mb-2">
                       <strong>S/.{{entry.price}}</strong>
                     </h4>
                     <a href="{% url 'products:product_detail'  entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
@@ -477,10 +480,10 @@
 <!--Grid row-->
 
 
-</section>
+</div>
 <!--Section: Content-->
 </div>
-</div>
+
 {% endblock content %}
 {% block js_page %}
 <script>
