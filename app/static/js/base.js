@@ -1,4 +1,14 @@
 $(function() {
+  var swiper = new Swiper('.swiper-container', {
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: function (index, className) {
+          console.log(index)
+        return '<span class="' + className + '">' + (index +1 ) + '</span>';
+      },
+    },
+  });
   
   new WOW().init();
   $(document).on("click","#closeModal",function () { 
@@ -6,9 +16,9 @@ $(function() {
     $("#exampleModal").css("opacity","0")
   });
   $(document).on("click","#openModal",function () { 
-  
+  $("#exampleModal").removeClass("none")
 
-    $( "<div class='modal-backdrop  show animate__animated animate__fadeIn'></div>" ).insertAfter( "body" );
+    $( "<div class='modal-backdrop  show animated fadeIn'></div>" ).insertAfter( "body" );
     $("#exampleModal").css("opacity","1")
   });
   if (!window.location.href.includes("page") || window.location.href.includes("order") || window.location.href.includes("sc") || window.location.href.includes("price") || !window.location.href.includes()=="") {

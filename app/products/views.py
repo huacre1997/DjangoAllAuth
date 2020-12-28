@@ -53,15 +53,16 @@ class ProductDetailView(DetailView):
             staravg=round(total/suma,1)
         context["starsAvg"]=staravg
         context["starsCount"]=data[::-1]
-        post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),1)
-        if  self.request.GET.get('page'):
-            page_obj = post.page( self.request.GET.get('page'))  
-        else:
-            page_obj = post.page(1)
-        context["comment"]=page_obj
+        # post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),5)
+        # if  self.request.GET.get('page'):
+        #     page_obj = post.page( self.request.GET.get('page'))  
+        # else:
+        #     page_obj = post.page(1)
+        context["comment"]=Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse()
         return context
     def post(self, request, *args, **kwargs):
-        if self.request.POST["action"]=="next":
+        print(self.request.POST["paramSend"])
+        if self.request.POST["paramSend"]=="next":
             self.object = self.get_object()
             context = self.get_context_data(object=self.object)
             return HttpResponse(render_block_to_string(self.template_name,"content",context=context,request=self.request))
@@ -103,7 +104,7 @@ class ProductList(TemplateView):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
                 page_obj = post.page(1)
-            context={"entries":page_obj,"text":"Nuestros productos","tag":"Productos"}
+            context={"entries":page_obj,"text":"Nuestros productos","tag":3}
          
             return render(self.request,self.template_name,context)
 

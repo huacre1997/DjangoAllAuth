@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.sites',
-    'easy_thumbnails',
     'mptt',
     'imagefit',
     "debug_toolbar",
@@ -58,7 +57,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'ckeditor',
-
+    "columns",
     "base",
     "accounts",
     "products"

@@ -109,12 +109,15 @@ $(function (e) {
   );
   $(document).on("mouseenter",".carrbutton",
     function () {
-      $(this).children().toggleClass("animate__animated animate__heartBeat animate__infinite");
+      $(this).children().toggleClass("animated  rubberBand infinite");
+      console.log("enter");
     }
   );
   $(document).on("mouseleave",".carrbutton",
     function () {
-      $(this).children().removeClass("animate__animated animate__heartBeat animate__infinite");
+      $(this).children().removeClass("animated  rubberBand infinite");
+      console.log("leave");
+
     }
   );
 

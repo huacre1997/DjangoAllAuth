@@ -104,32 +104,28 @@ $(document).ready(function () {
     
   })
   }
-  const callUrlComment =  (url) => {
-    $.ajax({  
-      type: "post",
-      url: url,
-      data:{"action":"next"},
-      startTime: performance.now(),
-      success: function (response) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(response, "text/html");
-        var img = doc.querySelector(".reviews");
-
-        $(".reviews").html(img)
-         var time = performance.now() - this.startTime;
  
-         var seconds = time / 1000;
-  
-         seconds = seconds.toFixed(3);
-  
-         var result = 'AJAX request took ' + seconds + ' seconds to complete.';
-         console.log(result);
+  //   $.ajax({  
+  //     type: "post",
+  //     url: url,
+  //     data:{"method":"next"},
+  //     startTime: performance.now(),
+  //     success: function (response) {
+  //       var parser = new DOMParser();
+  //       var doc = parser.parseFromString(response, "text/html");
+  //       var img = doc.querySelector(".reviews");
+  //       $(".reviews").html(img)
+  //        var time = performance.now() - this.startTime;
+  //        var seconds = time / 1000;
+  //        seconds = seconds.toFixed(3);
+  //        var result = 'AJAX request took ' + seconds + ' seconds to complete.';
+  //        console.log(result);
 
-      }
+  //     }
     
-  });;
+  // });;
 
-}    
+
 
     
 
@@ -380,27 +376,28 @@ $(document).ready(function () {
 
     
   });
-  $(document).on("click",".page-item_comment>.page-link", function (e) {
-    // $("#loadingCharge").css("visibility", "visible");
-    // $("#spinnner2").css("visibility", "visible");
-    if(!$(this).is('.active')){
+  
+  // $(document).on("click",".page-item_comment>.page-link", function (e) {
+  //   // $("#loadingCharge").css("visibility", "visible");
+  //   // $("#spinnner2").css("visibility", "visible");
+  //   if(!$(this).is('.active')){
  
-    $(".page-item").each(function (index, element) {
-         $(element).removeClass("active")
+  //   $(".page-item").each(function (index, element) {
+  //        $(element).removeClass("active")
          
-       });}
-       $(this).parent().addClass("active")
-    if ($(this).text()) {
-      oldURL = window.location.href;
-      var url = new URL(oldURL);
-      url.searchParams.set("page", $(this).attr("page_number")); // setting your param
-      var newUrl = url.href;
-      callUrlComment(newUrl.replace(/%2C/g, ","));
+  //      });}
+  //      $(this).parent().addClass("active")
+  //   if ($(this).text()) {
+  //     oldURL = window.location.href;
+  //     var url = new URL(oldURL);
+  //     url.searchParams.set("page", $(this).attr("page_number")); // setting your param
+  //     var newUrl = url.href;
+  //     callUrlComment(newUrl.replace(/%2C/g, ","));
 
-    }
+  //   }
 
   
-  });
+  // });
  var  price=[]
  if (url.searchParams.get("price")) {
    var c = url.searchParams.get("price").split(",");

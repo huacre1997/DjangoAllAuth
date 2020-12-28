@@ -12,6 +12,9 @@ def show_results(poll):
 def to_str(value):
     """converts int to string"""
     return str(value)
+def multiply(value):
+   
+    return value%5==0
 def type_of(value):
     """converts int to string"""
     return type(value)
@@ -36,8 +39,25 @@ def priceSeparate(val,arg):
 def percent(num):
     print("el num es",str(num))
     return int(num/5*100)
+
+import itertools
+
+@register.filter
+def chunks(value, chunk_length):
+    """
+    Breaks a list up into a list of lists of size <chunk_length>
+    """
+    clen = int(chunk_length)
+    i = iter(value)
+    while True:
+        chunk = list(itertools.islice(i, clen))
+        if chunk:
+            yield chunk
+        else:
+            break
 register.filter('url', to_url)
 register.filter('priceSeparate', priceSeparate)
+register.filter('multiply', multiply)
 
 register.filter('to_str', to_str)
 register.filter('type_of', type_of)

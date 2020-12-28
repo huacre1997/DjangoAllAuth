@@ -1,17 +1,29 @@
 "use strict";
 
 $(function () {
+  var swiper = new Swiper('.swiper-container', {
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: function renderBullet(index, className) {
+        console.log(index);
+        return '<span class="' + className + '">' + (index + 1) + '</span>';
+      }
+    }
+  });
   new WOW().init();
   $(document).on("click", "#closeModal", function () {
     $(".modal-backdrop").removeClass("modal-backdrop fade show ");
     $("#exampleModal").css("opacity", "0");
   });
   $(document).on("click", "#openModal", function () {
-    $("<div class='modal-backdrop  show animate__animated animate__fadeIn'></div>").insertAfter("body");
+    $("#exampleModal").removeClass("none");
+    $("<div class='modal-backdrop  show animated fadeIn'></div>").insertAfter("body");
     $("#exampleModal").css("opacity", "1");
   });
 
-  if (!window.location.href.includes("page")) {
+  if (!window.location.href.includes("page") || window.location.href.includes("order") || window.location.href.includes("sc") || window.location.href.includes("price") || !window.location.href.includes() == "") {
+    console.log(window.location.href);
     $(".pagination .page-item_list:nth-child(3)").addClass("active");
   }
 

@@ -1,3 +1,5 @@
+"use strict";
+
 //     const callUrl=async (url)=>{
 //       $("#loadingCharge").css("visibility","visible");
 //       $("#loadingSpinner").css("visibility","visible");
@@ -5,12 +7,9 @@
 //           const dataHtml=await data.text()
 //             renderPage(dataHtml,url)      
 //           if(renderPage){
-          
 //               $("#loadingCharge").css("visibility","hidden");
 //               $("#loadingSpinner").css("visibility","hidden");
-           
 //           }
-    
 //     }
 //      const renderPage=(html,url)=>{
 //       var parser = new DOMParser();
@@ -19,10 +18,7 @@
 //       document.getElementById("ListProducts").innerHTML=""
 //       document.getElementById("ListProducts").appendChild(img)
 //       window.history.pushState({page: "another"}, "another page", url)
-    
-
 //     }
-    
 //     const removeParam = (key, sourceURL) => {
 //         var rtn = sourceURL.split("?")[0],
 //         param,
@@ -38,7 +34,6 @@
 //         }
 //         return rtn.replace(/%2C/g, ",");
 //     };
-
 // document.querySelectorAll(".marca") .forEach(element => {
 //     element.addEventListener("click",function(){
 //         oldURL = window.location.href;
@@ -47,79 +42,61 @@
 //         var newUrl = url.href;
 //         newUrl2 = removeParam("page", newUrl);
 //         callUrl(newUrl2.replace(/%2C/g, ","))
-      
-
 //     })
 // });
-let a=0
-
+var a = 0;
 $(document).ready(function () {
   $(".subcatCheck").each(function (index2, element2) {
-    let arr= $(this).parent().parent().find("input")
-  arr.each(function (index, element) {
-      if($(element).attr("checked")){
+    var arr = $(this).parent().parent().find("input");
+    arr.each(function (index, element) {
+      if ($(element).attr("checked")) {
         console.log("chec");
-        $(element2).prop("checked",this.checked)
-        $("#cleanCheckFilter").prop("disabled",false)
-
+        $(element2).prop("checked", this.checked);
+        $("#cleanCheckFilter").prop("disabled", false);
       }
-     
-   });
-    
+    });
   });
   $(".custom-control-input").each(function (index, element) {
-    if( $(element).prop("checked"))    $("#cleanFilter").prop("disabled",false)
-
+    if ($(element).prop("checked")) $("#cleanFilter").prop("disabled", false);
   });
-  $(document).on("click",".Details",function (e) { 
+  $(document).on("click", ".Details", function (e) {
     e.preventDefault();
-    $('.modal-body').text("")
-
-    $('#exampleModalCenter').modal('show')
+    $('.modal-body').text("");
+    $('#exampleModalCenter').modal('show');
     $.ajax({
       startTime: performance.now(),
       url: $(this).attr("tag-url"),
-      success: function (response) {
+      success: function success(response) {
         console.log(response);
-
-       
       }
-    }).done(function(response){
-      $('.modal-body').append(response.response)
-
+    }).done(function (response) {
+      $('.modal-body').append(response.response);
       var time = performance.now() - this.startTime;
- 
       var seconds = time / 1000;
-
       seconds = seconds.toFixed(3);
-
       var result = 'AJAX request took ' + seconds + ' seconds to complete.';
       console.log(result);
     });
   });
-  $(document).on("click","#postComment",function (e) { 
+  $(document).on("click", "#postComment", function (e) {
     e.preventDefault();
-      $.ajax({
-        type: "POST",
-        url:$("#commentForm").attr("action"),
-        data: $("#commentForm").serialize(),
-        success: function (response) {
-          console.log(response);
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(response, "text/html");
-       
-          var results=doc.getElementById("loadDetail").children
-          $("#taloadDetailb3").text()
-          $("#loadDetail").html(results)
-          $("input[name='author']").text("")
-          $("input[name='comment']").text("")
-          $("input[name='rate']").val()
-          $(".modal-backdrop").removeClass("modal-backdrop fade show ")
-          $("#exampleModal").css("opacity","0")
-        }
-      });
-      
-
-
+    $.ajax({
+      type: "POST",
+      url: $("#commentForm").attr("action"),
+      data: $("#commentForm").serialize(),
+      success: function success(response) {
+        console.log(response);
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(response, "text/html");
+        var results = doc.getElementById("loadDetail").children;
+        $("#taloadDetailb3").text();
+        $("#loadDetail").html(results);
+        $("input[name='author']").text("");
+        $("input[name='comment']").text("");
+        $("input[name='rate']").val();
+        $(".modal-backdrop").removeClass("modal-backdrop fade show ");
+        $("#exampleModal").css("opacity", "0");
+      }
+    });
   });
 });

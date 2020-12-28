@@ -1,11 +1,55 @@
 {% extends "index.html" %}
 {% load static %}
 {% load poll_extras %}
+{% load columns %}
 
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
-<div class="section aeaman" id="loadDetail">
+<style>
+        .swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+
+      /* Center slide text vertically */
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }
+
+    .swiper-pagination-bullet {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+      color: #000;
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .swiper-pagination-bullet-active {
+      color: #fff;
+      background: #007aff;
+    }
+</style>
+<div class="section aeaman" id="loadDetail" >
+    
     <!-- container -->
     <div class="container">
 
@@ -50,8 +94,8 @@
                         </div>
                     </div>
                     <!-- /Product thumb imgs -->
-                
-                      
+
+
                     <!-- Product details -->
                     <div class="col-md-6">
                         <div class="product-details">
@@ -64,65 +108,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modalComment left fade" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog-comment " role="document">
-                                    <div class="modal-content-comment">
-                                        <div class="d-flex flex-row-reverse">    <a  id="closeModal"><img src="{% static 'icons/cancel.png' %}" alt=""></a>
-                                        </div>
-                                        <div class="modal-body">
-                                          
-                                        <div id="review-form ">
-                                               
-                                            <form class="review-form" id="commentForm"
-                                                action="{% url 'products:product_detail' object.slug %}">
-                                                {% csrf_token %}
-                                                <div class="form-outline">
-                                                    <h3>Califica nuestro producto</h3>
-                                                    <label class="form-label" for="form1">Tu nombre</label>
 
-                                                    <input type="text" id="form1" class="form-control" name="author" />
-                                                </div>
-                                                <div class="form-outline">
-                                                    <label class="form-label" for="textAreaExample">Escribe un
-                                                        comentario</label>
-                                                    <textarea class="form-control" id="textAreaExample" name="comment"
-                                                        rows="4"></textarea>
-                                                  
-                                                </div>
-                                                <div class="input-rating">
-                                                    <span>Tu puntuación: </span>
-
-                                                    <div class="container">
-                                                        <div class="feedback">
-                                                            <div class="rating">
-                                                                <input type="radio" name="rate" id="rating-5" value="5">
-                                                                <label for="rating-5"></label>
-                                                                <input type="radio" name="rate" id="rating-4" value="4">
-                                                                <label for="rating-4"></label>
-                                                                <input type="radio" name="rate" id="rating-3" value="3">
-                                                                <label for="rating-3"></label>
-                                                                <input type="radio" name="rate" id="rating-2" value="2">
-                                                                <label for="rating-2"></label>
-                                                                <input type="radio" name="rate" id="rating-1" value="1">
-                                                                <label for="rating-1"></label>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                        </div>
-
-
-                                        <a href="#" class="btn btn-indigo btn-block " id="postComment">Publicar</a>
-
-
-                                        </div>
-                                     
-                                    </div>
-                                </div>
-                            </div> 
-                            <a class="review-link" href="#">{{ comment.paginator.count }} calificaciones </a>| <a  class="text-primary" id="openModal">
+                            <a class="review-link" href="#">{{ comment.paginator.count }} calificaciones </a>| <a
+                                class="text-primary" id="openModal">
                                 Agregar
                                 opinion</a>
                             <div>
@@ -166,8 +154,8 @@
 
 
 
-                            <a href="#" class="btn btn-indigo  carrbutton seeDetail "> <img
-                                    src="{% static 'icons/recibo.png'%}" class="carrIconButton ">&nbsp;&nbsp;Cotizar</a>
+                            <a href="#" class="btn btn-indigo  carrbutton"> <img src="{% static 'icons/recibo.png'%}"
+                                    class="carrIconButton   ">&nbsp;&nbsp;Cotizar</a>
 
 
 
@@ -238,14 +226,14 @@
                                 <div id="tab3" class="tab-pane fade in active">
                                     <div class="row">
                                         <!-- Rating -->
-                                        <div class="col-md-3">
+                                        <div class="col-lg-3 col-md-12 col-sm-12">
                                             <div id="rating">
                                                 <div class="rating-avg">
                                                     <span class="mr-3">{{starsAvg}}</span>
                                                     <div id="wrapper">
                                                         <div class="star-rating">
                                                             <span style="width:{{starsAvg|percent}}%"></span>
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -284,102 +272,236 @@
                                         <!-- /Rating -->
 
                                         <!-- Reviews -->
-                                        <div class="col-md-9">
+                                        <div class="col-lg-9 col-md-12 col-sm-12">
                                             <h4>Opiniones de nuestros clientes</h4>
                                             <div id="reviews" class="comments-container">
-                                            {% if comment %}
-                                                <ul id="comments-list" class="comments-list reviews">
-                                              
-                                                    {% for i  in comment  %}
-                                                    <li>
-                                                        <div class="comment-main-level">
-                                                            <!-- Avatar -->
-                                                            <img class="crop-circle"
-                                                                src="{% static 'img/account.png' %}"
-                                                                width="28px" alt="user image">
-                                                            <div class="comment-box">
-                                                                <div class="comment-head d-flex justify-content-between align-items-center">
-                                                                    <div class="d-flex align-items-center"><h6 class="comment-name by-author">{{i.author}}</h6>
-                                                                <span> {{i.created_date|date:'N d,Y H:i A'}} </span></div>
-                                                                    
-                                                                    <div class="ratingPost d-flex align-items-center">
-                                                                        <input type="radio" 
-                                                                            {% if i.rate == 1 %}checked{% endif %}>
-                                                                        <label ></label>
-                                                                        <input type="radio"
-                                                                            {% if i.rate == 2 %}checked{% endif %}>
-                                                                        <label></label>
-                                                                        <input type="radio"
-                                                                            {% if i.rate == 3 %}checked{% endif %}>
-                                                                        <label></label>
-                                                                        <input type="radio"
-                                                                            {% if i.rate == 4 %}checked{% endif %}>
-                                                                        <label ></label>
-                                                                        <input type="radio" 
-                                                                            {% if i.rate == 5 %}checked{% endif %}>
-                                                                        <label ></label>
+                                                {% if comment %}
+                                                <div id="comments-list" class="animated fadeIn fast" style="height: 630px;">
+                                                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            {% for chunk in comment|chunks:5 %}
+                            <div class="swiper-slide">
+    <ul class="comments-list reviews">
 
+            {% for i in chunk %}
+
+                                       <li>
+                                                            <div class="comment-main-level">
+                                                                <!-- Avatar -->
+                                                                <img class="crop-circle"
+                                                                    src="{% static 'img/account.png' %}" width="28px"
+                                                                    alt="user image">
+                                                                <div class="comment-box">
+                                                                    <div
+                                                                        class="comment-head d-flex justify-content-between align-items-center">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <h6 class="comment-name by-author">
+                                                                                {{i.author}}</h6>
+                                                                            <span> {{i.created_date|date:'N d,Y H:i A'}}
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <div
+                                                                            class="ratingPost d-flex align-items-center">
+                                                                            <input type="radio"
+                                                                                {% if i.rate == 1 %}checked{% endif %}>
+                                                                            <label></label>
+                                                                            <input type="radio"
+                                                                                {% if i.rate == 2 %}checked{% endif %}>
+                                                                            <label></label>
+                                                                            <input type="radio"
+                                                                                {% if i.rate == 3 %}checked{% endif %}>
+                                                                            <label></label>
+                                                                            <input type="radio"
+                                                                                {% if i.rate == 4 %}checked{% endif %}>
+                                                                            <label></label>
+                                                                            <input type="radio"
+                                                                                {% if i.rate == 5 %}checked{% endif %}>
+                                                                            <label></label>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="comment-content">
+                                                                        {{i.comment}}
                                                                     </div>
                                                                 </div>
-                                                                <div class="comment-content">
-                                                                    {{i.comment}}
-                                                                </div>
                                                             </div>
-                                                        </div>
-
-                                         
-                                            </li>
-                                            {%endfor%}
-     
-
-                                            </ul>
-                                            <div class="pagination">
-                                                <span class="step-links d-flex pagination_comment">
 
 
-                                                    {% for i in comment.paginator  %}
-                                                    <li class="page-item page-item_comment {% if i.number == 1 %}
+                                                        </li>
+
+            {% endfor %}
+                                                                </ul>
+
+            </div>
+    {% endfor %}
+                          </div>
+
+                <div class="swiper-pagination mt-5"></div>
+                </div>                                         
+
+                                                </div>
+                                                {% comment %} <div class="pagination">
+                                                    <span class="step-links d-flex pagination_comment">
+
+
+                                                        {% for i in comment.paginator  %}
+                                                        <li class="page-item page-item_comment {% if i.number == 1 %}
                                                               active 
                                                             {% endif %}">
-                                                        <a page_number="{{i.number}}"
-                                                            class="page-link ">{{i.number}}</a>
-                                                    </li>
+                                                            <a page_number="{{i.number}}"
+                                                                class="page-link ">{{i.number}}</a>
+                                                        </li>
 
-                                                    {% endfor %}
+                                                        {% endfor %}
 
 
-                                                </span>
+                                                    </span>
+                                                </div> {% endcomment %}
+                                                {%else%}
+                                                <div class="card ">
+                                                    <div class="card-body">Aun no hay comentarios para este producto .
+                                                    </div>
+                                                </div>
+                                                {%endif%}
+
+
                                             </div>
-                                            {%else%}
-                                            <div class="card ">
-                                                <div class="card-body">Aun no hay comentarios para este producto .</div>
-                                              </div>
-                                            {%endif%}
-
-                                           
                                         </div>
-                                    </div>
-                                    <!-- /Reviews -->
+                                        <!-- /Reviews -->
 
-                                    <!-- Review Form -->
-                        
-                                    </form>
+                                        <!-- Review Form -->
+
+                                    </div>
+                                </div>
+                                <!-- /Review Form -->
+                            </div>
+                        </div>
+                        <!-- /tab3  -->
+                    </div>
+                    <!-- /product tab content  -->
+               
+                </div>
+               
+                
+            </div>
+            <!-- /product tab -->
+         
+        </div>
+        <!-- /row -->
+    </div>
+</div>
+
+<!-- /container -->
+
+<div class="modalComment left fade none" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog-comment " role="document">
+        <div class="modal-content-comment">
+            <div class="d-flex flex-row-reverse"> <a id="closeModal"><img src="{% static 'icons/cancel.png' %}"
+                        alt=""></a>
+            </div>
+            <div class="modal-body">
+
+                <div id="review-form ">
+
+                    <form class="review-form mt-3" id="commentForm"
+                        action="{% url 'products:product_detail' object.slug %}">
+                        {% csrf_token %}
+                        <h3>Califica nuestro producto</h3>
+                        <label class="form-label" for="form1">Tu nombre</label>
+
+                        <input type="text" id="form1" class="form-control" name="author" />
+                        <label class="form-label" for="textAreaExample">Escribe un
+                            comentario</label>
+                        <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
+
+                        <div class="input-rating">
+                            <span>Tu puntuación: </span>
+
+                            <div class="container">
+                                <div class="feedback">
+                                    <div class="rating">
+                                        <input type="radio" name="rate" id="rating-5" value="5">
+                                        <label for="rating-5"></label>
+                                        <input type="radio" name="rate" id="rating-4" value="4">
+                                        <label for="rating-4"></label>
+                                        <input type="radio" name="rate" id="rating-3" value="3">
+                                        <label for="rating-3"></label>
+                                        <input type="radio" name="rate" id="rating-2" value="2">
+                                        <label for="rating-2"></label>
+                                        <input type="radio" name="rate" id="rating-1" value="1">
+                                        <label for="rating-1"></label>
+
+                                    </div>
                                 </div>
                             </div>
-                            <!-- /Review Form -->
+
                         </div>
-                    </div>
-                    <!-- /tab3  -->
+                        <input type="hidden" name="paramSend" value="">
+                    </form>
+
                 </div>
-                <!-- /product tab content  -->
+
+
+                <a href="#" class="btn btn-indigo btn-block " id="postComment">Publicar</a>
+
+
             </div>
+
         </div>
-        <!-- /product tab -->
     </div>
-    <!-- /row -->
+    
 </div>
-</div>
-</div>
-<!-- /container -->
-</div>
+
 {% endblock content %}
+{% block js_page%}
+<script>
+    const callUrlComment = (url) => {
+        let before = document.getElementById("comments-list")
+        const data = new FormData();
+        data.append("paramSend", "next")
+        console.time("timer1");
+
+        before.classList.remove("fadeIn")
+
+        fetch(url, {
+                method: "POST",
+                body: data
+            }).then(response => response.text())
+            .then(function (response) {
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(response, "text/html");
+                let img = doc.querySelector("#comments-list").childNodes[1]
+
+                before.innerHTML = ""
+                before.appendChild(img)
+
+                document.getElementById("loadingCharge").style.visibility="hidden"
+                document.getElementById("spinnner2").style.visibility="hidden"
+                before.classList.add("fadeIn")
+
+            })
+    }
+    q = document.querySelectorAll("li.page-item_comment > .page-link")
+    q.forEach(element => {
+        element.addEventListener("click", function (e) {
+       document.getElementById("loadingCharge").style.visibility="visible"
+        document.getElementById("spinnner2").style.visibility="visible"
+            if (!e.target.parentNode.classList.contains('active')) {
+                console.log("if");
+                Array.from(document.getElementsByClassName("page-item")).forEach(element2 => {
+                    element2.classList.remove('active')
+                });
+            }
+            e.target.parentNode.classList.add("active");
+            oldURL = window.location.href;
+            var url = new URL(oldURL);
+            url.searchParams.set("page", e.target.text); // setting your param
+            var newUrl = url.href;
+            callUrlComment(newUrl.replace(/%2C/g, ","));
+        })
+    });
+ 
+</script>
+{%endblock%}
