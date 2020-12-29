@@ -12,16 +12,9 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-        {% if tag == 1 %}
-        <li class="breadcrumb-item">Categorías</li>
-        {% elif tag == 2 %}
-          <li class="breadcrumb-item">Marcas</li>
+      
+        <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
 
-        
-        {% elif tag == 3 %}
-                  <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
-
-        {% endif %}
         <li class="breadcrumb-item subtitle active">{{tag2 |title}}</li>
 
       </ol>
@@ -245,7 +238,7 @@
           {% elif tag3 %}
 
           <h4 class="titleProducts font-weight-bold ml-3">Mostrando resultados de búsqueda.</h4>
-          {% elif tag %}
+          {% else %}
 
           <h4 class="titleProducts font-weight-bold ml-3 ">Nuestros Productos</h4>
           {% endif %}
@@ -280,18 +273,17 @@
             <div class="font-weight-bold ">Ordernar por:</div>
           </div>
           <div class="col-lg-4  col-sm-12">
-            <form id="formFilter2">
-
-              <select class="browser-default custom-select" id="select" name="order">
-                <option value="all"></option>
+            <div class="select">
+            <select  name="order" id="select">
+              <option value="all"></option>
                 <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
                   menor a mayor</option>
                 <option value="priceHigher" {% if request.GET.order == "priceHigher" %} selected {%endif%}>
                   Precio mayor a menor</option>
 
               </select>
-            </form>
-
+              <div class="select__arrow"></div>
+            </div>
 
           </div>
         </div>
@@ -342,7 +334,7 @@
                     <li class="image_container is-loading">
                       <!-- <div class="loader " style="visibility: visible;">Loading...</div> -->
 
-                      <img src="../media/{{entry.image}}"  
+                      <img src="{% get_media_prefix %}{{entry.image}} "  
                         class="imgProduct"  >
 
                     </li>
@@ -414,7 +406,7 @@
         
 
         </section>
-        {% if entries.paginator.count < 9 %}
+        {% if entries.paginator.count > 0 %}
         <nav class="d-flex justify-content-center wow fadeIn " 
       id="paginator">
       <ul class="pagination ">

@@ -1,4 +1,8 @@
 $(function() {
+  $(".js-header-responsive").select2({
+    width: 'resolve' // need to override the changed default
+});
+
   var swiper = new Swiper('.swiper-container', {
     pagination: {
       el: '.swiper-pagination',
@@ -10,7 +14,6 @@ $(function() {
     },
   });
   
-  new WOW().init();
   $(document).on("click","#closeModal",function () { 
     $(".modal-backdrop").removeClass("modal-backdrop fade show ")
     $("#exampleModal").css("opacity","0")

@@ -267,7 +267,7 @@ $(document).ready(function () {
   //   callUrl(returnURL(number));
   // });
 
-  $("#select").on("change", function (e) {
+  $(document).on("change","#select", function (e) {
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
 
@@ -408,38 +408,33 @@ $(document).ready(function () {
   $(document).on("click","#priceFilter",function (e) { 
     $("#loadingCharge").css("visibility", "visible");
     $("#spinnner2").css("visibility", "visible");
+    oldURL = window.location.href;
 
     e.preventDefault();
-    let tgl=$(this).attr("aria-pressed");
    
 
     if($(this).hasClass("active")){
       price.push(parseInt($("#input-numberMin").val()))
       price.push(parseInt($("#input-numberMax").val()))
       console.log("else");      
-      oldURL = window.location.href;
-      var url = new URL(oldURL);
-      url.searchParams.set("price",price.toString()); 
-      var newUrl = url.href;
-     
-      console.log(newUrl)
+      let url2= removeParam("page", oldURL);
+      var url3 = new URL(url2);
 
+      url3.searchParams.set("price",price.toString()); 
+      let newUrl = url3.href;
+     
       $(this).text("Quitar filtro")
 
       callUrl(newUrl.replace(/%2C/g, ","));
     }else{
-   
       console.log("if");      
-      oldURL = window.location.href;
       newUrl2 = removeParam("price", oldURL);
-      console.log(newUrl2);
       $(this).text("Aplicar filtro")
 
       price.length=0
       
       callUrl(newUrl2.replace(/%2C/g, ","));
     }
-    console.log(price)
 
   });
   let vale=()=>{

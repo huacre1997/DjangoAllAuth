@@ -67,11 +67,7 @@
                     </div>
                   </nav>
                 <!-- row -->
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                     
-                    </ol>
-                </nav>
+             
                 <div class="row">
                     <!-- Product main img -->
                     <div class="col-md-5 col-md-push-2">
@@ -146,10 +142,10 @@
                                 <dt class="col-sm-3">Categorías:</dt>
                                 <dd class="col-sm-9">
                                     <p><a
-                                            href="{% url 'products:byCategory' object.category.id object.category.slug %}">{{object.category}}</a>
+                                            href="{% url 'products:byCategory'  object.category.slug %}">{{object.category}}</a>
                                     </p>
                                     <p><a
-                                            href="{% url 'products:byCategory' object.category.parent.id object.category.parent.slug %}">{{object.category.parent}}</a>
+                                            href="{% url 'products:byCategory'  object.category.parent.slug %}">{{object.category.parent}}</a>
                                     </p>
                                 </dd>
 

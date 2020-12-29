@@ -642,12 +642,12 @@ h6::selection
 {
 	color: #0e8ce4;
 }
-select
+/* select
 {
 	display: inline;
 	border: 0;
 	width: auto;
-	/* margin-left: 10px; */
+	 margin-left: 10px; 
 	outline: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -667,7 +667,7 @@ select option
 	padding: 10px;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-}
+} */
 .header_search_button
 {
 	position: absolute;
