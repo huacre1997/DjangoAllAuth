@@ -1,6 +1,37 @@
 "use strict";
 
 $(function () {
+  $(".js-header-responsive").select2({
+    width: 'resolve' // need to override the changed default
+
+  });
+  document.querySelectorAll(".tabs").forEach(function (tab) {
+    // Selecting headings and blocks with content
+    var tabHeading = tab.querySelectorAll(".tabs__heading");
+    var tabContent = tab.querySelectorAll(".tabs__content"); // A variable for the data attribute
+
+    var tabName; // For each tab heading...
+
+    tabHeading.forEach(function (element) {
+      // ...add event listener
+      element.addEventListener("click", function () {
+        // Disabling each tab
+        tabHeading.forEach(function (item) {
+          item.classList.remove("is-active");
+        }); // Enabling a tab
+
+        element.classList.add("is-active"); // Getting value from the data attribute
+
+        tabName = element.getAttribute("data-tab-index"); // Checking all the blocks with content
+
+        tabContent.forEach(function (item) {
+          // If the item has the same class as the value of the data attribute...
+          item.classList.contains(tabName) ? item.classList.add("is-active") : item.classList.remove("is-active"); // Add class 'is-active' to this item
+          // Otherwise, remove the class
+        });
+      });
+    });
+  });
   var swiper = new Swiper('.swiper-container', {
     pagination: {
       el: '.swiper-pagination',
@@ -11,7 +42,6 @@ $(function () {
       }
     }
   });
-  new WOW().init();
   $(document).on("click", "#closeModal", function () {
     $(".modal-backdrop").removeClass("modal-backdrop fade show ");
     $("#exampleModal").css("opacity", "0");

@@ -370,8 +370,21 @@
                     <h4 class="blue-text mb-2">
                       <strong>S/.{{entry.price}}</strong>
                     </h4>
-                    <a href="{% url 'products:product_detail'  entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                    {% if tag2 %}
+                      {% if tag == 2 %}
+                      <a href="{% url 'products:product_detail_category'  tag2|slugify entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
                         src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
+                        {% elif tag == 3 %}
+                        <a href="{% url 'products:product_detail_brand'  tag2|slugify entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                          src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
+                        {% endif %}
+                   
+                    {% else %}
+                    <a href="{% url 'products:product_detail'  entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                      src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
+                    {% endif %}
+                    
+                  
 
                   </div>
                 </div>
@@ -380,7 +393,6 @@
               </div>
 
               {% endfor %}
-          
 
 
 

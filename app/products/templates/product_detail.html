@@ -6,75 +6,85 @@
 {% endblock categories %}
 {% block content %}
 <style>
-        .swiper-container {
-      width: 100%;
-      height: 100%;
+    .swiper-container {
+        width: 100%;
+        height: 100%;
     }
 
     .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #fff;
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
 
-      /* Center slide text vertically */
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      -webkit-justify-content: center;
-      justify-content: center;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      align-items: flex-start;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: flex-start;
     }
 
     .swiper-pagination-bullet {
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      line-height: 20px;
-      font-size: 12px;
-      color: #000;
-      opacity: 1;
-      background: rgba(0, 0, 0, 0.2);
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+        color: #000;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.2);
     }
 
     .swiper-pagination-bullet-active {
-      color: #fff;
-      background: #007aff;
+        color: #fff;
+        background: #007aff;
     }
 </style>
-<div class="section aeaman" id="loadDetail" >
-    
+<div class="section aeaman" id="loadDetail">
+
     <!-- container -->
     <div class="container">
 
-        <div class="card">
+        <div class="card shadow-3-strong">
+            <div class="card-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb m-auto p-2">
+                        <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
+                        {% if nameBrand %}
+                        <li class="breadcrumb-item"><a
+                                href="{% url 'products:byMarcas' nameBrand|slugify %}">{{nameBrand|title}}</a></li>
+                        {% elif nameCategory%}
+                        <li class="breadcrumb-item"><a
+                                href="{% url 'products:byCategory' nameCategory|slugify %}">{{nameCategory|title}}</a>
+                        </li>
+
+                        {% endif %}
+                        <li class="breadcrumb-item subtitle active">{{object.name}}</li>
+
+                    </ol>
+                </nav>
+            </div>
             <div class="card-body">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
-                      <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{% url 'base:index' %}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{% url 'products:getProducList' %}">Productos</a></li>
-                            <li class="breadcrumb-item subtitle active">{{object.name}}</li>
-    
-                        </ol>
-                      </nav>
-                    </div>
-                  </nav>
+
+
+
                 <!-- row -->
-             
+
                 <div class="row">
                     <!-- Product main img -->
                     <div class="col-md-5 col-md-push-2">
 
                         <div id="product-main-img">
 
-                            <img src="../../media/{{object.image}}" style="width:80%">
+                            <img src="{% get_media_prefix %}{{object.image}}" style="width:80%">
 
 
 
@@ -89,7 +99,7 @@
                         <div id="product-imgs">
                             {% for  i in image  %}
                             <div class="product-preview">
-                                <img src="../../media/{{i.image}}" style="width:80%">
+                                <img src="{% get_media_prefix %}{{i.image}}" style="width:80%">
                             </div>
                             {% endfor %}
 
@@ -190,18 +200,16 @@
                             <!-- product tab content -->
                             <div class="tab-content">
                                 <!-- tab1  -->
-                                <div id="tab1" class="tab-pane fade in">
+                                <div id="tab1" class="tab-pane active">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="force-overflow">
                                                 <article class="article">
                                                     <div class="article__content">
 
-
                                                         {% autoescape off %}
                                                         {{object.caracteristicas}}
                                                         {% endautoescape %}
-
                                                     </div>
                                                 </article>
                                             </div>
@@ -211,7 +219,7 @@
                                 <!-- /tab1  -->
 
                                 <!-- tab2  -->
-                                <div id="tab2" class="tab-pane fade in">
+                                <div id="tab2" class="tab-pane">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -227,7 +235,7 @@
                                 <!-- /tab2  -->
 
                                 <!-- tab3  -->
-                                <div id="tab3" class="tab-pane fade in active">
+                                <div id="tab3" class="tab-pane">
                                     <div class="row">
                                         <!-- Rating -->
                                         <div class="col-lg-3 col-md-12 col-sm-12">
@@ -280,69 +288,69 @@
                                             <h4>Opiniones de nuestros clientes</h4>
                                             <div id="reviews" class="comments-container">
                                                 {% if comment %}
-                                                <div id="comments-list" class="animated fadeIn fast mt-3" style="height: 630px;">
+                                                <div id="comments-list" class="animated fadeIn fast mt-3"
+                                                    style="height: 630px;">
                                                     <div class="swiper-container">
-                        <div class="swiper-wrapper">
-                            {% for chunk in comment|chunks:5 %}
-                            <div class="swiper-slide">
-    <ul class="comments-list reviews">
+                                                        <div class="swiper-wrapper">
+                                                            {% for chunk in comment|chunks:5 %}
+                                                            <div class="swiper-slide">
+                                                                <ul class="comments-list reviews">
 
-            {% for i in chunk %}
+                                                                    {% for i in chunk %}
 
-                                       <li>
-                                                            <div class="comment-main-level">
-                                                                <!-- Avatar -->
-                                                                <img class="crop-circle"
-                                                                    src="{% static 'img/account.png' %}" width="28px"
-                                                                    alt="user image">
-                                                                <div class="comment-box">
-                                                                    <div
-                                                                        class="comment-head d-flex justify-content-between align-items-center">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <h6 class="comment-name by-author">
-                                                                                {{i.author}}</h6>
-                                                                            <span> {{i.created_date|date:'N d,Y H:i A'}}
-                                                                            </span>
+                                                                    <li>
+                                                                        <div class="comment-main-level">
+                                                                            <!-- Avatar -->
+                                                                            <img class="crop-circle"
+                                                                                src="{% static 'img/account.png' %}"
+                                                                                width="28px" alt="user image">
+                                                                            <div class="comment-box">
+                                                                                <div
+                                                                                    class="comment-head d-flex justify-content-between align-items-center">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center">
+                                                                                        <h6
+                                                                                            class="comment-name by-author">
+                                                                                            {{i.author}}</h6>
+                                                                                        <span>
+                                                                                            {{i.created_date|date:'N d,Y H:i A'}}
+                                                                                        </span>
+                                                                                    </div>
+
+                                                                                    <div
+                                                                                        class="ratingPost d-flex align-items-center">
+                                                                                        <input type="radio"
+                                                                                            {% if i.rate == 1 %}checked{% endif %}>
+                                                                                        <label></label>
+                                                                                        <input type="radio"
+                                                                                            {% if i.rate == 2 %}checked{% endif %}>
+                                                                                        <label></label>
+                                                                                        <input type="radio"
+                                                                                            {% if i.rate == 3 %}checked{% endif %}>
+                                                                                        <label></label>
+                                                                                        <input type="radio"
+                                                                                            {% if i.rate == 4 %}checked{% endif %}>
+                                                                                        <label></label>
+                                                                                        <input type="radio"
+                                                                                            {% if i.rate == 5 %}checked{% endif %}>
+                                                                                        <label></label>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="comment-content">
+                                                                                    {{i.comment}}
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-
-                                                                        <div
-                                                                            class="ratingPost d-flex align-items-center">
-                                                                            <input type="radio"
-                                                                                {% if i.rate == 1 %}checked{% endif %}>
-                                                                            <label></label>
-                                                                            <input type="radio"
-                                                                                {% if i.rate == 2 %}checked{% endif %}>
-                                                                            <label></label>
-                                                                            <input type="radio"
-                                                                                {% if i.rate == 3 %}checked{% endif %}>
-                                                                            <label></label>
-                                                                            <input type="radio"
-                                                                                {% if i.rate == 4 %}checked{% endif %}>
-                                                                            <label></label>
-                                                                            <input type="radio"
-                                                                                {% if i.rate == 5 %}checked{% endif %}>
-                                                                            <label></label>
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="comment-content">
-                                                                        {{i.comment}}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-
-                                                        </li>
-
-            {% endfor %}
+                                                                    </li>
+                                                                    {% endfor %}
                                                                 </ul>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </div>
 
-            </div>
-    {% endfor %}
-                          </div>
-
-                <div class="swiper-pagination mt-5"></div>
-                </div>                                         
+                                                        <div class="swiper-pagination mt-5"></div>
+                                                    </div>
 
                                                 </div>
                                                 {% comment %} <div class="pagination">
@@ -380,23 +388,33 @@
                                 </div>
                                 <!-- /Review Form -->
                             </div>
-                        </div>
-                        <!-- /tab3  -->
+                        </div> <!-- /tab3  -->
                     </div>
                     <!-- /product tab content  -->
-               
+
                 </div>
-               
-                
+
+
             </div>
             <!-- /product tab -->
-         
+
         </div>
         <!-- /row -->
     </div>
 </div>
 
-<!-- /container -->
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="modalComment left fade none" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -455,7 +473,7 @@
 
         </div>
     </div>
-    
+
 </div>
 
 {% endblock content %}
@@ -481,8 +499,8 @@
                 before.innerHTML = ""
                 before.appendChild(img)
 
-                document.getElementById("loadingCharge").style.visibility="hidden"
-                document.getElementById("spinnner2").style.visibility="hidden"
+                document.getElementById("loadingCharge").style.visibility = "hidden"
+                document.getElementById("spinnner2").style.visibility = "hidden"
                 before.classList.add("fadeIn")
 
             })
@@ -490,8 +508,8 @@
     q = document.querySelectorAll("li.page-item_comment > .page-link")
     q.forEach(element => {
         element.addEventListener("click", function (e) {
-       document.getElementById("loadingCharge").style.visibility="visible"
-        document.getElementById("spinnner2").style.visibility="visible"
+            document.getElementById("loadingCharge").style.visibility = "visible"
+            document.getElementById("spinnner2").style.visibility = "visible"
             if (!e.target.parentNode.classList.contains('active')) {
                 console.log("if");
                 Array.from(document.getElementsByClassName("page-item")).forEach(element2 => {
@@ -506,6 +524,5 @@
             callUrlComment(newUrl.replace(/%2C/g, ","));
         })
     });
- 
 </script>
 {%endblock%}

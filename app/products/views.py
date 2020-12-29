@@ -19,6 +19,8 @@ from django.db.models import Q, Count,Avg
 from django.db import connection
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.decorators import method_decorator
+from django.urls import resolve
+
 class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
@@ -35,9 +37,8 @@ class ProductDetailView(DetailView):
             
     def get_context_data(self, **kwargs):
         data=[]
-        print("Entro a lcontex")
-        print(self.template_name)
         total=0
+        
         context = super().get_context_data(**kwargs)
         context["image"] = Productimage.objects.filter(product=self.object.id)
         q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
@@ -55,7 +56,12 @@ class ProductDetailView(DetailView):
         if suma!=0:
             staravg=round(total/suma,1)
         context["starsAvg"]=staravg
+        # current_url = resolve(self.request.path_info)
         context["starsCount"]=data[::-1]
+        if "marca" in self.kwargs.keys():
+            context["nameBrand"]=self.kwargs["marca"]
+        if "categoria" in self.kwargs.keys():
+            context["nameCategory"]=self.kwargs["categoria"]
         # post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),5)
         # if  self.request.GET.get('page'):
         #     page_obj = post.page( self.request.GET.get('page'))  
@@ -63,6 +69,33 @@ class ProductDetailView(DetailView):
         #     page_obj = post.page(1)
         context["comment"]=Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse()
         return context
+    def post(self, request, *args, **kwargs):
+        print(self.request.POST["paramSend"])
+        if self.request.POST["paramSend"]=="next":
+            self.object = self.get_object()
+            context = self.get_context_data(object=self.object)
+            return HttpResponse(render_block_to_string(self.template_name,"content",context=context,request=self.request))
+
+        else:
+            form=RatingForm(request.POST)    
+            self.object = self.get_object()
+            if form.is_valid():
+                
+                data=Comment()
+                data.author=form.cleaned_data["author"]
+                data.comment=form.cleaned_data["comment"]       
+                data.ip=request.META.get("REMOTE_ADDR")
+                data.rate=form.cleaned_data["rate"]
+                data.product_id=self.object.id
+                data.save()
+                with connection.cursor() as cursor:
+                    cursor.execute("select * from avgRating("+str(self.object.id)+")")
+                    row = cursor.fetchone() 
+                self.object.updateRate(row[0])
+                context = self.get_context_data(**kwargs)
+                return self.render_to_response(context)   
+            else:
+                return HttpResponse(form.errors)
     
 from render_block import render_block_to_string
 
@@ -175,8 +208,10 @@ class byCategory(ListView):
     def get(self, request, *args, **kwargs) :
         print(kwargs)
         if self.request.GET:
+            print("if")
             return render(self.request,self.template_name,self.getCategory(kwargs["categoria"]))
         else:
+            print("else")
             node = Category.objects.get(slug=kwargs["categoria"])
 
             if node.is_child_node():
@@ -188,7 +223,7 @@ class byCategory(ListView):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
                 page_obj = post.page(1)
-            context={"entries":page_obj,"text":"Nuestros productos","tag2":kwargs["categoria"],"displayCat":"none"}
+            context={"entries":page_obj,"text":"Nuestros productos","tag":2,"tag2":node.name,"displayCat":"none"}
          
             return render(self.request,self.template_name,context)
     def post(self,request,*args, **kwargs):
@@ -244,22 +279,23 @@ class byCategory(ListView):
             page_obj = post.page(self.request.GET.get("page"))  
         else:
             page_obj = post.page(1)
-        return {"entries":page_obj,"tag2":slug,"displayCat":"none"}
+        print("aea mnit")
+        return {"entries":page_obj,"tag2":node["name"],"displayCat":"none"}
        
 class byMarcas(TemplateView):
     template_name="productList.html"
     def get(self,request,*args, **kwargs):
-        print(kwargs)
         if self.request.GET:
             return render(self.request,self.template_name,self.getMarca(kwargs["marca"]))
         else:
-            marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca__slug=kwargs["marca"])
+            marca=Marcas.objects.get(slug=kwargs["marca"])
+            marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca=marca.id)
             post = Paginator(marcas, 1)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
                 page_obj = post.page(1)
-            context={"entries":page_obj,"tag2":kwargs["marca"],"displayBrand":"none"}
+            context={"entries":page_obj,"tag2":marca.name.lower(),"tag":3,"displayBrand":"none"}
          
             return render(self.request,self.template_name,context)
     def post(self, *args, **kwargs):
@@ -267,7 +303,6 @@ class byMarcas(TemplateView):
         return HttpResponse(render_block_to_string("productList.html","content",context=self.getMarca(kwargs["marca"]),request=self.request))
 
     def getMarca(self,slug):
-        print(slug)
         subcat=self.request.GET.get("sc")
         order=self.request.GET.get("order")
         price=self.request.GET.get("price")
