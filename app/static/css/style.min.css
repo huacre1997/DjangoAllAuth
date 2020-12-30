@@ -50,55 +50,291 @@ html, body {
 }
 
 /*CUSTONM SELECT */
-.select {
+div.cs-select {
   position: relative;
+  z-index: 100;
   display: inline-block;
   width: 100%;
+  max-width: 500px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: left;
+  vertical-align: middle;
+  background: #fff;
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
 }
-.select select {
-  display: inline-block;
-  width: 100%;
-  cursor: pointer;
-  padding: 10px 15px;
-  outline: 0;
-  border: 0;
-  border-radius: 0;
-  background: #e6e6e6;
-  color: #7b7b7b;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+
+div.cs-select:focus {
+  outline: none;
+  /* For better accessibility add a style for this in your skin */
 }
-.select select::-ms-expand {
+
+.cs-select select {
   display: none;
 }
-.select select:hover,
-.select select:focus {
-  color: #000;
-  background: #ccc;
+
+.cs-select span {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 0.5em;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.select select:disabled {
-  opacity: 0.5;
-  pointer-events: none;
+/* Placeholder and selected option */
+
+.cs-select > span {
+  padding-right: 3em; 
 }
-.select__arrow {
+
+.cs-select > span::after,
+.cs-select .cs-selected span::after {
   position: absolute;
-  top: 16px;
-  right: 15px;
-  width: 0;
-  height: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cs-select > span::after {
+  right: 1em;
+  content: '\25BE';
+}
+
+.cs-select .cs-selected span::after {
+  margin-left: 1em;
+  content: '\2713';
+}
+
+.cs-select.cs-active > span::after {
+  -webkit-transform: translateY(-50%) rotate(180deg);
+  transform: translateY(-50%) rotate(180deg);
+}
+
+div.cs-active {
+  z-index: 200;
+}
+/* Options */
+
+.cs-select .cs-options {
+  position: absolute;
+  visibility: hidden;
+  overflow: hidden;
+  width: 100%;
+  background: #fff;
+}
+
+.cs-select.cs-active .cs-options {
+  visibility: visible;
+}
+
+.cs-select ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-select ul span {
+  padding: 1em;
+}
+
+.cs-select ul li.cs-focus span {
+  background-color: #ddd;
+}
+/* Optgroup and optgroup label */
+
+.cs-select li.cs-optgroup ul {
+  padding-left: 1em;
+}
+
+.cs-select li.cs-optgroup > span {
+  cursor: default;
+}
+
+div.cs-skin-elastic {
+  font-size: 1em;
+  font-weight: 400;
+  background: transparent;
+}
+
+@media screen and (max-width: 30em) {
+  div.cs-skin-elastic {
+    font-size: 1em;
+  }
+}
+
+.cs-skin-elastic > span {
+  z-index: 100;
+  background-color: #fff;
+}
+
+.cs-skin-elastic .cs-options {
+  visibility: visible;
+  overflow: visible;
   pointer-events: none;
-  border-style: solid;
-  border-width: 8px 5px 0 5px;
-  border-color: #7b7b7b transparent transparent transparent;
+  opacity: 1;
+  background: transparent;
 }
-.select select:hover ~ .select__arrow,
-.select select:focus ~ .select__arrow {
-  border-top-color: #000;
+
+.cs-skin-elastic.cs-active .cs-options {
+  pointer-events: auto;
 }
-.select select:disabled ~ .select__arrow {
-  border-top-color: #ccc;
+
+.cs-skin-elastic .cs-options > ul::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  -webkit-transition: -webkit-transform .3s;
+  transition: transform .3s;
+  -webkit-transform: scale3d(1, 0, 1);
+  transform: scale3d(1, 0, 1);
+  -webkit-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+  background: #fff;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.25),0 3px 10px 0 rgba(0,0,0,.2)!important;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.25),0 3px 10px 0 rgba(0,0,0,.2)!important;
 }
+
+.cs-skin-elastic.cs-active .cs-options > ul::before {
+  -webkit-transition: none;
+  transition: none;
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  -webkit-animation: expand .6s ease-out;
+  animation: expand .6s ease-out;
+}
+
+.cs-skin-elastic .cs-options ul li {
+  -webkit-transition: opacity .15s, -webkit-transform .15s;
+  transition: opacity .15s, transform .15s;
+  -webkit-transform: translate3d(0, -25px, 0);
+  transform: translate3d(0, -25px, 0);
+  opacity: 0;
+}
+
+.cs-skin-elastic.cs-active .cs-options ul li {
+  -webkit-transition: none;
+  transition: none;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-animation: bounce .6s ease-out;
+  animation: bounce .6s ease-out;
+  opacity: 1;
+}
+
+.cs-skin-elastic .cs-options span {
+  background-repeat: no-repeat;
+  background-position: 1.5em 50%;
+  background-size: 2em auto;
+}
+
+.cs-skin-elastic .cs-options span:hover,
+.cs-skin-elastic .cs-options li.cs-focus span,
+.cs-skin-elastic .cs-options .cs-selected span {
+  color: black;
+  background-color: lightgray;
+}
+
+.cs-skin-elastic .cs-options .cs-selected span::after {
+  content: '';
+}
+
+@-webkit-keyframes expand {
+  0% {
+    -webkit-transform: scale3d(1, 0, 1);
+  }
+  25% {
+    -webkit-transform: scale3d(1, 1.2, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1, .85, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1, 1.05, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes expand {
+  0% {
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+  }
+  25% {
+    -webkit-transform: scale3d(1, 1.2, 1);
+    transform: scale3d(1, 1.2, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1, .85, 1);
+    transform: scale3d(1, .85, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1, 1.05, 1);
+    transform: scale3d(1, 1.05, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@-webkit-keyframes bounce {
+  0% {
+    -webkit-transform: translate3d(0, -25px, 0);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: translate3d(0, 10px, 0);
+  }
+  50% {
+    -webkit-transform: translate3d(0, -6px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0, 2px, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    -webkit-transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, -25px, 0);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+  50% {
+    -webkit-transform: translate3d(0, -6px, 0);
+    transform: translate3d(0, -6px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0, 2px, 0);
+    transform: translate3d(0, 2px, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
 /****************************************************************************************CUSTONM SELECT */
 
 .carousel{height:50%}.carousel .carousel-inner,.carousel .carousel-inner .active,.carousel .carousel-inner .carousel-item{height:100%}@media (max-width:776px){.carousel{height:100%}}.page-footer{background-color:#929FBA}  
@@ -475,7 +711,6 @@ html, body {
   display: block;
   float: left;
   list-style: none;
-  margin: 0 5px 5px 0;
   background-color: rgba(0, 0, 0, 0.7);
   background-position: center center;
   background-repeat: no-repeat;
@@ -489,14 +724,14 @@ html, body {
           transition: opacity 0.4s;
 }
 
-.image_container.is-loading {
+.is-loading {
   display: inline-block;
   width: 100%;
   height: 250px;
 }
-.image_container.is-loading::after{
+.is-loading::after{
 
- content: " ";
+ content: "";
   position: absolute;
   top: 35%;
     left: 35%;
@@ -506,7 +741,8 @@ html, body {
   border-radius: 50%;
   border: 6px solid #fff;
   border-color: #fff transparent #fff transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
+  animation: lds-dual-ring 0.7s linear infinite;
+  z-index: 2;
 }
 @keyframes lds-dual-ring {
   0% {
@@ -515,7 +751,7 @@ html, body {
   100% {
     transform: rotate(360deg);
   }
-}|
+}
 
 .image_container.is-broken {
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png');
@@ -1088,13 +1324,16 @@ input[type="radio"]:checked + .page .page-contents > * {
   display: block;
 }
 
-.view.overlay.zoom.Details::before {
-  /* color: black; */
+.bg-dark::before {
+  color: black;
   content: "";
   width: 100%;
-  background: transparent;
+  background: rgba(0,0,0,0.6);
   height: 100%;
-  position: absolute;}
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
   
   @keyframes ldio-wnsj81wwc9 {
     0% { transform: rotate(0) }
