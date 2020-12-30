@@ -119,20 +119,26 @@ $(function () {
   var myModalEl = document.getElementById('exampleModalCenter')
 myModalEl.addEventListener('hidden.bs.modal', function (event) {
   console.log("cerrado");
+  document.querySelector(".modal-body").innerHTML=""
+
   document.getElementById("spin").style.visibility="visible"
 })
   document.getElementsByClassName("Details").forEach((element) => {
 
     element.addEventListener("click", function (e) {
       let url = e.target.closest(".Details").getAttribute("tag-url")
-      $('#exampleModalCenter').modal('show')
 
       fetch(url).then(data=>data.json()).then(
         function (response) {
-          document.getElementById("spin").style.visibility="hidden"
-          document.querySelector(".modal-body").innerHTML=""
+          setTimeout(function() {
+
+          // document.querySelector(".modal-body").innerHTML=""
 
           document.querySelector(".modal-body").innerHTML=response.response
+          $('#exampleModalCenter').modal('show')
+
+        }, 3000);
+
         }
       )
     })

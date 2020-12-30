@@ -76,7 +76,7 @@ $(document).ready(function () {
         var doc = parser.parseFromString(response, "text/html");
         doc.querySelectorAll(".pagination")["0"].children[2].classList.add("active")
         let a =0
-
+        doc.getElementById("spin").style.visibility="visible"
         Array.from(doc.querySelectorAll(".pagination")["0"].children).forEach(element=>{
           if (element.classList.contains('active')) {
             a+=1
@@ -94,11 +94,15 @@ $(document).ready(function () {
 
           element.addEventListener("click", function (e) {
             let url = e.target.closest(".Details").getAttribute("tag-url")
-            document.querySelector(".modal-body").innerHTML=""
-            $('#exampleModalCenter').modal('show')
+          
             fetch(url).then(data=>data.json()).then(
               function (response) {
-                document.querySelector(".modal-body").innerHTML=response.response
+                setTimeout(function() {
+
+                  document.querySelector(".modal-body").innerHTML=response.response
+                  $('#exampleModalCenter').modal('show')
+              }, 3000);
+
               }
             )
           })

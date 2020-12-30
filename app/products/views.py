@@ -108,7 +108,7 @@ class ProductList(TemplateView):
             return render(self.request,self.template_name,self.getFilter())
         else:
             response =  Product.objects.values("id","name","price","rating","slug","image")
-            post = Paginator(response, 1)
+            post = Paginator(response, 2)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
@@ -187,7 +187,7 @@ class ProductList(TemplateView):
                     response=Product.objects.order_by("price")
                 elif order=="priceHigher":
                     response=Product.objects.order_by("price").reverse()
-            post = Paginator(response, 1)
+            post = Paginator(response, 2)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
