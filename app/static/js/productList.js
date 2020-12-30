@@ -71,32 +71,31 @@ $(document).ready(function () {
     if( $(element).prop("checked"))    $("#cleanFilter").prop("disabled",false)
 
   });
-  $(document).on("click",".Details",function (e) { 
-    e.preventDefault();
-    $('.modal-body').text("")
-
-    $('#exampleModalCenter').modal('show')
-    $.ajax({
-      startTime: performance.now(),
-      url: $(this).attr("tag-url"),
-      success: function (response) {
-        console.log(response);
-
-       
-      }
-    }).done(function(response){
-      $('.modal-body').append(response.response)
-
-      var time = performance.now() - this.startTime;
  
-      var seconds = time / 1000;
 
-      seconds = seconds.toFixed(3);
+  // $(document).on("click",".Details",function (e) { 
+  //   e.preventDefault();
+  //   $('.modal-body').text("")
 
-      var result = 'AJAX request took ' + seconds + ' seconds to complete.';
-      console.log(result);
-    });
-  });
+  //   $('#exampleModalCenter').modal('show')
+  //   $.ajax({
+  //     startTime: performance.now(),
+  //     url: $(this).attr("tag-url"),
+  //     success: function (response) {
+  //     }
+  //   }).done(function(response){
+  //     $('.modal-body').append(response.response)
+
+  //     var time = performance.now() - this.startTime;
+ 
+  //     var seconds = time / 1000;
+
+  //     seconds = seconds.toFixed(3);
+
+  //     var result = 'AJAX request took ' + seconds + ' seconds to complete.';
+  //     console.log(result);
+  //   });
+  // });
   $(document).on("click","#postComment",function (e) { 
     e.preventDefault();
       $.ajax({

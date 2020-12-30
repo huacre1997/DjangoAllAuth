@@ -70,16 +70,46 @@ $(document).ready(function () {
         "X-CSRFToken":getCookie('csrftoken'),
         "X-Requested-With":"XMLHttpRequest"
       },
-      data:{"aea":"aeaa"},
       startTime: performance.now(),
       success: function (response) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(response, "text/html");
+        doc.querySelectorAll(".pagination")["0"].children[2].classList.add("active")
+        let a =0
+
+        Array.from(doc.querySelectorAll(".pagination")["0"].children).forEach(element=>{
+          if (element.classList.contains('active')) {
+            a+=1
+          };
+        })
+          if (a>1  ) {
+            console.log("if");
+            doc.querySelectorAll(".pagination")["0"].children[2].classList.remove("active")
+
+          } else{
+            doc.querySelectorAll(".pagination")["0"].children[2].classList.add("active")
+
+          }
+        doc.getElementsByClassName("Details").forEach((element) => {
+
+          element.addEventListener("click", function (e) {
+            let url = e.target.closest(".Details").getAttribute("tag-url")
+            document.querySelector(".modal-body").innerHTML=""
+            $('#exampleModalCenter').modal('show')
+            fetch(url).then(data=>data.json()).then(
+              function (response) {
+                document.querySelector(".modal-body").innerHTML=response.response
+              }
+            )
+          })
+        })
+     
+        
         var img = doc.querySelector(".ListProducts").children;
         // var title=doc.querySelector(".titleProducts").textContent
         // var subtitle=doc.querySelector(".subtitle").textContent
         // var results=doc.querySelector(".results").textContent
-
+    
         $("#ListProducts").text("").append(img)
         window.history.pushState({ page: "another" }, "another page", url);
          var time = performance.now() - this.startTime;
@@ -92,13 +122,11 @@ $(document).ready(function () {
          console.log(result);
          imageLoad();
          $("#loadingCharge").css("visibility", "hidden");
-         $("#spinnner2").css("visibility", "hidden");
-          // $(".titleProducts").text(title)
-          // $(".subtitle").text(subtitle)
-          // $(".results").text(results)
+         $("#spinnner2").css("visibility", "hidden")
 
          var body = $("html, body");
          body.stop().animate({ scrollTop: 150 }, 500, "swing");
+        
 
       }
     

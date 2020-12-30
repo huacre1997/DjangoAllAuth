@@ -280,7 +280,7 @@ class byCategory(ListView):
         else:
             page_obj = post.page(1)
         print("aea mnit")
-        return {"entries":page_obj,"tag2":node["name"],"displayCat":"none"}
+        return {"entries":page_obj,"tag2":node.name,"displayCat":"none"}
        
 class byMarcas(TemplateView):
     template_name="productList.html"

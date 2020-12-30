@@ -24,7 +24,6 @@ $(function (e) {
   $(".cat").on("click",async  function (e) {
     e.preventDefault();
     
-    console.log($(this));
     $("#spinner").css("display","block");
 
     clg = $(this).attr("hreft");
@@ -39,7 +38,6 @@ $(function (e) {
         $("#spinner").css("display","none");
 
         response.forEach((i) => {
-          console.log(i);
               $("#subcatlist").append(
                 `<li class="sub-title text-uppercase"><a class='nav-item pl-1 mt-2 waves-effect waves-light' href="/subcategory/${i.id}/${i.slug}">${i.name}</a></li>`
               );})
@@ -110,13 +108,11 @@ $(function (e) {
   $(document).on("mouseenter",".carrbutton",
     function () {
       $(this).children().toggleClass("animated  rubberBand infinite");
-      console.log("enter");
     }
   );
   $(document).on("mouseleave",".carrbutton",
     function () {
       $(this).children().removeClass("animated  rubberBand infinite");
-      console.log("leave");
 
     }
   );
@@ -139,7 +135,6 @@ $(document).on("mouseleave",".cartEnter",
   $("#btnLogin").on("click", function () {
     $("#navbarSupportedContent").removeClass("show");
     url = $(this).attr("hreft");
-    console.log(url);
     const login = $.confirm({
       title: "",
       columnClass: "col-lg-5 col-md-7 col-xs-9",

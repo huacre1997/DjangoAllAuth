@@ -1,91 +1,76 @@
- 
-    <!-- Classic tabs -->
-    <!-- Classic tabs -->
-
- 
-{% load poll_extras %}
-        
-          <div class="row">
-          
-          <div class="col-6">
-              <img src="../../media/{{product.image}}" style="width:80%">
-</div>
-          
-          <div class="col-6">
-
-          <h2 class="h2-responsive mb-2">{{product.name}}</h2>
-    
-          <div class="d-flex justify-content-end flex-row-reverse">
-           <div id="wrapper2">
-                                    <div class="star-rating_Title">
-                                      <span style="width:{{product.rating|percent}}%"></span>
-                                    </div>
-                                </div>
-                                        
-            <div class="mr-2">
-              <p class="text-muted">{{product.rating}} ({{n}})</p>
-            </div>
-          </div>
-           {% if product.amount >= 20 %}
-          <span class="badge badge-pill badge-success mb-4">Disponible</span>
-          {%elif product.amount < 20 %}
-          <span class="badge badge-pill badge-warning  mb-4">Disponible</span>
-          {%elif product.amount < 10 %}
-            <span class="badge badge-pill badge-danger  mb-4">No disponible</span>
-
-          {% endif %}
-          <div class="d-flex align-items-end mb-2">
-            <h2 class="font-weight-bold blue-text">S/.{{product.price}}        
-            </h2>&nbsp;&nbsp;
-            <h4
-              class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
-          </h4>
-          </div>
-         <h5 class="mb-2">
-            <strong>Modelo</strong>
-            <small class="text-muted">{{product.modelo}}</small>
-          </h5>
-          
-          <h5 class="mb-2">
-            <strong>Marca</strong>
-            <small class="text-muted">{{product.marca}}</small>
-          </h5>
-          <h5 class="mb-2">
-            <strong>SKU</strong>
-            <small class="text-muted">{{product.sku}}</small>
-          </h5>
-          <h5 class="mb-2">
-            <strong>Categoría</strong>
-            <small class="text-muted">{{product.category}}/{{product.category.parent}}</small>
-          </h5>
-          <h5 class="mb-2">
-            <strong>Descripcion</strong><br>
-            <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit alias dolorum necessitatibus similique consequatur, non exercitationem quidem commodi nisi! Iure voluptatem pariatur, enim quasi voluptate maxime aperiam reprehenderit soluta nam.Nihil odit repellat et consectetur corporis aut magni aspernatur sapiente quaerat, quasi libero voluptatem maiores molestiae expedita pariatur temporibus, quidem provident iure? Laboriosam dolorum illum quibusdam numquam sint hic unde.</p>
-          </h5>
-         
-        
-     
-          </div>
-          </div>
-      
-          {% comment %} <div class="scrollbar scrollbar-primary">
-            <div class="force-overflow">
-          <article class="article">
-            <h5 class="article__title"><strong>Descripcion</strong></h5>
-            <div class="article__content">
-             
-                
-                      {% autoescape off %}
-                      {{product.description}}
-                      {% endautoescape %}
-             
-            </div>
-          </article>
-        </div>
-      </div> {% endcomment %}
+ <!-- Classic tabs -->
+ <!-- Classic tabs -->
 
 
-    <!-- Classic tabs -->
+ {% load poll_extras %}
+
+ <div class="row">
+
+   <div class="col-6">
+     <img src="../../media/{{product.image}}" style="width:80%">
+   </div>
+
+   <div class="col-6">
+
+     <h2 class="h2-responsive mb-2">{{product.name}}</h2>
+
+     <div class="d-flex justify-content-end flex-row-reverse">
+       <div id="wrapper2">
+         <div class="star-rating_Title">
+           <span style="width:{{product.rating|percent}}%"></span>
+         </div>
+       </div>
+
+       <div class="mr-2">
+         <p class="text-muted">{{product.rating}} ({{n}})</p>
+       </div>
+     </div>
+     {% if product.amount >= 20 %}
+     <span class="badge badge-pill badge-success mb-4">Disponible</span>
+     {%elif product.amount < 20 %}
+     <span class="badge badge-pill badge-warning  mb-4">Disponible</span>
+     {%elif product.amount < 10 %}
+     <span class="badge badge-pill badge-danger  mb-4">No disponible</span>
+
+     {% endif %}
+     <div class="d-flex align-items-end mb-2">
+       <h2 class="font-weight-bold blue-text">S/.{{product.price}}
+       </h2>&nbsp;&nbsp;
+       <h4 class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
+       </h4>
+     </div>
+     <h5 class="mb-2">
+       <strong>Modelo</strong>
+       <small class="text-muted">{{product.modelo}}</small>
+     </h5>
+
+     <h5 class="mb-2">
+       <strong>Marca</strong>
+       <small class="text-muted">{{product.marca}}</small>
+     </h5>
+     <h5 class="mb-2">
+       <strong>SKU</strong>
+       <small class="text-muted">{{product.sku}}</small>
+     </h5>
+     <h5 class="mb-2">
+       <strong>Categoría</strong>
+       <small class="text-muted">{{product.category}}/{{product.category.parent}}</small>
+     </h5>
+     <h5 class="mb-2">
+       <strong>Descripcion</strong><br>
+       <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit alias dolorum necessitatibus
+         similique consequatur, non exercitationem quidem commodi nisi! Iure voluptatem pariatur, enim quasi voluptate
+         maxime aperiam reprehenderit soluta nam.Nihil odit repellat et consectetur corporis aut magni aspernatur
+         sapiente quaerat, quasi libero voluptatem maiores molestiae expedita pariatur temporibus, quidem provident
+         iure? Laboriosam dolorum illum quibusdam numquam sint hic unde.</p>
+     </h5>
 
 
 
+   </div>
+ </div>
+
+
+
+
+ <!-- Classic tabs -->

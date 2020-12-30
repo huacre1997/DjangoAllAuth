@@ -4,7 +4,7 @@
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
-<div class="container">
+<div class="container" id="listaProductos">
 <div class="card " >
 
   <!--Section: Content-->
@@ -89,7 +89,7 @@
                   id="defaultUnchecked{{node.id}}" {% if  node.id|to_str in request.GET.sc %} checked {% endif %}>
                 <label class="custom-control-label" for="defaultUnchecked{{node.id}}">{{node.name}}
                 </label>
-                <span class="badge  bg-primary">
+                <span class="badge  indigo">
                   {% with total=node.products_cumulative_count %}
     {{ total }} 
 {% endwith %}
@@ -113,7 +113,7 @@
           </div>
 
 
-          <button id="cleanCheckFilter" class="btn btn-indigo btn-block  waves-effect waves-light"
+          <button id="cleanCheckFilter" class="btn indigo btn-block  waves-effect waves-light"
             {% if  request.GET.sc %} {%else%}disabled{%endif%}>Limpiar
             filtro</button>
 
@@ -140,7 +140,7 @@
             <input type="radio" value="{{item.name}}" {% if request.GET.brand == item.name %} checked {%endif%}
               class="custom-control-input marca" id="optionbrand{{item.id}}" name="brand">
             <label class="custom-control-label" for="optionbrand{{item.id}}">{{item.name}}</label>
-            <span class="badge bg-primary indigo ">
+            <span class="badge  indigo ">
               {% with total2=item.marca_count %}
     {{ total2 }} 
 {% endwith %}
@@ -150,7 +150,7 @@
           </div>
 
           {% endfor %}
-          <button id="cleanFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3"
+          <button id="cleanFilter" class="btn indigo btn-block  waves-effect waves-light mt-3"
             {% if  request.GET.brand  %} {%else%}disabled{%endif%}>Limpiar
             filtro</button>
         </div>
@@ -179,7 +179,7 @@
 
                 
             </div>
-            <button id="priceFilter" class="btn btn-indigo btn-block  waves-effect waves-light mt-3 {%if request.GET.price %}active{%endif%}" data-toggle="button" aria-pressed="false" autocomplete="off"
+            <button id="priceFilter" class="btn indigo btn-block  waves-effect waves-light mt-3 {%if request.GET.price %}active{%endif%}" data-toggle="button" aria-pressed="false" autocomplete="off"
             >{% if request.GET.price %}Quitar filtro {%else%} Aplicar filtro {%endif%}</button>
 
       
@@ -311,11 +311,14 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLongTitle">{{product.name}}</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-mdb-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
+                      <div class="spinner-border text-primary" role="status" id="spin" style="visibility: visible;">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
                     </div>
 
                   </div>
@@ -331,12 +334,18 @@
                 <div class="card animated fadeIn hoverable shadow-2-strong">
                   <!--Card image-->
                   <div class="view overlay zoom Details" tag-url="{% url 'products:getProductDetail' entry.id %}">
-                    <li class="image_container is-loading">
+                    <li class="image_container is-loading hover-overlay ripple">
                       <!-- <div class="loader " style="visibility: visible;">Loading...</div> -->
-
+                        
                       <img src="{% get_media_prefix %}{{entry.image}} "  
-                        class="imgProduct"  >
-
+                        class="imgProduct waves-effect waves-light"  >
+                        <a href="#!">
+                          <div class="mask" style="background-color: rgba(0,0,0, 0.5)">
+                            <div class="d-flex justify-content-center align-items-center h-100">
+                              <p class="text-white mb-0">Vista rápida</p></div>
+                        </a>
+                   
+                        </div>
                     </li>
                     <!-- <a class="bk product{{item.id}}">
                       <div class="mask flex-center rgba-black-strong">
@@ -371,16 +380,19 @@
                       <strong>S/.{{entry.price}}</strong>
                     </h4>
                     {% if tag2 %}
-                      {% if tag == 2 %}
-                      <a href="{% url 'products:product_detail_category'  tag2|slugify entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                      {% if tag == 2 or 'categorias' in request.path  %}
+
+                      <a href="{% url 'products:product_detail_category'  tag2|slugify entry.slug %}" class="btn indigo btn-block carrbutton seeDetail"> <img
                         src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
-                        {% elif tag == 3 %}
-                        <a href="{% url 'products:product_detail_brand'  tag2|slugify entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+                        {% elif tag == 3 or 'marcas' in request.path   %}
+
+                        <a href="{% url 'products:product_detail_brand'  tag2|slugify entry.slug %}" class="btn indigo btn-block carrbutton seeDetail"> <img
                           src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
                         {% endif %}
                    
                     {% else %}
-                    <a href="{% url 'products:product_detail'  entry.slug %}" class="btn btn-indigo btn-block carrbutton seeDetail"> <img
+
+                    <a href="{% url 'products:product_detail'  entry.slug %}" class="btn indigo btn-block carrbutton seeDetail"> <img
                       src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
                     {% endif %}
                     
@@ -419,6 +431,7 @@
 
         </section>
         {% if entries.paginator.count > 0 %}
+      
         <nav class="d-flex justify-content-center wow fadeIn " 
       id="paginator">
       <ul class="pagination ">
@@ -429,21 +442,22 @@
             page_number="1">Primero</a>
         </li>
 
-        <li class="page-item page-item_list  ">
+        <li class="page-item page-item_list">
           <a class="page-link {% if request.GET.page == 1 %}disabled{% endif %}" aria-label="Previous"
             page_number="{% if entries.has_previous %}{{entries.previous_page_number}}{% endif %}">
             <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
             <span class="sr-only">Anterior</span>
           </a>
         </li>
-       
+  
+
         
         
         {% for i in entries.paginator  %}
       
         <li class="page-item page-item_list 
         
-        {% if i.number == 1 or  request.GET.page == i.number|to_str   %}
+        {% if  request.GET.page == i.number|to_str   %}
         
         
         active
@@ -491,6 +505,7 @@
 {% endblock content %}
 {% block js_page %}
 <script>
+
   $(function () {
     $(".cat_menu_container ").hover(function () {
       $(this).children("ul").removeClass("none")
