@@ -93,6 +93,10 @@ $(document).ready(function () {
 
           }
         }
+        [].slice.call(doc.querySelectorAll("select.cs-select")).forEach(function(e) {
+    
+          new SelectFx(e)
+        })
         doc.getElementsByClassName("Details").forEach((element) => {
 
           element.addEventListener("click", function (e) {
@@ -304,7 +308,6 @@ $(document).ready(function () {
   //   }
   //   callUrl(returnURL(number));
   // });
-  document.getElementById("select").addEventListener("change", ()=>console.log("aweaweawe"), true);
  
   $(document).on("change","#select", function (e) {
     $("#loadingCharge").css("visibility", "visible");
@@ -412,9 +415,9 @@ $(document).ready(function () {
       console.log(newUrl);
       callUrl(newUrl.replace(/%2C/g, ","));
     } 
-  });
-  ! function(e) {
-    "use strict";
+ })
+ document.querySelector(".cs-select").children[2].addEventListener("change",()=>console.log("aea"))    
+ ! function(e) {
   
     function t(e) {
       return new RegExp("(^|\\s+)" + e + "(\\s+|$)")
@@ -524,6 +527,7 @@ $(document).ready(function () {
           case 27:
             t.preventDefault(), e._isOpen() && e._toggleSelect()
         }
+      
       })
     }, l.prototype._navigateOpts = function(e) {
       this._isOpen() || this._toggleSelect();
@@ -535,9 +539,23 @@ $(document).ready(function () {
       "undefined" != typeof this.preSelCurrent && -1 !== this.preSelCurrent && (this.current = this.preSelCurrent, this.preSelCurrent = -1);
       var t = this.selOpts[this.current];
       this.selPlaceholder.textContent = t.textContent, this.el.value = t.getAttribute("data-value");
+      $("#loadingCharge").css("visibility", "visible");
+      $("#spinnner2").css("visibility", "visible");
+  
+  
+      if (this.el.value == "all") {
+        console.log("all");
+  
+        callUrl(removeParam("order", window.location.href).replace(/%2C/g, ","));
+      } else {
+        var url = new URL(window.location.href);
+        url.searchParams.set("order", this.el.value); // setting your param
+        var newUrl = url.href;
+        callUrl(newUrl.replace(/%2C/g, ","));
+      }
       var s = this.selEl.querySelector("li.cs-selected");
       s && classie.remove(s, "cs-selected"), classie.add(t, "cs-selected"), t.getAttribute("data-link") && (this.options.newTab ? e.open(t.getAttribute("data-link"), "_blank") : e.location = t.getAttribute("data-link")), this.options.onChange(this.el.value)
-    }, l.prototype._isOpen = function() {
+    }, l.prototype._isOpen = function(e) {
       return classie.has(this.selEl, "cs-active")
     }, l.prototype._removeFocus = function() {
       var e = this.selEl.querySelector("li.cs-focus");
@@ -545,6 +563,8 @@ $(document).ready(function () {
     }, e.SelectFx = l
   }(window),
   function() {
+  
+
     [].slice.call(document.querySelectorAll("select.cs-select")).forEach(function(e) {
     
       new SelectFx(e)

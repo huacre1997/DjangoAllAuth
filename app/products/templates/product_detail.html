@@ -388,7 +388,48 @@
                         </div>
                     </div>
                     <!-- /product tab content  -->
+                    <div id="review-form ">
 
+                        <form class="review-form mt-3" id="commentForm"
+                            action="{% url 'products:product_detail' object.slug %}">
+                            {% csrf_token %}
+                            <h3>Califica nuestro producto</h3>
+                            <label class="form-label" for="form1">Tu nombre</label>
+    
+                            <input type="text" id="form1" class="form-control" name="author" />
+                            <label class="form-label" for="textAreaExample">Escribe un
+                                comentario</label>
+                            <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
+    
+                            <div class="input-rating">
+                                <span>Tu puntuación: </span>
+    
+                                <div class="container">
+                                    <div class="feedback">
+                                        <div class="rating">
+                                            <input type="radio" name="rate" id="rating-5" value="5">
+                                            <label for="rating-5"></label>
+                                            <input type="radio" name="rate" id="rating-4" value="4">
+                                            <label for="rating-4"></label>
+                                            <input type="radio" name="rate" id="rating-3" value="3">
+                                            <label for="rating-3"></label>
+                                            <input type="radio" name="rate" id="rating-2" value="2">
+                                            <label for="rating-2"></label>
+                                            <input type="radio" name="rate" id="rating-1" value="1">
+                                            <label for="rating-1"></label>
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+                            <input type="hidden" name="paramSend" value="">
+                            <a href="#" class="btn indigo btn-block " id="postComment">Publicar</a>
+
+                        </form>
+    
+                    </div>
+    
                 </div>
 
 
@@ -398,7 +439,6 @@
         </div>
         <!-- /row -->
     </div>
-</div>
 
 
 
@@ -410,7 +450,7 @@
 
 
 
-<div class="modalComment left fade none" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel"
+<!-- <div class="modalComment left fade none" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog-comment " role="document">
         <div class="modal-content-comment">
@@ -419,46 +459,7 @@
             </div>
             <div class="modal-body">
 
-                <div id="review-form ">
-
-                    <form class="review-form mt-3" id="commentForm"
-                        action="{% url 'products:product_detail' object.slug %}">
-                        {% csrf_token %}
-                        <h3>Califica nuestro producto</h3>
-                        <label class="form-label" for="form1">Tu nombre</label>
-
-                        <input type="text" id="form1" class="form-control" name="author" />
-                        <label class="form-label" for="textAreaExample">Escribe un
-                            comentario</label>
-                        <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
-
-                        <div class="input-rating">
-                            <span>Tu puntuación: </span>
-
-                            <div class="container">
-                                <div class="feedback">
-                                    <div class="rating">
-                                        <input type="radio" name="rate" id="rating-5" value="5">
-                                        <label for="rating-5"></label>
-                                        <input type="radio" name="rate" id="rating-4" value="4">
-                                        <label for="rating-4"></label>
-                                        <input type="radio" name="rate" id="rating-3" value="3">
-                                        <label for="rating-3"></label>
-                                        <input type="radio" name="rate" id="rating-2" value="2">
-                                        <label for="rating-2"></label>
-                                        <input type="radio" name="rate" id="rating-1" value="1">
-                                        <label for="rating-1"></label>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <input type="hidden" name="paramSend" value="">
-                    </form>
-
-                </div>
-
+              
 
                 <a href="#" class="btn btn-indigo btn-block " id="postComment">Publicar</a>
 
@@ -468,7 +469,7 @@
         </div>
     </div>
 
-</div>
+</div> -->
 
 {% endblock content %}
 {% block js_page%}
