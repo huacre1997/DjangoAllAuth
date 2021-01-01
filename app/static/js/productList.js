@@ -98,27 +98,48 @@ $(document).ready(function () {
   // });
   $(document).on("click","#postComment",function (e) { 
     e.preventDefault();
+    document.getElementById("postComment").innerHTML=""
+    let parent=document.createElement("div")
+    let loader=document.createElement("span")
+    loader.style.marginRight="2px"
+    loader.classList.add("spinner-border","spinner-border-sm")
+    loader.setAttribute("role","status")
+    loader.setAttribute("aria-hidden","true")
+    parent.appendChild(loader)
+
+    loader.after("Publicando...")
+
+    console.log(parent)
+    document.getElementById("postComment").appendChild(parent)
+    document.getElementById("postComment").disabled=true
+
+// "<div><p></p>Text</div>"
       $.ajax({
         type: "POST",
         url:$("#commentForm").attr("action"),
         data: $("#commentForm").serialize(),
         success: function (response) {
           console.log(response);
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(response, "text/html");
-       
-          var results=doc.getElementById("loadDetail").children
-          $("#taloadDetailb3").text()
-          $("#loadDetail").html(results)
-          $("input[name='author']").text("")
-          $("input[name='comment']").text("")
-          $("input[name='rate']").val()
-          $(".modal-backdrop").removeClass("modal-backdrop fade show ")
-          $("#exampleModal").css("opacity","0")
+          document.getElementById("postComment").innerHTML=""
+          document.getElementById("postComment").textContent="Publicado"
+
+          document.getElementById("postComment").disabled=false
+
+          // var parser = new DOMParser();
+          // var doc = parser.parseFromString(response, "text/html");
+          
+          // var results=doc.getElementById("loadDetail").children
+          // $("#taloadDetailb3").text()
+          // $("#loadDetail").html(results)
+          // $("input[name='comment']").text("")
+          // $("input[name='rate']").val()
+          // $(".modal-backdrop").removeClass("modal-backdrop fade show ")
+          // $("#exampleModal").css("opacity","0")
         }
       });
       
 
 
   });
+  console.log(user);
 });

@@ -3,5 +3,5 @@ from .models import Comment
 class RatingForm(ModelForm):
     class Meta:
         model=Comment
-        fields=["author","comment","rate"]
+        fields=["comment","rate"]
   

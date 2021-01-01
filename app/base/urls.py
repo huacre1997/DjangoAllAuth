@@ -3,13 +3,13 @@ from django.urls import path,include
 from django.conf import settings
 from base.views import *
 from django.conf.urls.static import static
-from .views import LoginFormView,RegisterView,LoginView
+from .views import LoginFormView,RegisterView,LoginView, index
 
 from django.contrib.auth.views import LogoutView
 handler404 = 'base.views.handler404' 
 
 urlpatterns = [
-    path('', IndexView.as_view(), name="index"),
+    path('', index, name="index"),
     path('sobre-nosotros', AboutView.as_view(), name="about"),
     path('contactanos', ContactView.as_view(), name="contact"),
 

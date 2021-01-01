@@ -18,8 +18,16 @@ from django.urls import reverse
 from django.template import RequestContext 
 from django.views import generic
 
-class IndexView(TemplateView):
-    template_name="index.html"
+def index(request):
+
+    num_visits = request.session.get('num_visits', 1)
+    request.session['num_visits'] = num_visits + 1
+
+    context = {
+        'num_visits': num_visits,
+    }
+
+    return render(request, 'index.html', context=context)
 class AboutView(TemplateView):
     template_name="about.html"    
 class ContactView(TemplateView):

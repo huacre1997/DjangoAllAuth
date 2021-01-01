@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'ckeditor',
     "base",
     "accounts",
-    "products"
+    "products",
+    "cart"
 
 ]
 IMAGEFIT_ROOT = "media"
@@ -73,7 +74,7 @@ CACHES = {
 ACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSignupForm'}
 
 SOCIALACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSocialSignupForm'}
-
+CART_SESSION_ID = 'cart'
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False

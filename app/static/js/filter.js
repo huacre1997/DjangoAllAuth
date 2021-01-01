@@ -416,7 +416,6 @@ $(document).ready(function () {
       callUrl(newUrl.replace(/%2C/g, ","));
     } 
  })
- document.querySelector(".cs-select").children[2].addEventListener("change",()=>console.log("aea"))    
  ! function(e) {
   
     function t(e) {

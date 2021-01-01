@@ -5,7 +5,10 @@
   {% load static %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-  <title>Mery</title>
+  <title>{% block title %}Mery{% endblock title %}</title>
+     <meta property="og:title" content="{% block titlemeta %} {% endblock titlemeta %}">
+    <meta name="description" property="og:description" content="{% block description %}{% endblock description %}">
+    <meta property="og:url" content="www.electroniaperu.com{% block slug %}{% endblock slug %}">
   <link rel="stylesheet" href="{% static 'css/dist/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}"> 
   <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
@@ -26,42 +29,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'plugins/slick-1.8.0/slick.css' %}"> {% endcomment %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/main_styles.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
-    <link rel="stylesheet" href="http://anijs.github.io/lib/anicollection/anicollection.css">
 
-  <!-- <style type="text/css">
-    html,
-    body,
-    header,
-    .carousel {
-      height: 70vh;
-      bottom: -35px;
-
-    }
-
-    @media (max-width: 550px) {
-
-      html,
-      body,
-      header,
-      .carousel {
-        bottom: 25px;
-
-        height: 100vh;
-      }
-    }
-
-    @media (max-width: 1000px) {
-
-      html,
-      body,
-      header,
-      .carousel {
-        bottom: 25px;
-
-        height: 80vh;
-      }
-    }
-  </style> -->
   <style type="text/css">
     output {
       display: block;
@@ -222,7 +190,7 @@
                 <div class="cartEnter cart_container d-flex flex-row align-items-center justify-content-end">
                   <div class="cart_icon">
                   <img src="{% static 'icons/carrito.png'%}" id="carrIconNav">
-                    <div class="cart_count indigo darken-1"><span>10</span></div>
+                    <div class="cart_count indigo darken-1"><span>{{num_visits}}</span></div>
                   </div>
                   <div class="cart_content">
                     <div class="cart_text"><a href="#">Mi carrito</a></div>
@@ -945,7 +913,9 @@
 <script src="{% static 'js/swipper.min.js' %}"></script>
 <script src="{% static 'js/select2.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-
+<script text="text/javascript">
+  var user="{{request.user.first_name}}"
+</script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 {% comment %} <script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/TimelineMax.min.js'%}"></script>

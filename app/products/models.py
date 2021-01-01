@@ -1,10 +1,11 @@
 from django.db import models
+from django.db.models.fields.related import ForeignKey
 from base.models import BaseModel
 from crum import get_current_user
 from django.forms.models import model_to_dict
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
-
+from django.conf import settings
 from mptt.models import MPTTModel, TreeForeignKey
 
 from django.dispatch import receiver
@@ -183,7 +184,7 @@ class Productimage(models.Model):
 class Comment(models.Model):
     STATUS=(("Nuevo","Nuevo"),("True","True"),("False","False"))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
-    author = models.CharField(max_length=30)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     comment = models.TextField(max_length=200)
     rate=models.IntegerField(default=1)
     ip=models.CharField(max_length=20,blank=True)

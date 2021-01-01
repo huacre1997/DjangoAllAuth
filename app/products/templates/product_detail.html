@@ -1,7 +1,12 @@
 {% extends "index.html" %}
 {% load static %}
 {% load poll_extras %}
+{% block title %}{{object.name}}{% endblock title %}
 
+{% block titlemeta %}{{object.meta_keywords}}{% endblock titlemeta %}
+
+{% block slug %}{{object.slug}}{% endblock slug %}
+{% block description %}{{object.meta_description|striptags|truncatewords:20}}{% endblock description %}
 {% block categories %}cat_menu none
 {% endblock categories %}
 {% block content %}
@@ -212,7 +217,7 @@
                                 <div class="page-contents">
                                     <div class="row">
                                         <!-- Rating -->
-                                        <div class="col-lg-3 col-md-12 col-sm-12">
+                                        <div class="col-lg-3 col-md-4 col-sm-12">
                                             <div id="rating">
                                                 <div class="rating-avg">
                                                     <span class="mr-3">{{starsAvg}}</span>
@@ -258,7 +263,7 @@
                                         <!-- /Rating -->
 
                                         <!-- Reviews -->
-                                        <div class="col-lg-9 col-md-12 col-sm-12">
+                                        <div class="col-lg-9 col-md-8 col-sm-12">
                                             <h4 class=" mb-4">Opiniones de nuestros clientes</h4>
                                             <div id="reviews" class="comments-container">
                                                 {% if comment %}
@@ -285,7 +290,7 @@
                                                                                         class="d-flex align-items-center">
                                                                                         <h6
                                                                                             class="comment-name by-author">
-                                                                                            {{i.author}}</h6>
+                                                                                            {{i.author.first_name}}</h6>
                                                                                         <span>|
                                                                                             {{i.created_date|date:'N d,Y H:i A'}}
                                                                                         </span>
@@ -390,50 +395,57 @@
                            
                         </div>
                     <!-- /product tab content  -->
-                    <div id="review-form ">
 
-                        <form class="review-form mt-3" id="commentForm"
-                            action="{% url 'products:product_detail' object.slug %}">
-                            {% csrf_token %}
-                            <h3>Califica nuestro producto</h3>
-                            <label class="form-label" for="form1">Tu nombre</label>
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6">
+                            <div id="review-form ">
     
-                            <input type="text" id="form1" class="form-control" name="author" />
-                            <label class="form-label" for="textAreaExample">Escribe un
-                                comentario</label>
-                            <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
-    
-                            <div class="input-rating">
-                                <span>Tu puntuación: </span>
-    
-                                <div class="container">
-                                    <div class="feedback">
-                                        <div class="rating">
-                                            <input type="radio" name="rate" id="rating-5" value="5">
-                                            <label for="rating-5"></label>
-                                            <input type="radio" name="rate" id="rating-4" value="4">
-                                            <label for="rating-4"></label>
-                                            <input type="radio" name="rate" id="rating-3" value="3">
-                                            <label for="rating-3"></label>
-                                            <input type="radio" name="rate" id="rating-2" value="2">
-                                            <label for="rating-2"></label>
-                                            <input type="radio" name="rate" id="rating-1" value="1">
-                                            <label for="rating-1"></label>
-    
+                                <form class="review-form mt-3" id="commentForm"
+                                    action="{% url 'products:product_detail' object.slug %}">
+                                    {% csrf_token %}
+                                    <h3>Califica nuestro producto</h3>
+                                    <!-- <label class="form-label" for="form1">Tu nombre</label>
+            
+                                    <input type="text" id="form1" class="form-control" name="author" /> -->
+                                    <label class="form-label" for="textAreaExample">Escribe un
+                                        comentario</label>
+                                    <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
+            
+                                    <div class="input-rating">
+                                        <span>Tu puntuación: </span>
+            
+                                        <div class="container">
+                                            <div class="feedback">
+                                                <div class="rating">
+                                                    <input type="radio" name="rate" id="rating-5" value="5">
+                                                    <label for="rating-5"></label>
+                                                    <input type="radio" name="rate" id="rating-4" value="4">
+                                                    <label for="rating-4"></label>
+                                                    <input type="radio" name="rate" id="rating-3" value="3">
+                                                    <label for="rating-3"></label>
+                                                    <input type="radio" name="rate" id="rating-2" value="2">
+                                                    <label for="rating-2"></label>
+                                                    <input type="radio" name="rate" id="rating-1" value="1">
+                                                    <label for="rating-1"></label>
+            
+                                                </div>
+                                            </div>
                                         </div>
+            
                                     </div>
-                                </div>
-    
+                                    <input type="hidden" name="paramSend" value="">
+                                </form>
+            
                             </div>
-                            <input type="hidden" name="paramSend" value="">
-                            <a href="#" class="btn indigo btn-block " id="postComment">Publicar</a>
-
-                        </form>
+                            <button  class="btn indigo btn-block " id="postComment">Publicar</button>
+                        
+                        </div>
     
                     </div>
-    
                 </div>
 
+            
 
             </div>
             <!-- /product tab -->
@@ -461,9 +473,6 @@
             </div>
             <div class="modal-body">
 
-              
-
-                <a href="#" class="btn btn-indigo btn-block " id="postComment">Publicar</a>
 
 
             </div>
@@ -486,7 +495,7 @@
 
         fetch(url, {
                 method: "POST",
-                body: data
+                bodye: data
             }).then(response => response.text())
             .then(function (response) {
                 let parser = new DOMParser();

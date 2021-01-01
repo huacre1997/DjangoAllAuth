@@ -20,6 +20,7 @@ from django.db import connection
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.decorators import method_decorator
 from django.urls import resolve
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ProductDetailView(DetailView):
     model=Product
@@ -28,6 +29,7 @@ class ProductDetailView(DetailView):
     print("Entro al detail")
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs) :
+ 
         return super().dispatch(request, *args, **kwargs)
     # def render_to_response(self, context, **response_kwargs) :
     #     q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
@@ -70,33 +72,41 @@ class ProductDetailView(DetailView):
         context["comment"]=Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse()
         return context
     def post(self, request, *args, **kwargs):
-        print(self.request.POST["paramSend"])
         if self.request.POST["paramSend"]=="next":
+            print("if next")
             self.object = self.get_object()
             context = self.get_context_data(object=self.object)
             return HttpResponse(render_block_to_string(self.template_name,"content",context=context,request=self.request))
 
         else:
-            form=RatingForm(request.POST)    
-            self.object = self.get_object()
-            if form.is_valid():
-                
-                data=Comment()
-                data.author=form.cleaned_data["author"]
-                data.comment=form.cleaned_data["comment"]       
-                data.ip=request.META.get("REMOTE_ADDR")
-                data.rate=form.cleaned_data["rate"]
-                data.product_id=self.object.id
-                data.save()
-                with connection.cursor() as cursor:
-                    cursor.execute("select * from avgRating("+str(self.object.id)+")")
-                    row = cursor.fetchone() 
-                self.object.updateRate(row[0])
-                context = self.get_context_data(**kwargs)
-                return self.render_to_response(context)   
+            if  request.user.is_authenticated: 
+                print("if username")
+                from crum import get_current_user          
+                form=RatingForm(request.POST)    
+                self.object = self.get_object()
+
+                if form.is_valid():
+                    data=Comment()
+                    data.author=get_current_user()
+                    data.comment=form.cleaned_data["comment"]       
+                    data.ip=request.META.get("REMOTE_ADDR")
+                    data.rate=form.cleaned_data["rate"]
+                    data.product_id=self.object.id
+                    data.save()
+                    print("TOdo bien")
+                    with connection.cursor() as cursor:
+                        cursor.execute("select * from avgRating("+str(self.object.id)+")")
+                        row = cursor.fetchone() 
+                    self.object.updateRate(row[0])
+                    context = self.get_context_data(**kwargs)
+                    return self.render_to_response(context)   
+                else:
+                    print(form.errors)
+                    return HttpResponse(form.errors)
             else:
-                return HttpResponse(form.errors)
-    
+                print("if not authenticated")
+
+                return HttpResponse("No se encuentra logueado en el sistema")
 from render_block import render_block_to_string
 
 class ProductList(TemplateView):
