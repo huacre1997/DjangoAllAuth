@@ -1,6 +1,8 @@
 from decimal import Decimal 
 from django.conf import settings 
 from django.apps import apps
+from json import JSONEncoder
+import json
 class Cart(object):
     model = apps.get_model('products', 'Product')
 
@@ -12,8 +14,7 @@ class Cart(object):
         self.cart = cart
     def add(self, product, quantity=1, override_quantity=False):
         product_id = str(product.id)   
-        print(product_id)
-        print(self.__dict__)     
+          
         if product_id not in self.cart:
             print("if product_id not in self.cart")            
             self.cart[product_id] = {'quantity': 0,'price': str(product.price)}        
@@ -50,3 +51,4 @@ class Cart(object):
     def clear(self):      
         del self.session[settings.CART_SESSION_ID]        
         self.save() 
+   

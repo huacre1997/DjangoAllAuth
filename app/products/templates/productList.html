@@ -414,11 +414,11 @@
                           class="btn btn-primary indigo  carrbutton seeDetail"> <img
                             src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
 
-                        <a class="btn btn-primary" style="background-color: #dd4b39"
-                          href="{% url 'cart:add_cart' entry.id %}" role="button"> <img
+                        <button  class="btn btn-primary addCart" style="background-color: #dd4b39"
+                          data-url="{% url 'cart:add_cart' entry.id %}" onclick="addCart('{% url 'cart:add_cart' entry.id %}')" > <img
                             src="{% static 'icons/carrito.png'%}" class="carrIconButton">
 
-                        </a>
+                        </button>
                       </div>
 
                       {% endif %}

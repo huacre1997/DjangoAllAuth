@@ -1,3 +1,7 @@
+"use strict";
+
+var _this = void 0;
+
 //     const callUrl=async (url)=>{
 //       $("#loadingCharge").css("visibility","visible");
 //       $("#loadingSpinner").css("visibility","visible");
@@ -5,12 +9,9 @@
 //           const dataHtml=await data.text()
 //             renderPage(dataHtml,url)      
 //           if(renderPage){
-
 //               $("#loadingCharge").css("visibility","hidden");
 //               $("#loadingSpinner").css("visibility","hidden");
-
 //           }
-
 //     }
 //      const renderPage=(html,url)=>{
 //       var parser = new DOMParser();
@@ -19,10 +20,7 @@
 //       document.getElementById("ListProducts").innerHTML=""
 //       document.getElementById("ListProducts").appendChild(img)
 //       window.history.pushState({page: "another"}, "another page", url)
-
-
 //     }
-
 //     const removeParam = (key, sourceURL) => {
 //         var rtn = sourceURL.split("?")[0],
 //         param,
@@ -38,7 +36,6 @@
 //         }
 //         return rtn.replace(/%2C/g, ",");
 //     };
-
 // document.querySelectorAll(".marca") .forEach(element => {
 //     element.addEventListener("click",function(){
 //         oldURL = window.location.href;
@@ -47,61 +44,66 @@
 //         var newUrl = url.href;
 //         newUrl2 = removeParam("page", newUrl);
 //         callUrl(newUrl2.replace(/%2C/g, ","))
-
-
 //     })
 // });
-let a = 0
-Array.from(document.getElementsByClassName("subcatCheck")).forEach(element=>{
-  let inp=element.closest(".tree").querySelector("input")
-  Array.from(inp).forEach(element2=>{
+var a = 0;
+Array.from(document.getElementsByClassName("subcatCheck")).forEach(function (element) {
+  var inp = element.closest(".tree").querySelector("input");
+  Array.from(inp).forEach(function (element2) {
     if (element2.getAttribute("checked")) {
-      element2.setAttribute("checked",this.checked)
-      document.getElementById("cleanCheckFilter").setAttribute("disabled",false)
+      element2.setAttribute("checked", _this.checked);
+      document.getElementById("cleanCheckFilter").setAttribute("disabled", false);
     }
-  })
-})
-Array.from(document.getElementsByClassName("custom-control-input")).forEach(element=>{
+  });
+});
+Array.from(document.getElementsByClassName("custom-control-input")).forEach(function (element) {
   if (element.getAttribute("checked")) {
-    document.getElementById("cleanFilter").setAttribute("disabled",false)
-
+    document.getElementById("cleanFilter").setAttribute("disabled", false);
   }
-})
+});
 
-let addCart=(url)=>{
-fetch(url,{method:"POST",headers:{
-  "Content-Type":"application/json",
-  "X-CSRFToken":csrftoken
-}}).then(response=>response.json()).then(data=>console.log(data))
-}
+var addCart = function addCart(url) {
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken
+    }
+  }).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    return console.log(data);
+  });
+};
+
 function addevent() {
-  let postComment=()=>{
-    document.getElementById("postComment").addEventListener("click", (e) => {
+  var postComment = function postComment() {
+    document.getElementById("postComment").addEventListener("click", function (e) {
       e.preventDefault();
-      document.getElementById("postComment").innerHTML = ""
-      let form = document.querySelector("#commentForm")
-      let dataForm = new FormData(form)
-      let parent = document.createElement("div")
-      let loader = document.createElement("span")
-      loader.style.marginRight = "2px"
-      loader.classList.add("spinner-border", "spinner-border-sm")
-      loader.setAttribute("role", "status")
-      loader.setAttribute("aria-hidden", "true")
-      parent.appendChild(loader)
-    
-      loader.after("Publicando...")
-    
-      console.log(parent)
-      document.getElementById("postComment").appendChild(parent)
-      document.getElementById("postComment").disabled = true
-      fetch(form.getAttribute("action"), { method: "POST", body: dataForm }).then(() => {
-        document.getElementById("postComment").innerHTML = ""
-        document.getElementById("postComment").textContent = "Publicado"
-    
-        document.getElementById("postComment").disabled = false
-      })
-    
-    
-    });}
-  }
+      document.getElementById("postComment").innerHTML = "";
+      var form = document.querySelector("#commentForm");
+      var dataForm = new FormData(form);
+      var parent = document.createElement("div");
+      var loader = document.createElement("span");
+      loader.style.marginRight = "2px";
+      loader.classList.add("spinner-border", "spinner-border-sm");
+      loader.setAttribute("role", "status");
+      loader.setAttribute("aria-hidden", "true");
+      parent.appendChild(loader);
+      loader.after("Publicando...");
+      console.log(parent);
+      document.getElementById("postComment").appendChild(parent);
+      document.getElementById("postComment").disabled = true;
+      fetch(form.getAttribute("action"), {
+        method: "POST",
+        body: dataForm
+      }).then(function () {
+        document.getElementById("postComment").innerHTML = "";
+        document.getElementById("postComment").textContent = "Publicado";
+        document.getElementById("postComment").disabled = false;
+      });
+    });
+  };
+}
+
 document.addEventListener("DOMContentLoaded", addevent, false);
