@@ -47,11 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
 
     'django.contrib.staticfiles',
-
+    
     'django.contrib.sites',
-    'fast_pagination',
-    'easy_thumbnails',
-
+    'mptt',
     "debug_toolbar",
     'allauth',
     'allauth.account',
@@ -60,24 +58,23 @@ INSTALLED_APPS = [
     'ckeditor',
     "base",
     "accounts",
-    "products"
+    "products",
+    "cart"
 
 ]
+IMAGEFIT_ROOT = "media"
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
-THUMBNAIL_ALIASES = {
-    '': {
-        'avatar': {'size': (250, 300), 'crop': False},
-    },
-    }
+
 ACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSignupForm'}
 
 SOCIALACCOUNT_FORMS = {'signup': 'accounts.forms.MyCustomSocialSignupForm'}
-
+CART_SESSION_ID = 'cart'
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -98,7 +95,6 @@ MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-
     
 ]
 
@@ -200,7 +196,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND  
-EMAIL_HOST = 'smtp.googlemail.com'  
+EMAIL_HOST = 'smtp.gmail.com'  
 EMAIL_HOST_PASSWORD = 'Sonyw395'  
 EMAIL_HOST_USER = 'huacreenciso97@gmail.com'  
 EMAIL_PORT = 465  
@@ -210,3 +206,4 @@ ACCOUNT_UNIQUE_EMAIL=True
 LOGIN_REDIRECT_URL="/"
 
 ACCOUNT_SIGNUP_REDIRECT_URL="/"
+EL_PAGINATION_PER_PAGE=2   

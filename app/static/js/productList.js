@@ -52,9 +52,10 @@
 //     })
 // });
 let a=0
+
 $(document).ready(function () {
-  $(".catCheck").each(function (index2, element2) {
-    let arr=  $(this).parent().siblings('ul').find("input[type='checkbox']")
+  $(".subcatCheck").each(function (index2, element2) {
+    let arr= $(this).parent().parent().find("input")
   arr.each(function (index, element) {
       if($(element).attr("checked")){
         console.log("chec");
@@ -70,36 +71,75 @@ $(document).ready(function () {
     if( $(element).prop("checked"))    $("#cleanFilter").prop("disabled",false)
 
   });
-  $(document).on("click",".Details",function (e) { 
-    e.preventDefault();
-    $('.modal-body').text("")
-
-    $('#exampleModalCenter').modal('show')
-    $.ajax({
-      type: "get",
-      startTime: performance.now(),
-      url: $(this).attr("tag-url"),
-      success: function (response) {
-        console.log(response);
-
-       
-      }
-    }).done(function(response){
-      $('.modal-body').append(response.response)
-
-      var time = performance.now() - this.startTime;
  
-      var seconds = time / 1000;
 
-      seconds = seconds.toFixed(3);
+  // $(document).on("click",".Details",function (e) { 
+  //   e.preventDefault();
+  //   $('.modal-body').text("")
 
-      var result = 'AJAX request took ' + seconds + ' seconds to complete.';
-      console.log(result);
-    });
-  });
-  $(document).on("click",".menuItem",function (e) { 
+  //   $('#exampleModalCenter').modal('show')
+  //   $.ajax({
+  //     startTime: performance.now(),
+  //     url: $(this).attr("tag-url"),
+  //     success: function (response) {
+  //     }
+  //   }).done(function(response){
+  //     $('.modal-body').append(response.response)
+
+  //     var time = performance.now() - this.startTime;
+ 
+  //     var seconds = time / 1000;
+
+  //     seconds = seconds.toFixed(3);
+
+  //     var result = 'AJAX request took ' + seconds + ' seconds to complete.';
+  //     console.log(result);
+  //   });
+  // });
+  $(document).on("click","#postComment",function (e) { 
     e.preventDefault();
-   $("#catSearch").val($(this).attr("id"))
+    document.getElementById("postComment").innerHTML=""
+    let parent=document.createElement("div")
+    let loader=document.createElement("span")
+    loader.style.marginRight="2px"
+    loader.classList.add("spinner-border","spinner-border-sm")
+    loader.setAttribute("role","status")
+    loader.setAttribute("aria-hidden","true")
+    parent.appendChild(loader)
+
+    loader.after("Publicando...")
+
+    console.log(parent)
+    document.getElementById("postComment").appendChild(parent)
+    document.getElementById("postComment").disabled=true
+
+// "<div><p></p>Text</div>"
+      $.ajax({
+        type: "POST",
+        url:$("#commentForm").attr("action"),
+        data: $("#commentForm").serialize(),
+        success: function (response) {
+          console.log(response);
+          document.getElementById("postComment").innerHTML=""
+          document.getElementById("postComment").textContent="Publicado"
+
+          document.getElementById("postComment").disabled=false
+
+          // var parser = new DOMParser();
+          // var doc = parser.parseFromString(response, "text/html");
+          
+          // var results=doc.getElementById("loadDetail").children
+          // $("#taloadDetailb3").text()
+          // $("#loadDetail").html(results)
+          // $("input[name='comment']").text("")
+          // $("input[name='rate']").val()
+          // $(".modal-backdrop").removeClass("modal-backdrop fade show ")
+          // $("#exampleModal").css("opacity","0")
+        }
+      });
+      
+
+
   });
-  
+  console.log(user);
 });

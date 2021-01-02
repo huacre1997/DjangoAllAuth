@@ -1,90 +1,76 @@
-<div class="row">
-  <div class="col-lg-6">
-    <img src="../../media/{{product.image}}" style="width:80%">
-  </div>
-  <div class="col-lg-6">
-    <!-- Classic tabs -->
-    <!-- Classic tabs -->
-    <div class="classic-tabs mx-2">
+ <!-- Classic tabs -->
+ <!-- Classic tabs -->
 
-      <ul class="nav indigo darken-4" id="myClassicTabShadow" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link  waves-light active show" id="profile-tab-classic-shadow" data-toggle="tab"
-            href="#profile-classic-shadow" role="tab" aria-controls="profile-classic-shadow"
-            aria-selected="true">Características</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link waves-light" id="follow-tab-classic-shadow" data-toggle="tab" href="#follow-classic-shadow"
-            role="tab" aria-controls="follow-classic-shadow" aria-selected="false">Descripción</a>
-        </li>
 
-      </ul>
+ {% load poll_extras %}
 
-      <div class="tab-content card" id="myClassicTabContentShadow">
-        <div class="tab-pane fade active show" id="profile-classic-shadow" role="tabpanel"
-          aria-labelledby="profile-tab-classic-shadow">
-          <p>
-          <h2 class="h2-responsive">{{product.name}}</h2>
-          <div class="d-flex align-items-end">
-            <h2 class="font-weight-bold blue-text"><strong>S/.{{product.price}}</strong></h2>&nbsp;&nbsp;
-            <h4
-              class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
-          </h4>
-          </div>
-             <ul class="list-unstyled list-inline rating mb-0">
-            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"> </i></li>
-            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
-            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
-            <li class="list-inline-item mr-0"><i class="fas fa-star amber-text"></i></li>
-            <li class="list-inline-item"><i class="fas fa-star-half-alt amber-text"></i></li>
-            <li class="list-inline-item">
-              <p class="text-muted">4.5 (413)</p>
-            </li>
-          </ul>
-          
-          <h5>
-            <strong>Marca</strong>
-            <small class="text-muted">{{product.marca}}</small>
-          </h5>
-          <h5>
-            <strong>SKU</strong>
-            <small class="text-muted">{{product.sku}}</small>
-          </h5>
-          <h5>
-            <strong>Categoría</strong>
-            <small class="text-muted">{{product.subcategory}}/{{product.subcategory.category}}</small>
-          </h5>
-         
-        
-          <button type="button" class="btn btn-indigo btn-block carrbutton seeDetail waves-effect waves-light"> <img
-              src="/static/icons/recibo.png" class="carrIconButton">&nbsp;&nbsp;Cotizar</button>
-          </p>
-        </div>
-        <div class="tab-pane fade" id="follow-classic-shadow" role="tabpanel"
-          aria-labelledby="follow-tab-classic-shadow">
-          <div class="scrollbar scrollbar-primary">
-            <div class="force-overflow">
-          <article class="article">
-            <h5 class="article__title"><strong>Descripcion</strong></h5>
-            <div class="article__content">
-             
-                
-                      {% autoescape off %}
-                      {{product.description}}
-                      {% endautoescape %}
-             
-            </div>
-          </article>
-        </div>
-      </div>
-        </div>
+ <div class="row">
 
-      </div>
+   <div class="col-6">
+     <img src="../../media/{{product.image}}" style="width:80%">
+   </div>
 
-    </div>
-    <!-- Classic tabs -->
+   <div class="col-6">
+
+     <h2 class="h2-responsive mb-2">{{product.name}}</h2>
+
+     <div class="d-flex justify-content-end flex-row-reverse">
+       <div id="wrapper2">
+         <div class="star-rating_Title">
+           <span style="width:{{product.rating|percent}}%"></span>
+         </div>
+       </div>
+
+       <div class="mr-2">
+         <p class="text-muted">{{product.rating}} ({{n}})</p>
+       </div>
+     </div>
+     {% if product.amount >= 20 %}
+     <span class="badge badge-pill badge-success mb-4">Disponible</span>
+     {%elif product.amount < 20 %}
+     <span class="badge badge-pill badge-warning  mb-4">Disponible</span>
+     {%elif product.amount < 10 %}
+     <span class="badge badge-pill badge-danger  mb-4">No disponible</span>
+
+     {% endif %}
+     <div class="d-flex align-items-end mb-2">
+       <h2 class="font-weight-bold blue-text">S/.{{product.price}}
+       </h2>&nbsp;&nbsp;
+       <h4 class="text-grey mb-2"><s class="text-muted ">S/.{{product.before}}</s>
+       </h4>
+     </div>
+     <h5 class="mb-2">
+       <strong>Modelo</strong>
+       <small class="text-muted">{{product.modelo}}</small>
+     </h5>
+
+     <h5 class="mb-2">
+       <strong>Marca</strong>
+       <small class="text-muted">{{product.marca}}</small>
+     </h5>
+     <h5 class="mb-2">
+       <strong>SKU</strong>
+       <small class="text-muted">{{product.sku}}</small>
+     </h5>
+     <h5 class="mb-2">
+       <strong>Categoría</strong>
+       <small class="text-muted">{{product.category}}/{{product.category.parent}}</small>
+     </h5>
+     <h5 class="mb-2">
+       <strong>Descripcion</strong><br>
+       <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit alias dolorum necessitatibus
+         similique consequatur, non exercitationem quidem commodi nisi! Iure voluptatem pariatur, enim quasi voluptate
+         maxime aperiam reprehenderit soluta nam.Nihil odit repellat et consectetur corporis aut magni aspernatur
+         sapiente quaerat, quasi libero voluptatem maiores molestiae expedita pariatur temporibus, quidem provident
+         iure? Laboriosam dolorum illum quibusdam numquam sint hic unde.</p>
+     </h5>
 
 
 
-  </div>
-</div>
+   </div>
+ </div>
+
+
+
+
+ <!-- Classic tabs -->

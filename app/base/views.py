@@ -13,14 +13,25 @@ from allauth.account.forms import LoginForm
 from accounts.forms import MyCustomSignupForm
 import json
 from allauth.account.admin import EmailAddress
-from products.models import Category,SubCategory,Marcas,Product,Productimage
+from products.models import Category,Marcas,Product,Productimage
 from django.urls import reverse
 from django.template import RequestContext 
 from django.views import generic
 
-class IndexView(TemplateView):
-    template_name="index.html"
-    
+def index(request):
+
+    num_visits = request.session.get('num_visits', 1)
+    request.session['num_visits'] = num_visits + 1
+
+    context = {
+        'num_visits': num_visits,
+    }
+
+    return render(request, 'index.html', context=context)
+class AboutView(TemplateView):
+    template_name="about.html"    
+class ContactView(TemplateView):
+    template_name="contact.html"
 def handler404(request, exception, template_name="base/404.html"):
     response = render_to_response(template_name)
     response.status_code = 404
@@ -66,17 +77,13 @@ class LoginFormView(LoginView):
         return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        print("Entro al post")
         data = {}
         form = LoginForm(data=request.POST)
-        print(form)
         if form.is_valid():
-            print("form valido")
             username = request.POST['login']
             password = request.POST['password']        
             user = authenticate(request, username=username, password=password) 
             if EmailAddress.objects.filter(user=user, verified=False).exists():
-                print("Email verified")
                 data = {
                 "error":"Su cuenta aún no se encuentra activada.",
                 'stat': False}
@@ -84,15 +91,13 @@ class LoginFormView(LoginView):
             
 
             if user is not None:
-                print("User none")
                 login(request, user)
                 data = {
                 'stat': True}
             else:
-                print("None")
+                pass
             return JsonResponse(data)
         else:
-            print("else")
             data = {
                 "error":form.errors["__all__"][0],
                 'stat': False,

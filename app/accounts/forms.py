@@ -41,7 +41,6 @@ class MyCustomSignupForm(SignupForm):
         return celular
     
     def save(self, request):
-        print(self.cleaned_data['dni'])
         user = super(MyCustomSignupForm, self).save(request)
         user.dni = self.cleaned_data['dni']
         user.celular = self.cleaned_data['celular']
@@ -74,7 +73,6 @@ class MyCustomSocialSignupForm(SocialAccountSign):
             raise ValidationError("El celular ya se encuentra registrado.")
         return celular
     def save(self, request):
-        print(self.cleaned_data['dni'])
         user = super(MyCustomSocialSignupForm, self).save(request)
         user.dni = self.cleaned_data['dni']
         user.celular = self.cleaned_data['celular']

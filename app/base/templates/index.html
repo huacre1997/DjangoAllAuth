@@ -4,496 +4,496 @@
 <head>
   {% load static %}
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Mery</title>
-
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <title>{% block title %}Mery{% endblock title %}</title>
+     <meta property="og:title" content="{% block titlemeta %} {% endblock titlemeta %}">
+    <meta name="description" property="og:description" content="{% block description %}{% endblock description %}">
+    <meta property="og:url" content="www.electroniaperu.com{% block slug %}{% endblock slug %}">
+  <link rel="stylesheet" href="{% static 'css/dist/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}"> 
   <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> 
+
+  <link rel="stylesheet" href="{% static 'css/compiled.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
   <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.min.css' %}">
-
+ 
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'plugins/slick-1.8.0/slick.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/main_styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
+  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'plugins/slick-1.8.0/slick.css' %}"> {% endcomment %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main_styles.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}">
 
-  <!-- <style type="text/css">
-    html,
-    body,
-    header,
-    .carousel {
-      height: 70vh;
-      bottom: -35px;
-
-    }
-
-    @media (max-width: 550px) {
-
-      html,
-      body,
-      header,
-      .carousel {
-        bottom: 25px;
-
-        height: 100vh;
-      }
-    }
-
-    @media (max-width: 1000px) {
-
-      html,
-      body,
-      header,
-      .carousel {
-        bottom: 25px;
-
-        height: 80vh;
-      }
-    }
-  </style> -->
   <style type="text/css">
-	output{ display: block; width: 100% }
-	.section-content{border-top:7px solid #eee}
-	.card-product-list:last-child{
-		margin-bottom:0!important
-	}
-	.section-content .padding-y{
-		padding-top:60px!important; padding-bottom:60px!important;
- 	}
+    output {
+      display: block;
+      width: 100%
+    }
 
- 	.section-header, .section-footer{
- 		    box-shadow: 0 2px 10px rgba(51, 51, 51, 0.1);
- 		    position: relative;
- 	}
-</style>
+    .section-content {
+      border-top: 7px solid #eee
+    }
+
+    .card-product-list:last-child {
+      margin-bottom: 0 !important
+    }
+
+    .section-content .padding-y {
+      padding-top: 60px !important;
+      padding-bottom: 60px !important;
+    }
+
+    .section-header,
+    .section-footer {
+      box-shadow: 0 2px 10px rgba(51, 51, 51, 0.1);
+      position: relative;
+    }
+  </style>
 </head>
 
 <body>
   <span id="loadingCharge" style="visibility: visible;"></span>
-  <div  class="loader2 " style="visibility: visible;" id="spinnner2">Loading...</div> 
-<header class="header">
+  <div class="loader2 " style="visibility: visible;" id="spinnner2">Loading...</div>
+  <header class="header">
 
-		<!-- Top Bar -->
+    <!-- Top Bar -->
 
-		<div class="top_bar">
-			<div class="container">
-				<div class="row">
-					<div class="col d-flex flex-row">
-						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="../media/images/phone.png" alt=""></div>+38 068 005 3570</div>
-						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="../media/images/mail.png" alt=""></div>silvia.enciso71@gmail.com</div>
-						<div class="top_bar_content ml-auto">
-							<div class="top_bar_menu">
-								<ul class="standard_dropdown top_bar_dropdown">
-									<li>
-										<a href="#">Español<i class="fas fa-chevron-down"></i></a>
-										<ul>
-											<li><a href="#">English</a></li>
-										
-										</ul>
-									</li>
-									<li>
-										<a href="#">S./ Nuevos Soles<i class="fas fa-chevron-down"></i></a>
-										<ul>
-											<li><a href="#">$ US dollar</a></li>
-											
-										</ul>
-									</li>
-								</ul>
-							</div>
-							<div class="top_bar_user">
-								<div class="user_icon"><img src="../media/images/user.svg" alt=""></div>
-								<div><a href="#">Registrarse</a></div>
-								<div><a href="#">Ingresar</a></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>		
-		</div>
+    <div class="top_bar">
+      <div class="container">
+        <div class="row">
+          <div class="col d-flex flex-row">
+            <div class="top_bar_contact_item">
+              <div class="top_bar_icon"><img src="../../media/images/phone.png" alt=""></div>+38 068 005 3570
+            </div>
+            <div class="top_bar_contact_item">
+              <div class="top_bar_icon"><img src="../../media/images/mail.png" alt=""></div>silvia.enciso71@gmail.com
+            </div>
+            <div class="top_bar_content ml-auto d-flex align-items-center">
+              <div class="top_bar_menu">
+                {% comment %} <ul class="standard_dropdown top_bar_dropdown">
+                  <li>
+                    <a href="#">Español<i class="fas fa-chevron-down"></i></a>
+                    <ul>
+                      <li><a href="#">English</a></li>
 
-		<!-- Header Main -->
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#">S./ Nuevos Soles<i class="fas fa-chevron-down"></i></a>
+                    <ul>
+                      <li><a href="#">$ US dollar</a></li>
 
-		<div class="header_main">
-			<div class="container">
-				<div class="row">
+                    </ul>
+                  </li>
+                </ul> {% endcomment %}
+              </div>
+              <div class="top_bar_user d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                <div class="user_icon"><img src="../../media/images/user.svg" alt=""></div>
+                <div>Bienvenido {{request.user.first_name}}</div>
 
-					<!-- Logo -->
-					<div class="col-lg-2 col-sm-3 col-3 order-1">
-						<div class="logo_container">
-							<div class="logo "><a class=" text-black-50" href="#">Mery</a></div>
-						</div>
-					</div>
 
-					<!-- Search -->
-					<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
-						<div class="header_search">
-							<div class="header_search_content">
-								<div class="header_search_form_container">
-									<form action="{% url 'products:search'  %}" class="header_search_form clearfix">
-										<input name="q" type="search"  class="header_search_input" placeholder="Buscar productos...">
-										<div class="custom_dropdown">
-											<div class="custom_dropdown_list">
-												<span class="custom_dropdown_placeholder clc">Todas categorías</span>
-												<i class="fas fa-chevron-down"></i>
-												<ul class="custom_list clc">
-                          					<li><a class="clc menuItem" id="0">Todas categorías</a></li>
 
-													{% for item in category  %}
-                          			<li><a class="clc menuItem" id="{{item.id}}" href="#">{{item.name}}</a></li>
+                <li class="dropdown3 dropdown-3">
+                  <i class="fa fa-angle-down" id="userIcon"></i>
+                  <ul class="dropdown_menu dropdown_menu-3">
+                    <li class="dropdown_item-1 border">Mi cuenta</li>
+                    <li class="dropdown_item-2 border">Historial</li>
+                    <li class="dropdown_item-3 border" id="logout" to="{% url 'base:logout' %}">Cerrar Sesión </li>
+                  </ul>
+                </li>
+                {% else %}
+                <div class="user_icon"><img src="../media/images/user.svg" alt=""></div>
+                <div><a href="{% url 'base:register' %}">Registrarse</a></div>
+                <div><a id="btnLogin" hreft="{% url 'base:login' %}">Ingresar</a></div>
 
-                          {% endfor %}
-												</ul>
-											</div>
-										</div>
-                     <input type="hidden" id="catSearch" value="0" name="in">
-										<button type="submit" class="header_search_button trans_300 indigo darken-1" value="Submit"><img src="../media/images/search.png" alt=""></button>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
+                {% endif %}
 
-					<!-- Wishlist -->
-					<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
-						<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
-							<div class="wishlist d-flex flex-row align-items-center justify-content-end">
-								<div class="wishlist_icon"><img src="../media/images/heart.png" alt=""></div>
-								<div class="wishlist_content">
-									<div class="wishlist_text"><a href="#">Wishlist</a></div>
-									<div class="wishlist_count">115</div>
-								</div>
-							</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-							<!-- Cart -->
-							<div class="cart">
-								<div class="cart_container d-flex flex-row align-items-center justify-content-end">
-									<div class="cart_icon">
-										<img src="../media/images/cart.png" alt="">
-										<div class="cart_count indigo darken-1"><span>10</span></div>
-									</div>
-									<div class="cart_content">
-										<div class="cart_text"><a href="#">Cart</a></div>
-										<div class="cart_price">$85</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Main Navigation -->
+    <!-- Header Main -->
 
-		<nav class="main_nav">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						
-						<div class="main_nav_content d-flex flex-row ">
+    <div class="header_main">
+      <div class="container">
+        <div class="row">
 
-							<!-- Categories Menu -->
+          <!-- Logo -->
+          <div class="col-lg-2 col-sm-3 col-3 order-1">
+            <div class="logo_container">
+              <div class="logo "><a class=" text-black-50" href="{% url 'base:index' %}">Mery</a></div>
+            </div>
+          </div>
 
-							<div class="cat_menu_container indigo darken-1">
-								<div class=" cat_menu_title d-flex flex-row align-items-center justify-content-start">
-									<div class="cat_burger"><span></span><span></span><span></span></div>
-									<div class="cat_menu_text ">Categorías</div>
-								</div>
+          <!-- Search -->
+          <div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+            <div class="header_search">
+              <div class="header_search_content">
+                <div class="header_search_form_container">
+                  <form action="{% url 'products:search'  %}" class="header_search_form clearfix">
+                    <input name="q" type="search" class="header_search_input" placeholder="Buscar productos...">
+                    <select class="js-header-responsive"  name="sc" style="width: 37%;">
 
-								<ul class="{% block categories %}cat_menu{% endblock categories %}">
-                 {% for item  in category  %}
+                      style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 50px;">
+                      <option value="">Seleccione</option>
+                      {% load mptt_tags %}
+                      {% recursetree category %}
+                      {% if  node.is_leaf_node %}
+                      <option value="{{ node.id }}"> {{ node.name }}</option>
 
-									<li><a href="#">{{item.name}} <i class="fas fa-chevron-right ml-auto"></i></a></li>
-									{% comment %} <li class="hassubs">
-										<a href="#">Hardware<i class="fas fa-chevron-right"></i></a>
-										<ul>
-											<li class="hassubs">
-												<a href="#">Menu Item<i class="fas fa-chevron-right"></i></a>
-												<ul>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-												</ul>
-											</li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-right"></i></a></li>
-										</ul>
-									</li> {% endcomment %}
-               
-           
-   
-          {% endfor %}
-								</ul>
 
-         
-							</div>
+                      {% endif %}
+                      {% if not node.is_leaf_node %}
+                      <optgroup label="{{node.name}}">
+                        {{children}}
+                      </optgroup>
+                      {% endif %}
 
-							<!-- Main Nav Menu -->
+                      {% endrecursetree %}
 
-							<div class="main_nav_menu ml-auto">
-								<ul class="standard_dropdown main_nav_dropdown">
-									<li><a href="{% url 'base:index' %}">Home<i class="fas fa-chevron-down"></i></a></li>
-									<li class="hassubs">
-										<a href="#">Ofertas<i class="fas fa-chevron-down"></i></a>
-										<ul>
-											<li>
-												<a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
-												<ul>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-												</ul>
-											</li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-										</ul>
-									</li>
-									<li class="hassubs">
-										<a href="#">Nuestras Marcas<i class="fas fa-chevron-down"></i></a>
-										<ul>
+
+
+                    </select>
+
+
+                    <button type="submit" class="header_search_button trans_300 indigo darken-1" value="Submit"><img
+                        src="../../media/images/search.png" alt=""></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wishlist -->
+          <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+            <div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+              {% comment %} <div class="wishlist d-flex flex-row align-items-center justify-content-end">
+                <div class="wishlist_icon"><img src="../../media/images/heart.png" alt=""></div>
+                <div class="wishlist_content">
+                  <div class="wishlist_text"><a href="#">Wishlist</a></div>
+                  <div class="wishlist_count">115</div>
+                </div>
+              </div> {% endcomment %}
+
+              <!-- Cart -->
+              {% with total_items=cart|length %} 
+
+              <div class="cart">
+                <div class="cartEnter cart_container d-flex flex-row align-items-center justify-content-end">
+                  <div class="cart_icon">
+                  <img src="{% static 'icons/carrito.png'%}" id="carrIconNav">
+                    <div class="cart_count indigo darken-1"><span>{{ total_items }} </span></div>
+                  </div>
+                  <div class="cart_content">
+                    <div class="cart_text"><a href="#">Mi carrito</a></div>
+                    <div class="cart_price">S/.{{ cart.get_total_price }}</div>
+                  </div>
+                </div>
+              </div>
+              {% endwith %} 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation -->
+
+    <nav class="main_nav main-header-inner">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+
+            <div class="main_nav_content d-flex flex-row ">
+
+              <!-- Categories Menu -->
+
+              <div class="cat_menu_container indigo darken-1">
+                <div class=" cat_menu_title d-flex flex-row align-items-center justify-content-start">
+                  <div class="cat_burger"><span></span><span></span><span></span></div>
+                  <div class="cat_menu_text ">Categorías</div>
+                </div>
+
+
+                <ul class="root  {% block categories %}cat_menu{% endblock categories %}">
+
+                  {% recursetree category %}
+
+                  <li><a href="{% url 'products:byCategory' node.slug %}"> {{ node.name }} </a>
+                    {% if not node.is_leaf_node %}
+                    <ul class="children">
+                      {{ children }}
+                    </ul>
+                    {% endif %}
+                  </li>
+
+
+
+
+                  {% endrecursetree %}
+                </ul>
+
+
+              </div>
+
+              <!-- Main Nav Menu -->
+
+              <div class="main_nav_menu ml-auto main-menu">
+                <ul style="height:100%">
+                  <li><a href="{% url 'base:index' %}">Home</a></li>
+
+
+                  <li class="hassubs">
+                    <a href="{% url 'products:getProducList' %}">Productos</a>
+
+                  </li>
+                  <li class="static "><a href="#">Marcas <i class="fa fa-angle-down"></i></a>
+                    <ul class="megamenu dropdown border">
+                      {% for item in marca  %}
+                      <div class="col-lg-2">
+
+                        <ul>
+                          <li><a href="{% url 'products:byMarcas' item.slug %}">{{item.name}}</a></li>
+                        </ul>
+                      </div>
+
+                      {%endfor%}
+
+                    </ul>
+                  </li>
+                  <li><a href="{% url 'base:about'  %}">Nosotros</a></li>
+                  <li><a href="{% url 'base:contact'  %}">Contacto</a></li>
+                </ul>
+              </div>
+
+              <!-- Menu Trigger -->
+
+              <div class="menu_trigger_container ml-auto">
+                <div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+                  <div class="menu_burger">
+                    <div class="menu_trigger_text">menu</div>
+                    <div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Menu -->
+
+    <div class="page_menu">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+
+            <div class="page_menu_content">
+
+              <div class="page_menu_search">
+                <form action="#">
+                  <input type="search" required="required" class="page_menu_search_input"
+                    placeholder="Buscar productos...">
+                </form>
+              </div>
+              <ul class="page_menu_nav">
+
+                <li class="page_menu_item has-children">
+                  <a href="#">Moneda<i class="fa fa-angle-down"></i></a>
+                  <ul class="page_menu_selection">
+                    <li><a href="#">US Dollar<i class="fa fa-angle-down"></i></a></li>
+                    <li><a href="#">PEN Soles<i class="fa fa-angle-down"></i></a></li>
+                  </ul>
+                </li>
+                <li class="page_menu_item">
+                  <a href="#">Home<i class="fa fa-angle-down"></i></a>
+                </li>
+                <li class="page_menu_item has-children">
+                  <a href="#">Super Ofertas<i class="fa fa-angle-down"></i></a>
+                  <ul class="page_menu_selection">
+                    <li><a href="#">Super Deals<i class="fa fa-angle-down"></i></a></li>
+                    <li class="page_menu_item has-children">
+                      <a href="#">Menu Item<i class="fa fa-angle-down"></i></a>
+                      <ul class="page_menu_selection">
+                        <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                        <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                        <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                        <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                    <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                    <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                  </ul>
+                </li>
+                <li class="page_menu_item has-children">
+                  <a href="#">Principales Marcas<i class="fa fa-angle-down"></i></a>
+                  <ul class="page_menu_selection">
                     {% for item in marca  %}
-                    <li><a href="{% url 'products:getMarcas' item.name %}">{{item.name}}<i class="fas fa-chevron-down"></i></a></li>
-                    
+                    <li><a href="#">{{item.name}}<i class="fa fa-angle-down"></i></a></li>
+
                     {% endfor %}
-											{% comment %} <li>
-												<a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
-												<ul>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
-												</ul>
-											</li> {% endcomment %}
-											
-										
-										</ul>
-									</li>
-									<li class="hassubs">
-										<a href="{% url 'products:getProducList' %}">Productos</a>
-								
-									</li>
-									<li><a href="blog.html">Blog<i class="fas fa-chevron-down"></i></a></li>
-									<li><a href="contact.html">Contacto<i class="fas fa-chevron-down"></i></a></li>
-								</ul>
-							</div>
 
-							<!-- Menu Trigger -->
+                  </ul>
+                </li>
+                <li class="page_menu_item has-children">
+                  <a href="#">Trending Styles<i class="fa fa-angle-down"></i></a>
+                  <ul class="page_menu_selection">
+                    <li><a href="#">Trending Styles<i class="fa fa-angle-down"></i></a></li>
+                    <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                    <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                    <li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+                  </ul>
+                </li>
+                <li class="page_menu_item"><a href="blog.html">Blog<i class="fa fa-angle-down"></i></a></li>
+                <li class="page_menu_item"><a href="contact.html">Contacto<i class="fa fa-angle-down"></i></a></li>
+              </ul>
 
-							<div class="menu_trigger_container ml-auto">
-								<div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
-									<div class="menu_burger">
-										<div class="menu_trigger_text">menu</div>
-										<div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
-									</div>
-								</div>
-							</div>
+              <div class="menu_contact">
+                <div class="menu_contact_item">
+                  <div class="menu_contact_icon"><img src="../media/images/phone_white.png" alt=""></div>+51 949 473 197
+                </div>
+                <div class="menu_contact_item">
+                  <div class="menu_contact_icon"><img src="../media/images/mail_white.png" alt=""></div>
+                  silvia.enciso71@gmail.com
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
-		
-		<!-- Menu -->
-
-		<div class="page_menu">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						
-						<div class="page_menu_content">
-							
-							<div class="page_menu_search">
-								<form action="#">
-									<input type="search" required="required" class="page_menu_search_input" placeholder="Buscar productos...">
-								</form>
-							</div>
-							<ul class="page_menu_nav">
-							
-								<li class="page_menu_item has-children">
-									<a href="#">Moneda<i class="fa fa-angle-down"></i></a>
-									<ul class="page_menu_selection">
-										<li><a href="#">US Dollar<i class="fa fa-angle-down"></i></a></li>
-										<li><a href="#">PEN Soles<i class="fa fa-angle-down"></i></a></li>
-									</ul>
-								</li>
-								<li class="page_menu_item">
-									<a href="#">Home<i class="fa fa-angle-down"></i></a>
-								</li>
-								<li class="page_menu_item has-children">
-									<a href="#">Super Ofertas<i class="fa fa-angle-down"></i></a>
-									<ul class="page_menu_selection">
-										<li><a href="#">Super Deals<i class="fa fa-angle-down"></i></a></li>
-										<li class="page_menu_item has-children">
-											<a href="#">Menu Item<i class="fa fa-angle-down"></i></a>
-											<ul class="page_menu_selection">
-												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-												<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-											</ul>
-										</li>
-										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-									</ul>
-								</li>
-								<li class="page_menu_item has-children">
-									<a href="#">Principales Marcas<i class="fa fa-angle-down"></i></a>
-									<ul class="page_menu_selection">
-                  {% for item in marca  %}
-                  			<li><a href="{% url 'products:getMarcas' item.slug %}">{{item.name}}<i class="fa fa-angle-down"></i></a></li>
-
-                  {% endfor %}
-									
-									</ul>
-								</li>
-								<li class="page_menu_item has-children">
-									<a href="#">Trending Styles<i class="fa fa-angle-down"></i></a>
-									<ul class="page_menu_selection">
-										<li><a href="#">Trending Styles<i class="fa fa-angle-down"></i></a></li>
-										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-										<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
-									</ul>
-								</li>
-								<li class="page_menu_item"><a href="blog.html">Blog<i class="fa fa-angle-down"></i></a></li>
-								<li class="page_menu_item"><a href="contact.html">Contacto<i class="fa fa-angle-down"></i></a></li>
-							</ul>
-							
-							<div class="menu_contact">
-								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="../media/images/phone_white.png" alt=""></div>+51 949 473 197</div>
-								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="../media/images/mail_white.png" alt=""></div>silvia.enciso71@gmail.com</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-	</header>
+  </header>
 
   </header>
   <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar" style="display:none">
 
-<div class="container">
+    <div class="container">
 
-    <div class="nav-second">
-      <p class="p_subnav"> <i class="fab fa-whatsapp  text-white" style="font-size: 1.5rem;"></i>&nbsp;996000053</p>
-      <p class="p_subnav"><i class="fab fa-facebook text-white" style="font-size: 1.5rem;"></i>&nbsp;GameStore</p>
-      <p class="p_subnav"><i class="fab fa-instagram" style="font-size: 1.5rem;"></i>&nbsp;GameStore</p>
-      <p class="p_subnav"> <i class="far fa-envelope" style="font-size: 1.5rem;"></i>&nbsp;huacreenciso97@gmail.com
-      </p>
-    </div>
-    <!-- Brand
+      <div class="nav-second">
+        <p class="p_subnav"> <i class="fab fa-whatsapp  text-white" style="font-size: 1.5rem;"></i>&nbsp;996000053</p>
+        <p class="p_subnav"><i class="fab fa-facebook text-white" style="font-size: 1.5rem;"></i>&nbsp;GameStore</p>
+        <p class="p_subnav"><i class="fab fa-instagram" style="font-size: 1.5rem;"></i>&nbsp;GameStore</p>
+        <p class="p_subnav"> <i class="far fa-envelope" style="font-size: 1.5rem;"></i>&nbsp;huacreenciso97@gmail.com
+        </p>
+      </div>
+      <!-- Brand
                   <a class="navbar-brand waves-effect" href="">
                     <strong class="blue-text">MDB</strong>
                   </a>
             
                    Collapse -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- Links -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-      <!-- Left -->
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item ">
-          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink1" 
-            aria-haspopup="true" aria-expanded="false" href="">Productos
-            <span class="sr-only">(current)</span>
-          </a>
-            
-        
-   
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item ">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink1" aria-haspopup="true" aria-expanded="false"
+              href="">Productos
+              <span class="sr-only">(current)</span>
+            </a>
 
-        </li>
-        <li class="nav-item dropdown mega-dropdown ">
-          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink2" 
-            aria-haspopup="true" aria-expanded="false">Marcas
-            <span class="sr-only">(current)</span>
-          </a>
-          <div class="dropdown-menu mega-menu v-1 z-depth-1 white  animated "  id="megamenu2"
-            aria-labelledby="navbarDropdownMenuLink2">
-            <div class="col-md-6 col-lg-12 sub-menu mb-xl-0 mb-5">
-              <ul class="list-unstyled">
-{% comment  %}
-            {% for mar in marca %}
 
-            {% if forloop.first %}     <li class="sub-title text-uppercase">
-              <div class="row ">{% endif %}
-            <div class="col-lg-6 ">
-              <a href="{% url 'products:filterProduct' 'marca' mar.id mar.slug %}" class="dropdown-item brand waves-effect waves-light ">
 
-                        {{ mar.name }}
-                    </a>
-                </div>
-            {% if forloop.counter|divisibleby:2 %}</div></li>  <li class="sub-title text-uppercase"><div class="row">{% endif %}
-            {% if forloop.last %}</div></li>{% endif %}
-        {% endfor %}
-{% endcomment %}
+
+          </li>
+          <li class="nav-item dropdown mega-dropdown ">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink2" aria-haspopup="true"
+              aria-expanded="false">Marcas
+              <span class="sr-only">(current)</span>
+            </a>
+            <div class="dropdown-menu mega-menu v-1 z-depth-1 white  animated " id="megamenu2"
+              aria-labelledby="navbarDropdownMenuLink2">
+              <div class="col-md-6 col-lg-12 sub-menu mb-xl-0 mb-5">
+                <ul class="list-unstyled">
+                  {% comment  %}
+                  {% for mar in marca %}
+
+                  {% if forloop.first %} <li class="sub-title text-uppercase">
+                    <div class="row ">{% endif %}
+                      <div class="col-lg-6 ">
+                        <a href="{% url 'products:filterProduct' 'marca' mar.id mar.slug %}"
+                          class="dropdown-item brand waves-effect waves-light ">
+
+                          {{ mar.name }}
+                        </a>
+                      </div>
+                      {% if forloop.counter|divisibleby:2 %}</div>
+                  </li>
+                  <li class="sub-title text-uppercase">
+                    <div class="row">{% endif %}
+                      {% if forloop.last %}</div>
+                  </li>{% endif %}
+                  {% endfor %}
+                  {% endcomment %}
+
+                </ul>
+              </div>
+          </li>
+
+
+
+          <h1>{{form}}</h1>
+
+        </ul>
+
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          <li class="nav-item" id="carrImg">
+            <a href="#" class="nav-item nav-link mx-auto ">
+
+              <img src="{% static 'icons/carrito.png'%}" alt="" class="carrIconButton" id="carrIcon">&nbsp;
+              <span class="badge red z-depth-1 mr-1"> 0 </span>
+
+            </a>
+
+          </li>
+
+          <li class="dropdown3 dropdown-3">
+            <img src="{% static 'icons/usuario.png'%}" alt="" id="userIcon">
+            &nbsp;
+            {% if request.user.is_authenticated %}
+            <ul class="dropdown_menu dropdown_menu-3">
+              <li class="dropdown_item-1">Mi cuenta</li>
+              <li class="dropdown_item-2">Historial</li>
+              <li class="dropdown_item-3" id="logout" to="{% url 'base:logout' %}">Cerrar Sesión </li>
+            </ul>
+
+            {%else%}
+            <ul class="dropdown_menu2 dropdown_menu-3">
+              <li class="dropdown_item-1 ">
+                <button hreft="{% url 'base:login' %}" id="btnLogin" class="btn btn-primary btn-block">Entrar</button>
+                Si no se encuentra registrado <a href="{% url 'base:register' %}">Registrese aquí</a>
+              </li>
 
             </ul>
-          </div>
-        </li>
-  
+            {% endif %}
 
+          </li>
+        </ul>
 
-        <h1>{{form}}</h1>
-
-      </ul>
-
-      <!-- Right -->
-      <ul class="navbar-nav nav-flex-icons">
-        <li class="nav-item" id="carrImg">
-          <a href="#" class="nav-item nav-link mx-auto ">
-
-            <img src="{% static 'icons/carrito.png'%}" alt="" class="carrIconButton" id="carrIcon">&nbsp;
-            <span class="badge red z-depth-1 mr-1"> 0 </span>
-
-          </a>
-
-        </li>
-
-        <li class="dropdown3 dropdown-3">
-          <img src="{% static 'icons/usuario.png'%}" alt="" id="userIcon">
-          &nbsp;
-          {% if request.user.is_authenticated %}
-          <ul class="dropdown_menu dropdown_menu-3">
-            <li class="dropdown_item-1">Mi cuenta</li>
-            <li class="dropdown_item-2">Historial</li>
-            <li class="dropdown_item-3" id="logout" to="{% url 'base:logout' %}">Cerrar Sesión </li>
-          </ul>
-
-          {%else%}
-          <ul class="dropdown_menu2 dropdown_menu-3">
-            <li class="dropdown_item-1 ">
-              <button hreft="{% url 'base:login' %}" id="btnLogin" class="btn btn-primary btn-block">Entrar</button>
-              Si no se encuentra registrado <a href="{% url 'base:register' %}">Registrese aquí</a>
-            </li>
-
-          </ul>
-          {% endif %}
-
-        </li>
-      </ul>
-
+      </div>
     </div>
-  </div>
   </nav>
 
   <div id="effect" style="display: none;" class="ui-widget-content ui-corner-all">
@@ -632,23 +632,28 @@
 
       <!-- Section: Block Content -->
       <section>
-    
+
         <h3 class="font-weight-bold dark-grey-text text-center mb-5">Productos nuevos</h3>
-    
+
         <!-- Grid row -->
         <div class="row">
-    
+          {% load mptt_tags %}
+
+
+
+
           <!-- Grid column -->
           {% for item in product %}
-            
-        
+
+
           <div class="col-lg-3 col-md-6 mb-4">
-    
+
             <!-- Card -->
             <div class="card card-ecommerce">
-    
+
               <div class="view overlay">
-                <div id="{{item.sku}}" class="carousel slide carousel-fade" data-ride="carousel" style="height: 45vh !important;">
+                <div id="{{item.sku}}" class="carousel slide carousel-fade" data-ride="carousel"
+                  style="height: 45vh !important;">
                   <ol class="carousel-indicators" style="bottom: 10px;">
                     <li data-target="#{{item.sku}}" data-slide-to="0" class="active"></li>
                     <li data-target="#{{item.sku}}" data-slide-to="1"></li>
@@ -656,21 +661,19 @@
                   </ol>
                   <div class="carousel-inner">
                     <div class="carousel-item active">
-                      <img class="d-block w-100" src="{{item.image.url}}"
-                        alt="First slide">
+                      <img class="d-block w-100" src="{{item.image.url}}" alt="First slide">
                     </div>
-                   {% for ide in img %}
+                    {% for ide in img %}
                     {% if item.id == ide.product.id %}
                     <div class="carousel-item">
-                      <img class="d-block w-100" src="{{ide.image.url}}"
-                        alt="First slide">
+                      <img class="d-block w-100" src="{{ide.image.url}}" alt="First slide">
                     </div>
                     {% endif %}
-                   {% endfor %}
-                 
-                   
+                    {% endfor %}
+
+
                   </div>
-               
+
                   <a class="carousel-control-prev" href="#{{item.sku}}" role="button" data-slide="prev">
                     <i class="fas fa-chevron-left text-black-50"></i>
                     <span class="sr-only">Previous</span>
@@ -684,23 +687,23 @@
                   <div class="mask rgba-white-slight"></div>
                 </a>
               </div>
-    
+
               <div class="card-body">
-    
+
                 <h5 class="card-title mb-1"><strong><a class="dark-grey-text">{{item.name}}</a></strong></h5>
                 <span class="badge badge-danger mb-2">Nuevo</span>
-    
-    
+
+
                 <ul class="rating">
-                  {% for i in "x"|rjust:"5" %}                 
-                   <li>
+                  {% for i in "x"|rjust:"5" %}
+                  <li>
                     <i class="fas fa-star blue-text"></i>
                   </li>
                   {% endfor %}
-                 
-               
+
+
                 </ul>
-    
+
                 <div class="card-footer pb-0">
                   <div class="row mb-0">
                     <span class="float-left">
@@ -709,23 +712,24 @@
                   </div>
 
                 </div>
-                <button type="button" class="btn btn-indigo btn-block carrbutton">  <img src="{% static 'icons/carrito.png'%}"  class="carrIconButton">&nbsp;&nbsp;Agregar</button>
+                <button type="button" class="btn btn-indigo btn-block carrbutton"> <img
+                    src="{% static 'icons/carrito.png'%}" class="carrIconButton">&nbsp;&nbsp;Agregar</button>
 
               </div>
-    
+
             </div>
             <!-- Card -->
-    
+
           </div>
           {% endfor %}
           <!-- Grid column -->
-    
+
           <!-- Grid column -->
-       
-    
+
+
         </div>
         <!-- Grid row -->
-    
+
         <!-- Grid row -->
         <div class="row justify-content-center mt-3 mb-4">
           <!-- Pagination -->
@@ -774,10 +778,10 @@
           <!-- Pagination -->
         </div>
         <!-- Grid row -->
-    
+
       </section>
       <!-- Section: Block Content -->
-    
+
     </div>
 
   </main>
@@ -785,8 +789,8 @@
 
 
   {% endblock content %}
-
-  <!-- <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated bounce infinite"
+{% comment %} 
+   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated bounce infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated flash infinite"
     alt="Transparent MDB Logo" id="animated-img1">
@@ -829,8 +833,7 @@
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideInUp infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideOutDown infinite"
-    alt="Transparent MDB Logo" id="animated-img1"> -->
-
+    alt="Transparent MDB Logo" id="animated-img1">  {% endcomment %}
 
 
 
@@ -894,9 +897,8 @@
 {% load static %}
 <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
 
-<script src="{% static 'js/popper.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.js' %}"></script>
-<script src="{% static 'js/mdb.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/mdb.min.js' %}"></script>
 <script src="{% static 'js/filter.js' %}"></script>
 
 
@@ -904,34 +906,34 @@
   // Animations initialization
 
 </script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script src="{% static 'js/base.js' %}"></script>
 
 <script src="{% static 'js/login.js' %}"></script>
 <script src="{% static 'js/productList.js' %}"></script>
 <script src="{% static 'js/messages.js' %}"></script>
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-<script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'js/nouislider.min.js' %}"></script>
+<script src="{% static 'js/swipper.min.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/imgloading.min.js' %}"></script>
+<script src="{% static 'js/semantic.min.js' %}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script text="text/javascript">
+  var user="{{request.user.first_name}}"
+</script>
+{% comment %} <script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/TimelineMax.min.js'%}"></script>
 <script src="{% static 'plugins/scrollmagic/ScrollMagic.min.js'%}"></script>
 <script src="{% static 'plugins/greensock/animation.gsap.min.js'%}"></script>
 <script src="{% static 'plugins/greensock/ScrollToPlugin.min.js'%}"></script>
 <script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js'%}"></script>
-<script src="{% static 'plugins/slick-1.8.0/slick.j'%}"></script>
-<script src="{% static 'plugins/easing/easing.js'%}"></script>
+<script src="{% static 'plugins/slick-1.8.0/slick.js'%}"></script>
+<script src="{% static 'plugins/easing/easing.js'%}"></script> {% endcomment %}
 <script src="{% static 'js/custom.js'%}"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'UA-23581568-13');
-</script>
 {% block js_page %}
 
 {% endblock js_page %}

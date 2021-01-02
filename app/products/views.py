@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView
 from .models import *
 from django.http import JsonResponse
-from  base.mixins import CustomMixin
-from django.shortcuts import redirect,HttpResponse
+from django.shortcuts import redirect,HttpResponse,HttpResponseRedirect
 from django.views import View
 from django.db.models import Q
 import json
@@ -14,203 +13,504 @@ from django.core.paginator import Paginator
 from django.core.paginator import (
     InvalidPage, PageNotAnInteger, EmptyPage, Paginator)
 from django.template.loader import render_to_string
-from fast_pagination.helpers import FastPaginator
 from django.views.decorators.cache import cache_page
+from .forms import RatingForm
+from django.db.models import Q, Count,Avg
+from django.db import connection
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.utils.decorators import method_decorator
+from django.urls import resolve
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-# def ProductList(request):
-#     model=Product
-#     template_name="productList.html"
-#     context_object_name = "product"
-#     paginate_by=3
-#     def dispatch(self, request, *args, **kwargs):
-#         return super().dispatch(request, *args, **kwargs)
-    
+class ProductDetailView(DetailView):
+    model=Product
+    template_name="product_detail.html"
+    form_class=RatingForm
+    print("Entro al detail")
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs) :
  
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["marca"]=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
-#         context["category"]=Category.objects.values("id","name","slug")
-#         context["subcategory"]=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
+        return super().dispatch(request, *args, **kwargs)
+  
+    def get_context_data(self, **kwargs):
+        data=[]
+        total=0
+        
+        context = super().get_context_data(**kwargs)
+        context["image"] = Productimage.objects.filter(product=self.object.id)
+        q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
+        with connection.cursor() as cursor:
+            cursor.execute("select * from getRating("+str(self.object.id)+")")
+            row = cursor.fetchall()       
+        for i in row:
+            data.append(i[1])
+               
+        for k,i in enumerate(data):
+            total+=i*(k+1)
+        from functools import reduce
+        staravg=0
+        suma=reduce((lambda a,b: a+b),data) 
+        if suma!=0:
+            staravg=round(total/suma,1)
+        context["starsAvg"]=staravg
+        # current_url = resolve(self.request.path_info)
+        context["starsCount"]=data[::-1]
+        if "marca" in self.kwargs.keys():
+            context["nameBrand"]=self.kwargs["marca"]
+        if "categoria" in self.kwargs.keys():
+            context["nameCategory"]=self.kwargs["categoria"]
+        # post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),5)
+        # if  self.request.GET.get('page'):
+        #     page_obj = post.page( self.request.GET.get('page'))  
+        # else:
+        #     page_obj = post.page(1)
+        context["comment"]=Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse()
+        return context
+    def post(self, request, *args, **kwargs):
+        if self.request.POST["paramSend"]=="next":
+            print("if next")
+            self.object = self.get_object()
+            context = self.get_context_data(object=self.object)
+            return HttpResponse(render_block_to_string(self.template_name,"content",context=context,request=self.request))
 
-#         return context
+        else:
+            if  request.user.is_authenticated: 
+                print("if username")
+                from crum import get_current_user          
+                form=RatingForm(request.POST)    
+                self.object = self.get_object()
+
+                if form.is_valid():
+                    data=Comment()
+                    data.author=get_current_user()
+                    data.comment=form.cleaned_data["comment"]       
+                    data.ip=request.META.get("REMOTE_ADDR")
+                    data.rate=form.cleaned_data["rate"]
+                    data.product_id=self.object.id
+                    data.save()
+                    print("TOdo bien")
+                    with connection.cursor() as cursor:
+                        cursor.execute("select * from avgRating("+str(self.object.id)+")")
+                        row = cursor.fetchone() 
+                    self.object.updateRate(row[0])
+                    context = self.get_context_data(**kwargs)
+                    return self.render_to_response(context)   
+                else:
+                    print(form.errors)
+                    return HttpResponse(form.errors)
+            else:
+                print("if not authenticated")
+
+                return HttpResponse("No se encuentra logueado en el sistema")
+from render_block import render_block_to_string
+
+class ProductList(TemplateView):
+    model=Product
+    template_name="productList.html"
+   
+    def get(self,context,**kwargs):
+        if self.request.GET:
+            return render(self.request,self.template_name,self.getFilter())
+        else:
+            response =  Product.objects.values("id","name","price","rating","slug","image")
+            post = Paginator(response, 2)
+            if(self.request.GET.get("page")):
+                page_obj = post.page(self.request.GET.get("page"))  
+            else:
+                page_obj = post.page(1)
+            context={"entries":page_obj,"text":"Nuestros productos"}    
+            return render(self.request,self.template_name,context)
+
+    def getFilter(self,*args, **kwargs):
+            # print(self.request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
+            brand=self.request.GET.get("brand")
+            order=self.request.GET.get("order")
+            chesubcat=self.request.GET.get("sc")
+            price=self.request.GET.get("price")
+            if price==None:
+                pass
+            else:
+                price=price.split(",")
+
+            if price and chesubcat==None and order==None and brand==None:
+                response=Product.objects.get_price_product(price)
+            elif price and chesubcat and order==None and brand:
+                response=Product.objects.filterMultiple(chesubcat,brand,price)
+            elif price and chesubcat and order==None and brand==None:
+                response=Product.objects.catxprice(price,chesubcat)
+            elif price and chesubcat and order and brand==None:
+                if order=="priceLower":
+                    response=Product.objects.catxprice(price,chesubcat).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.catxprice(price,chesubcat).order_by("price").reverse()    
+            elif price and chesubcat and order and brand:
+                if order=="priceLower":
+                    response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.filterMultiple(chesubcat,brand,price).order_by("price").reverse()
+            elif price and chesubcat==None and order==None and brand:
+                response=Product.objects.brandxprice(brand,price)
+            elif price and chesubcat==None and order and brand==None:
+                if order=="priceLower":
+                    response=Product.objects.get_price_product(price).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.get_price_product(price).order_by("price").reverse()
+            elif price and chesubcat==None and order and brand:
+                if order=="priceLower":
+                    response=Product.objects.brandxprice(brand,price).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.brandxprice(brand,price).order_by("price").reverse()
+            
+        
+            
+            
+            elif price==None and chesubcat==None and order==None and brand==None:
+                response=Product.objects.values("id","name","price","rating","slug","image")
+            elif price==None and chesubcat and order and brand==None:
+                if order=="priceLower":
+                    response=Product.objects.get_category_product(chesubcat).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.get_category_product(chesubcat).order_by("price").reverse()           
+            elif price==None and chesubcat and brand and order:
+                if order=="priceLower":
+                    response=Product.objects.catxbrand(chesubcat,brand).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.catxbrand(chesubcat,brand).order_by("price").reverse()
+            elif price==None and order and brand and chesubcat==None: 
+                if order=="priceLower":
+                    response=Product.objects.get_brands_product(brand).order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.get_brands_product(brand).order_by("price").reverse()      
+            elif price==None and order==None and brand and chesubcat:
+                response=Product.objects.catxbrand(chesubcat,brand)
+            elif price==None and order==None and brand and chesubcat==None:
+                response=Product.objects.get_brands_product(brand)
+            elif price==None and order==None and brand==None and chesubcat:
+                response=Product.objects.get_category_product(chesubcat)
+            elif price==None and order and brand==None and chesubcat==None:
+                if order=="priceLower":
+                    response=Product.objects.order_by("price")
+                elif order=="priceHigher":
+                    response=Product.objects.order_by("price").reverse()
+            post = Paginator(response, 2)
+            if(self.request.GET.get("page")):
+                page_obj = post.page(self.request.GET.get("page"))  
+            else:
+                page_obj = post.page(1)
+            context={"entries":page_obj,"text":'Nuestros productos.'  }
+            return context
+    def post(self, request, *args, **kwargs) :
+        
+        return HttpResponse(render_block_to_string("productList.html","content",context=self.getFilter(),request=self.request))
+        
 
 
-# @cache_page(60 * 15)
-def ProductList(request):
+class byCategory(ListView):
+    template_name="productList.html"
+    model=Category
     
-    if request.method == 'GET':
-        brand=request.GET.get("brand")
-        order=request.GET.get("order")
-        chesubcat=request.GET.get("subcategory")
-        if chesubcat==None and order==None and brand==None:
-            response=Product.objects.values("id","name","price","marca__name","image").distinct()
 
-        if chesubcat and order and brand==None:
-            print("chekcsubcat and order and brand none")
+    def get(self, request, *args, **kwargs) :
+        if self.request.GET:
+            return render(self.request,self.template_name,self.getCategory(kwargs["categoria"]))
+        else:
+            node = Category.objects.get(slug=kwargs["categoria"])
+
+            if node.is_child_node():
+                category=Product.objects.values("id","slug","name","price","rating","image").filter(category=node)
+            else:
+                category=Product.objects.values("id","slug","name","price","rating","image").filter(category__parent=node.get_root().id)  
+            post = Paginator(category, 1)
+            if(self.request.GET.get("page")):
+                page_obj = post.page(self.request.GET.get("page"))  
+            else:
+                page_obj = post.page(1)
+            context={"entries":page_obj,"text":"Nuestros productos","tag":2,"tag2":node.name,"displayCat":"none"}
+         
+            return render(self.request,self.template_name,context)
+    def post(self,request,*args, **kwargs):
+        return HttpResponse(render_block_to_string("productList.html","content",context=self.getCategory(kwargs["categoria"]),request=self.request))
+
+
+    def getCategory(self,slug):
+        brand=self.request.GET.get("brand")
+        order=self.request.GET.get("order")
+        node = Category.objects.get(slug=slug)
+        price=self.request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
+        if node.is_child_node():
+            category=Product.objects.values("id","slug","name","price","rating","image").filter(category=node)
+        else:
+            category=Product.objects.values("id","slug","name","price","rating","image").filter(category__parent=node.get_root().id)  
+        if price and brand==None and order==None :
+            context=category.filter(price__lt=price[1],price__gt=price[0])  
+        elif price and brand and order==None:
+            context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0])    
+        elif price and brand and order:
             if order=="priceLower":
-                response=Product.objects.get_subcategory_product(chesubcat).order_by("price")
+                context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0]).order_by("price")
             elif order=="priceHigher":
-                print("else")
-                response=Product.objects.get_subcategory_product(chesubcat).order_by("price").reverse()           
-
-        elif chesubcat and brand and order:
-            print("checksubcat and brand and order")
+                context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0]).order_by("price").reverse()          
+        elif price and brand==None and order:
             if order=="priceLower":
-                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price")
+                context=category.filter(price__lt=price[1],price__gt=price[0]).order_by("price")    
             elif order=="priceHigher":
-                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price").reverse()
-            response=Product.objects.filterMultiple(chesubcat,brand) 
-        
-        elif chesubcat and brand:
-            print("checksubcat and brand ")
-            response=Product.objects.filterMultiple(chesubcat,brand)             
-        elif order=="priceLower" and brand:
-            print("priceLower and brand")
-            response=Product.objects.get_brands_product(brand).order_by("price")
-            
-        elif order=="priceHigher" and brand:
-            print("pricehiguer and brand")
-            response=Product.objects.get_brands_product(brand).order_by("price").reverse()
-        elif chesubcat:
-            print("checksubcat")
-            response=Product.objects.get_subcategory_product(chesubcat)
-        elif brand:
-            print("brand")
-            response = Product.objects.get_brands_product(brand)
-        elif order=="priceLower":
-            response=Product.objects.orderLower()
-        elif order=="priceHigher":
-            response=Product.objects.orderHigher()
+                context=category.filter(price__lt=price[1],price__gt=price[0]).order_by("price").reverse()
+        elif price and brand and order==None:
+            context=category.filter(marca__name=brand,price__lt=price[1],price__gt=price[0])
 
-        # marca=Marcas.objects.values("id","name","slug").annotate(brand_count=Count('marca_id'))
-        # category=Category.objects.values("id","name","slug")
-        # subcategory=SubCategory.objects.select_related("category").values("id","name","category").annotate(subcategory_count=Count('subcategoria_id'))   
-        # product=Product.objects.select_related("marca").values("id","name","price","image")
-    
+        elif price==None and order==None and brand==None:
+            context=category    
+        elif price==None and order==None and brand:
+            context=category.filter(marca__name=brand)
+        elif price==None and order and brand==None:
+            if order=="priceLower" :
+                context=category.order_by("price")
+            elif order=="priceHigher":
+                context=category.order_by("price").reverse()
+        elif price==None and order and brand:
+            if order=="priceLower" :
+                context=category.filter(marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=category.filter(marca__name=brand).order_by("price").reverse()
+        post = Paginator(context,1)
+        if(self.request.GET.get("page")):
+            page_obj = post.page(self.request.GET.get("page"))  
+        else:
+            page_obj = post.page(1)
+        return {"entries":page_obj,"tag2":node.name,"displayCat":"none"}
        
-        # page_obj = paginator2.get_page(page_number)
-    else:
-        print("else")
-    post = Paginator(response,3)
-    if(request.GET.get("page")):
-        page_obj = post.page(request.GET.get("page"))  
-    else:
-        page_obj = post.page(1)
-            
-    context={"product":page_obj,"tag2":"Productos"}
-    return render(request,"productList.html",context)
-def filter(request):
-    if request.method == 'GET':
-        data={}
-        brand=request.GET.get("brand")  
-        order=request.GET.get("order")
-        chesubcat=request.GET.get("subcategory")
-       
-        response=Product.objects.values("id","slug","name","marca__name","price","image")
-        if chesubcat and order and brand==None:
-            print("chekcsubcat and order and brand none")
-            if order=="priceLower":
-                response=Product.objects.get_subcategory_product(chesubcat).order_by("price")
-            elif order=="priceHigher":
-                print("else")
-                response=Product.objects.get_subcategory_product(chesubcat).order_by("price").reverse()           
-
-        elif chesubcat and brand and order:
-            print("checksubcat and brand and order")
-            if order=="priceLower":
-                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price")
-            elif order=="priceHigher":
-                response=Product.objects.filterMultiple(chesubcat,brand).order_by("price").reverse()
-            response=Product.objects.filterMultiple(chesubcat,brand) 
-        
-        elif chesubcat and brand:
-            print("checksubcat and brand ")
-            response=Product.objects.filterMultiple(chesubcat,brand)             
-        elif order=="priceLower" and brand:
-            print("priceLower and brand")
-            response=Product.objects.get_brands_product(brand).order_by("price")
-            
-        elif order=="priceHigher" and brand:
-            print("pricehiguer and brand")
-            response=Product.objects.get_brands_product(brand).order_by("price").reverse()
-        elif chesubcat:
-            print("checksubcat")
-            response=Product.objects.get_subcategory_product(chesubcat)
-        elif brand:
-            print("brand")
-            response = Product.objects.get_brands_product(brand)
-        elif order=="priceLower":
-            response=Product.objects.orderLower()
-        elif order=="priceHigher":
-            response=Product.objects.orderHigher()
-        # objects = list(response[:3 * 3]) #2 !!!
-        # paginator = Paginator(objects, 3)
-        # post = paginator.page(request.GET.get("page"))        # page=request.GET.get("page")
-        # posts=paginator.page(page)
-        # context={"product":queryset,"marca":marca,"category":categ,"subcategory":subcategory}
-        # return render(request,"productList.html",context)
-        
-        data = {
-                'response': render_to_string("productList.html", {'product ': response}, request=request)}
-        return JsonResponse(data)
-        # try:
-        #     data=[]
-        #     for i in queryset:
-        #         data.append(i.toJSON())
-        #     return JsonResponse(data,safe=False)
-        # except Exception as e:
-        #     print(e)
-class getCat(TemplateView):
-    template_name="index.html"
+class byMarcas(TemplateView):
+    template_name="productList.html"
     def get(self,request,*args, **kwargs):
-        data = []
-        cat = kwargs['cat']
-        for i in SubCategory.objects.values("id","name","slug").filter(category__slug=cat):
-            data.append(i.toJSON())
- 
-        return JsonResponse(data,safe=False)
-def getBrands(request,name):
-    marcas=Product.objects.values("id","name","price","marca__name","image").filter(marca__name=name)
-    return render(request,"productList.html",{"product":marcas,"tag1":name,"tag2":"Marcas"})
-def getCategories(request,name):
-    marcas=Product.objects.values("id","name","price","marca__name","image").filter(subcategory__category=name)
-    return render(request,"productList.html",{"product":marcas,"tag1":name,"tag2":"Categorias"})
-def getProduct(request,id):
-
-    if request.method == 'GET':
-        item=Product.objects.get(id=id)
-        print(item.price)
-        data = {
-                'response': render_to_string("modal.html", {'product': item}, request=request)}
-        return JsonResponse(data,safe=False)
-def search(request):
-    search=request.GET.get("q")
-    brand=request.GET.get("brand")
-    cat=request.GET.get("in")
-    print(cat)
-    print(search)
-    print(brand)
-
-    if brand and search and cat:
-        print("brand and search")
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search, marca__name=brand,subcategory__category=cat )
-    if brand==None and search==None and cat==None:
-        print("none alll")
-        context=Product.objects.values("id","name","price","marca__name","image")
-    if search and cat!="0":
-        print("search and cat")
+        if self.request.GET:
+            return render(self.request,self.template_name,self.getMarca(kwargs["marca"]))
+        else:
+            marca=Marcas.objects.get(slug=kwargs["marca"])
+            marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca=marca.id)
+            post = Paginator(marcas, 1)
+            if(self.request.GET.get("page")):
+                page_obj = post.page(self.request.GET.get("page"))  
+            else:
+                page_obj = post.page(1)
+            context={"entries":page_obj,"tag2":marca.name.lower(),"tag":3,"displayBrand":"none"}
+         
+            return render(self.request,self.template_name,context)
+    def post(self, *args, **kwargs):
       
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search,subcategory__category=cat )
+        return HttpResponse(render_block_to_string("productList.html","content",context=self.getMarca(kwargs["marca"]),request=self.request))
 
-    if search and (cat==None or cat=="0") and brand==None:    
-        print(" search")
-        context=Product.objects.values("id","name","price","marca__name","image").filter(name__icontains=search)
-    
-    post = Paginator(context,3)
-    if(request.GET.get("page")):
-        page_obj = post.page(request.GET.get("page"))  
-    else:
-        page_obj = post.page(1)
-            
-    context={"product":page_obj,"item":search,"tag2":"Productos"}
-    return render(request,"productList.html",context)
+    def getMarca(self,slug):
+        subcat=self.request.GET.get("sc")
+        order=self.request.GET.get("order")
+        price=self.request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
+        if subcat==None or subcat=="":
+            pass
+        else:
+            subcat=subcat.split(",")
+        marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca__slug=slug)
+
+        if price and subcat==None and order==None :
+            context=marcas.filter(price__lt=price[1],price__gt=price[0])  
+        elif price and subcat and order==None:
+            context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0])    
+        elif price and subcat and order:
+            if order=="priceLower":
+                context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0]).order_by("price")
+            elif order=="priceHigher":
+                context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0]).order_by("price").reverse()          
+        elif price and subcat==None and order:
+            if order=="priceLower":
+                context=marcas.filter(price__lt=price[1],price__gt=price[0]).order_by("price")    
+            elif order=="priceHigher":
+                context=marcas.filter(price__lt=price[1],price__gt=price[0]).order_by("price").reverse()
+        elif price and subcat and order==None:
+            context=marcas.filter(category__in=subcat,price__lt=price[1],price__gt=price[0])  
+        elif price==None and order==None and subcat :
+            context=marcas.filter(category__in=subcat)
+        elif price==None and order==None and subcat==None:
+            context=marcas
+        elif price==None and order and subcat ==None:
+            if order=="priceLower":
+                context=marcas.order_by("price")
+            elif order=="priceHigher":
+                context=marcas.order_by("price").reverse()
+        elif price==None and order and subcat:
+            if order=="priceLower":
+                context=marcas.filter(category__id__in=subcat).order_by("price")
+            elif order=="priceHigher":
+                context=marcas.filter(category__id__in=subcat).order_by("price").reverse()
+
+        post = Paginator(context,1)
+        if(self.request.GET.get("page")):
+            page_obj = post.page(self.request.GET.get("page"))  
+        else:
+            page_obj = post.page(1)
+        return {"entries":page_obj,"tag2":slug,"displayBrand":"none"}
+
+
+def getProduct(request,pk):
+    if request.method == 'GET':
+        item=Product.objects.get(id=pk)
+        with connection.cursor() as cursor:
+            cursor.execute("select * from nRatings("+str(pk)+")")
+            row = cursor.fetchone() 
+        data = {
+                'response': render_to_string("modal.html", {'product': item,"n":row[0]}, request=request)}
+        return JsonResponse(data,safe=False)
+class Search(TemplateView):
+    template_name="productList.html"
+    def get(self, *args, **kwargs):
+        return render(self.request,self.template_name,self.results())
+        
+    def post(self, *args, **kwargs):
+      
+        return HttpResponse(render_block_to_string("productList.html","content",context=self.results(),request=self.request))
+
+    def results(self):
+        search=self.request.GET.get("q")
+        brand=self.request.GET.get("brand")
+        categ=self.request.GET.get("sc")
+        order=self.request.GET.get("order")
+      
+        if categ==None or categ=="":
+            categ=categ
+        else:
+            categ=categ.split(",")
+        price=self.request.GET.get("price")
+        if price==None:
+            pass
+        else:
+            price=price.split(",")
+        searchby=Product.objects.values("id","slug","name","price","rating","image")
+        if price and order==None and brand==None and categ and search=="":
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ)
+        elif price and order==None and search=="" and brand and categ:
+            context=searchby.filter(marca__name=brand,category__in=categ,price__lt=price[1],price__gt=price[0])
+        elif price and order==None and search=="" and  brand==None and categ:    
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ)
+        elif price and order==None and search=="" and brand and categ==None :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand)
+        elif price and order==None and search and brand==None and categ :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ)      
+        elif price and order==None and search and brand==None and (categ==None or categ=="") :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search)       
+        elif price and order==None and search and (categ=="" or categ==None)  and brand :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand,name__icontains=search)
+        elif price and order==None and search and categ  and brand :
+            context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand,name__icontains=search,category__in=categ)
+
+        elif  price and order and search=="" and categ   and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ,marca__name=brand).order_by("price").reverse() 
+        elif  price and order and search and (categ=="" or categ==None)  and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,marca__name=brand).order_by("price").reverse()  
+
+        elif price and order and search and (categ=="" or categ==None)  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search).order_by("price").reverse()       
+
+        elif  price and order and search and categ and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ,marca__name=brand).order_by("price").reverse()   
+        elif  price and order and search=="" and categ==None and brand:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],marca__name=brand).order_by("price").reverse()           
+        elif price and  order and search and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],name__icontains=search,category__in=categ).order_by("price").reverse() 
+        elif  price and order and search=="" and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0],category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(category__in=categ).order_by("price").reverse()           
+        elif  price and order and search=="" and brand==None and (categ =="" or categ==None):
+            if order=="priceLower":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0]).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(price__lt=price[1],price__gt=price[0]).order_by("price").reverse()   
+        
+        elif price==None and  order==None and brand==None and (categ==None or categ=="") and search=="":
+            context=searchby
+        elif price==None and  order==None and search=="" and brand and categ :
+            context=searchby.filter(marca__name=brand,category__in=categ)
+        elif price==None and  order==None and search=="" and  brand==None and categ:    
+            context=searchby.filter(category__in=categ)
+        elif price==None and  order==None and search=="" and brand and categ==None :
+            context=searchby.filter(marca__name=brand)
+        elif price==None and  order==None and search and brand==None and categ :
+            context=searchby.filter(name__icontains=search,category__in=categ)      
+        elif price==None and  order==None and search and brand==None and (categ==None or categ=="") :
+            context=searchby.filter(name__icontains=search)       
+        elif price==None and  order==None and search and (categ=="" or categ==None)  and brand :
+            context=searchby.filter(marca__name=brand,name__icontains=search)
+        elif price==None and order==None and search and categ  and brand :
+            context=searchby.filter(marca__name=brand,name__icontains=search,category__in=categ)
+        elif  price==None and  order and search=="" and categ   and brand:
+            if order=="priceLower":
+                context=searchby.filter(category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(category__in=categ,marca__name=brand).order_by("price").reverse() 
+        elif price==None and   order and search and (categ=="" or categ==None)  and brand:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,marca__name=brand).order_by("price").reverse()  
+        elif price==None and   order and search and (categ=="" or categ==None)  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search).order_by("price").reverse()                     
+        elif price==None and   order and search and categ and brand:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,category__in=categ,marca__name=brand).order_by("price").reverse()   
+        elif price==None and  order and search=="" and categ==None and brand:
+            if order=="priceLower":
+                context=searchby.filter(marca__name=brand).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(marca__name=brand).order_by("price").reverse()           
+        elif price==None and  order and search and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(name__icontains=search,category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(name__icontains=search,category__in=categ).order_by("price").reverse() 
+        elif price==None and  order and search=="" and categ  and brand==None:
+            if order=="priceLower":
+                context=searchby.filter(category__in=categ).order_by("price")
+            elif order=="priceHigher":
+                context=searchby.filter(category__in=categ).order_by("price").reverse()           
+        elif price==None and  order and search=="" and brand==None and (categ =="" or categ==None) :
+            if order=="priceLower":
+                context=searchby.order_by("price")
+            elif order=="priceHigher":
+                context=searchby.order_by("price").reverse()   
+        post = Paginator(context,3)
+        if(self.request.GET.get("page")):
+            page_obj = post.page(self.request.GET.get("page"))  
+        else:
+            page_obj = post.page(1)
+                
+        context={"entries":page_obj,"tag3":search}
+        return context
