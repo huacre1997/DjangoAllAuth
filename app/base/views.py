@@ -26,7 +26,6 @@ def index(request):
     context = {
         'num_visits': num_visits,
     }
-
     return render(request, 'index.html', context=context)
 class AboutView(TemplateView):
     template_name="about.html"    

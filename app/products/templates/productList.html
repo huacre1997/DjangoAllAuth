@@ -354,7 +354,7 @@
                         <img src="{% get_media_prefix %}{{entry.image}} " class="imgProduct">
 
                         <div class="mask" style="background-color: rgba(0,0,0, 0.5)">
-                          <div class="d-flex justify-content-center align-items-center h-100">
+                          <div class="d-flex justify-content-center align-items-center h-100" style="cursor: pointer;">
                             <p class="text-white mb-0">Vista rápida</p>
                           </div>
 
@@ -385,9 +385,13 @@
 
                       </div>
 
-                      <h4 class="blue-text mb-2">
-                        <strong>S/.{{entry.price}}</strong>
-                      </h4>
+                      <div class="d-flex align-items-center">
+                        <h4 class="blue-text mb-2">
+                          <strong>S/.{{entry.price}}</strong>
+                        </h4>
+                        <h6 class="text-grey mb-2"><s class="text-muted ">S/.{{entry.before}}</s>
+                        </h6>
+                      </div>
                       {% if tag2 %}
                       {% if tag == 2 or 'categorias' in request.path  %}
                       <div class="g-column-2-1 ">
@@ -395,8 +399,7 @@
                       <a href="{% url 'products:product_detail_category'  tag2|slugify entry.slug %}" role="button"
                         class="btn btn-primary indigo btn-block carrbutton seeDetail"> <img
                           src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
-                      <a class="btn btn-primary" style="background-color: #dd4b39" href="#!" role="button"><i
-                          class="fab fa-google"></i></a>
+                   
                       </div>
                       {% elif tag == 3 or 'marcas' in request.path   %}
                       <div class="g-column-2-1 ">
@@ -404,22 +407,19 @@
                       <a href="{% url 'products:product_detail_brand'  tag2|slugify entry.slug %}" role="button"
                         class="btn btn-primary indigo btn-block carrbutton seeDetail"> <img
                           src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
-                      <a class="btn btn-primary" style="background-color: #dd4b39" href="#!" role="button"><i
-                          class="fab fa-google"></i></a>
+                      
                       {% endif %}
                       </div>
                       {% else %}
-                      <div class="g-column-2-1 ">
                         <a href="{% url 'products:product_detail'  entry.slug %}" role="button"
-                          class="btn btn-primary indigo  carrbutton seeDetail"> <img
-                            src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver mas</a>
+                          class="btn btn-primary indigo btn-block  carrbutton seeDetail"> <img
+                            src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Ver detalles</a>
 
-                        <button  class="btn btn-primary addCart" style="background-color: #dd4b39"
-                          data-url="{% url 'cart:add_cart' entry.id %}" onclick="addCart('{% url 'cart:add_cart' entry.id %}')" > <img
+                        <!-- <button  class="btn btn-primary addCart" style="background-color: #dd4b39"
+                          onclick="addCart('{% url 'cart:add_cart' entry.id %}')" > <img
                             src="{% static 'icons/carrito.png'%}" class="carrIconButton">
 
-                        </button>
-                      </div>
+                        </button> -->
 
                       {% endif %}
 
@@ -527,6 +527,8 @@
   </div>
   <!--Section: Content-->
 </div>
+
+
 
 {% endblock content %}
 {% block js_page %}

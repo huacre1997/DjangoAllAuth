@@ -6,13 +6,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <title>{% block title %}Mery{% endblock title %}</title>
-     <meta property="og:title" content="{% block titlemeta %} {% endblock titlemeta %}">
-    <meta name="description" property="og:description" content="{% block description %}{% endblock description %}">
-    <meta property="og:url" content="www.electroniaperu.com{% block slug %}{% endblock slug %}">
+  <meta property="og:title" content="{% block titlemeta %} {% endblock titlemeta %}">
+  <meta name="description" property="og:description" content="{% block description %}{% endblock description %}">
+  <meta property="og:url" content="www.electroniaperu.com{% block slug %}{% endblock slug %}">
   <link rel="stylesheet" href="{% static 'css/dist/base.css' %}">
-  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}"> 
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> 
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
   <link rel="stylesheet" href="{% static 'css/compiled.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
@@ -22,9 +22,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
   <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.min.css' %}">
- 
+
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
-  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+  {% comment %}
+  <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'plugins/slick-1.8.0/slick.css' %}"> {% endcomment %}
@@ -58,7 +59,7 @@
   </style>
 </head>
 
-<body>
+<body class="body">
   <span id="loadingCharge" style="visibility: visible;"></span>
   <div class="loader2 " style="visibility: visible;" id="spinnner2">Loading...</div>
   <header class="header">
@@ -143,7 +144,7 @@
                 <div class="header_search_form_container">
                   <form action="{% url 'products:search'  %}" class="header_search_form clearfix">
                     <input name="q" type="search" class="header_search_input" placeholder="Buscar productos...">
-                    <select class="js-header-responsive"  name="sc" style="width: 37%;">
+                    <select class="js-header-responsive" name="sc" style="width: 37%;">
 
                       style="position: absolute; top: 0; height: 100%; z-index: 2;width: 40%;right: 50px;">
                       <option value="">Seleccione</option>
@@ -173,7 +174,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>  
 
           <!-- Wishlist -->
           <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
@@ -187,21 +188,65 @@
               </div> {% endcomment %}
 
               <!-- Cart -->
-              {% with total_items=cart|length %} 
+              {% with total_items=cart|length %}
 
               <div class="cart">
                 <div class="cartEnter cart_container d-flex flex-row align-items-center justify-content-end">
                   <div class="cart_icon">
-                  <img src="{% static 'icons/carrito.png'%}" id="carrIconNav">
-                    <div class="cart_count indigo darken-1"><span>{{ total_items }} </span></div>
+                    <img src="{% static 'icons/carrito.png'%}" id="carrIconNav">
+                    <div class="cart_count indigo darken-1"><span id="cartCount">{{ total_items }} </span></div>
                   </div>
                   <div class="cart_content">
-                    <div class="cart_text"><a href="#">Mi carrito</a></div>
-                    <div class="cart_price">S/.{{ cart.get_total_price }}</div>
+                    <div class="cart_text"><a href="#" id="openDropdownCart" class="cartDrop">Mi carrito</a></div>
+
+                    <div class="cart_price"></div>
+
                   </div>
+
                 </div>
               </div>
-              {% endwith %} 
+
+              <div class="containerDrop animated fadeOut faster " style="display: none;" id="cartContainer">
+                <div class="shopping-cart">
+                  <div class="shopping-cart-header">
+                    <div class="icondrop d-flex justify-content-start align-items-center">
+                      <i class="fa fa-shopping-cart cart-icon"></i>
+                      <button id="cartEmpty" data-url="{% url 'cart:clean_cart' %}" type="button" class="btn btn-danger btn-rounded">Vaciar</button>
+  
+                    </div>
+                  
+                    <div class="shopping-cart-total text-end">
+                      
+                      <span class="lighter-text">Total:</span>
+                      <span class="main-color-text priceTotal">S/.&nbsp;{{ cart.get_total_price }}</span>
+                    </div>
+                  </div>
+                  <!--end shopping-cart-header -->
+
+                  <ul class="shopping-cart-items">
+                    {% for key, value in cartdrop.items  %}
+
+                    <li class="clearfix">
+          
+                   
+                        <img src="{% get_media_prefix %}{{value.image}}" alt="item1" />
+                        <span class="item-name">{{value.name}}</span>
+                        <span class="item-price">S/. {{value.price}}</span>
+                        <span class="item-quantity">Cantidad: {{value.quantity}}</span>
+                       
+                    </li>
+                    {% endfor %}
+
+
+                
+                  </ul>
+
+                  <a href="{% url 'cart:cart' %}" class="btn btn-primary btn-block goCart">Ver detalles</a>
+                </div>
+                <!--end shopping-cart -->
+              </div>
+              <!--end container -->
+              {% endwith %}
             </div>
           </div>
         </div>
@@ -789,8 +834,8 @@
 
 
   {% endblock content %}
-{% comment %} 
-   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated bounce infinite"
+  {% comment %}
+  <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated bounce infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated flash infinite"
     alt="Transparent MDB Logo" id="animated-img1">
@@ -833,7 +878,7 @@
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideInUp infinite"
     alt="Transparent MDB Logo" id="animated-img1">
   <img src="https://mdbootstrap.com/img/logo/mdb-transparent-250px.png" class="animated slideOutDown infinite"
-    alt="Transparent MDB Logo" id="animated-img1">  {% endcomment %}
+    alt="Transparent MDB Logo" id="animated-img1"> {% endcomment %}
 
 
 
@@ -919,23 +964,24 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script text="text/javascript">
-  var user="{{request.user.first_name}}"
+  var user = "{{request.user.first_name}}"
+
   function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
-      return cookieValue;
+    }
+    return cookieValue;
   }
-  var csrftoken=getCookie("csrftoken")
+  var csrftoken = getCookie("csrftoken")
 </script>
 {% comment %} <script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/TimelineMax.min.js'%}"></script>

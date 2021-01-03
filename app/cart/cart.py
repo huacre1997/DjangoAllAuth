@@ -17,7 +17,7 @@ class Cart(object):
           
         if product_id not in self.cart:
             print("if product_id not in self.cart")            
-            self.cart[product_id] = {'quantity': 0,'price': str(product.price)}        
+            self.cart[product_id] = {'quantity': 0,'price': str(product.price),"image":str(product.image),"name":str(product.name)}        
         if override_quantity:  
             print("override_quantity")            
           
@@ -51,4 +51,4 @@ class Cart(object):
     def clear(self):      
         del self.session[settings.CART_SESSION_ID]        
         self.save() 
-   
+

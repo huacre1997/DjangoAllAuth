@@ -6,7 +6,9 @@ def marcas(request):
 
     from products.models import Marcas
     marca=Marcas.objects.only("id","name","slug").annotate(marca_count=Count('marca_id'))
-    return {'marca':marca,"cart":Cart(request)}
+    print()
+
+    return {'marca':marca,"cart":Cart(request),"cartdrop":request.session.get("cart")}
 
 
 def category(request):

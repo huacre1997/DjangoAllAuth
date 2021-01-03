@@ -31,7 +31,7 @@ class ProductDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs) :
  
         return super().dispatch(request, *args, **kwargs)
-  
+    
     def get_context_data(self, **kwargs):
         data=[]
         total=0
@@ -40,13 +40,16 @@ class ProductDetailView(DetailView):
         context["image"] = Productimage.objects.filter(product=self.object.id)
         q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
         with connection.cursor() as cursor:
-            cursor.execute("select * from getRating("+str(self.object.id)+")")
+            cursor.execute("select * from getRating("+str(self.object.id)+") order by num")
             row = cursor.fetchall()       
         for i in row:
             data.append(i[1])
-               
+            print(data)
         for k,i in enumerate(data):
+            print(k,i)
             total+=i*(k+1)
+        print(total)      
+
         from functools import reduce
         staravg=0
         suma=reduce((lambda a,b: a+b),data) 
@@ -112,8 +115,8 @@ class ProductList(TemplateView):
         if self.request.GET:
             return render(self.request,self.template_name,self.getFilter())
         else:
-            response =  Product.objects.values("id","name","price","rating","slug","image")
-            post = Paginator(response, 2)
+            response =  Product.objects.values("id","name","price","before","rating","slug","image")
+            post = Paginator(response, 3)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
@@ -165,7 +168,7 @@ class ProductList(TemplateView):
             
             
             elif price==None and chesubcat==None and order==None and brand==None:
-                response=Product.objects.values("id","name","price","rating","slug","image")
+                response=Product.objects.values("id","name","price","before","rating","slug","image")
             elif price==None and chesubcat and order and brand==None:
                 if order=="priceLower":
                     response=Product.objects.get_category_product(chesubcat).order_by("price")
@@ -217,9 +220,9 @@ class byCategory(ListView):
             node = Category.objects.get(slug=kwargs["categoria"])
 
             if node.is_child_node():
-                category=Product.objects.values("id","slug","name","price","rating","image").filter(category=node)
+                category=Product.objects.values("id","slug","name","price","rating","before","image").filter(category=node)
             else:
-                category=Product.objects.values("id","slug","name","price","rating","image").filter(category__parent=node.get_root().id)  
+                category=Product.objects.values("id","slug","name","price","before","rating","image").filter(category__parent=node.get_root().id)  
             post = Paginator(category, 1)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
@@ -242,9 +245,9 @@ class byCategory(ListView):
         else:
             price=price.split(",")
         if node.is_child_node():
-            category=Product.objects.values("id","slug","name","price","rating","image").filter(category=node)
+            category=Product.objects.values("id","slug","name","price","before","rating","image").filter(category=node)
         else:
-            category=Product.objects.values("id","slug","name","price","rating","image").filter(category__parent=node.get_root().id)  
+            category=Product.objects.values("id","slug","name","price","before","rating","image").filter(category__parent=node.get_root().id)  
         if price and brand==None and order==None :
             context=category.filter(price__lt=price[1],price__gt=price[0])  
         elif price and brand and order==None:
@@ -290,7 +293,7 @@ class byMarcas(TemplateView):
             return render(self.request,self.template_name,self.getMarca(kwargs["marca"]))
         else:
             marca=Marcas.objects.get(slug=kwargs["marca"])
-            marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca=marca.id)
+            marcas=Product.objects.values("id","slug","name","price","before","rating","image").filter(marca=marca.id)
             post = Paginator(marcas, 1)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
@@ -315,7 +318,7 @@ class byMarcas(TemplateView):
             pass
         else:
             subcat=subcat.split(",")
-        marcas=Product.objects.values("id","slug","name","price","rating","image").filter(marca__slug=slug)
+        marcas=Product.objects.values("id","slug","name","price","before","rating","image").filter(marca__slug=slug)
 
         if price and subcat==None and order==None :
             context=marcas.filter(price__lt=price[1],price__gt=price[0])  
@@ -355,10 +358,11 @@ class byMarcas(TemplateView):
             page_obj = post.page(1)
         return {"entries":page_obj,"tag2":slug,"displayBrand":"none"}
 
+from django.shortcuts import get_object_or_404
 
 def getProduct(request,pk):
     if request.method == 'GET':
-        item=Product.objects.get(id=pk)
+        item = get_object_or_404(Product, id=pk) 
         with connection.cursor() as cursor:
             cursor.execute("select * from nRatings("+str(pk)+")")
             row = cursor.fetchone() 

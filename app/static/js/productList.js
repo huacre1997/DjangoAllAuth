@@ -51,57 +51,142 @@
 
 //     })
 // });
+
+
 let a = 0
-Array.from(document.getElementsByClassName("subcatCheck")).forEach(element=>{
-  let inp=element.closest(".tree").querySelector("input")
-  Array.from(inp).forEach(element2=>{
+Array.from(document.getElementsByClassName("subcatCheck")).forEach(element => {
+  let inp = element.closest(".tree").querySelector("input")
+  Array.from(inp).forEach(element2 => {
     if (element2.getAttribute("checked")) {
-      element2.setAttribute("checked",this.checked)
-      document.getElementById("cleanCheckFilter").setAttribute("disabled",false)
+      element2.setAttribute("checked", this.checked)
+      document.getElementById("cleanCheckFilter").setAttribute("disabled", false)
     }
   })
 })
-Array.from(document.getElementsByClassName("custom-control-input")).forEach(element=>{
+Array.from(document.getElementsByClassName("custom-control-input")).forEach(element => {
   if (element.getAttribute("checked")) {
-    document.getElementById("cleanFilter").setAttribute("disabled",false)
+    document.getElementById("cleanFilter").setAttribute("disabled", false)
 
   }
 })
+document.getElementById("cartEmpty").addEventListener("click", function () {
+  fetch(this.dataset.url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken
+    }
+  }).then(response => response.json()).then(data => {
+    document.querySelector(".shopping-cart-items").innerHTML=""
+    document.querySelector(".priceTotal").innerHTML="S/. 0"
+    document.getElementById("cartCount").innerHTML="0"
+  })
+})
+let addCart = (url) => {
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken
+    }
+  }).then(response => response.json()).then(function (data) {
+    console.log(data.data);
+    document.querySelector(".shopping-cart-items").innerHTML=""
+    document.querySelector(".priceTotal").innerHTML=""
+    document.getElementById("cartCount").innerHTML=""
+    for (var key of Object.keys(data.data)) {
+      let li = document.createElement("li")
+      let img = document.createElement("img")
+      let spanName = document.createElement("span")
+      spanName.classList.add("item-name")
+      spanName.innerHTML = data.data[key].name
+      let spanPrice = document.createElement("span")
+      spanPrice.classList.add("item-price")
+      spanPrice.innerHTML = "S/. " +data.data[key].price
+      let spanCant = document.createElement("span")
+      spanCant.classList.add("item-quantity")
+      spanCant.innerHTML = "Cantidad:" + data.data[key].quantity
+      img.setAttribute("src", "/media/"+ data.data[key].image )
+      li.classList.add("clearfix")
+      li.append(img)
+      li.append(spanName)
+      li.append(spanPrice)
+      li.append(spanCant)
+      document.querySelector(".shopping-cart-items").append(li)
+     }
+    document.querySelector(".priceTotal").innerHTML="S/. "+data.total;
+    document.getElementById("cartCount").innerHTML=data.cantidad
 
-let addCart=(url)=>{
-fetch(url,{method:"POST",headers:{
-  "Content-Type":"application/json",
-  "X-CSRFToken":csrftoken
-}}).then(response=>response.json()).then(data=>console.log(data))
+  })
 }
-function addevent() {
-  let postComment=()=>{
-    document.getElementById("postComment").addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("postComment").innerHTML = ""
-      let form = document.querySelector("#commentForm")
-      let dataForm = new FormData(form)
-      let parent = document.createElement("div")
-      let loader = document.createElement("span")
-      loader.style.marginRight = "2px"
-      loader.classList.add("spinner-border", "spinner-border-sm")
-      loader.setAttribute("role", "status")
-      loader.setAttribute("aria-hidden", "true")
-      parent.appendChild(loader)
-    
-      loader.after("Publicando...")
-    
-      console.log(parent)
-      document.getElementById("postComment").appendChild(parent)
-      document.getElementById("postComment").disabled = true
-      fetch(form.getAttribute("action"), { method: "POST", body: dataForm }).then(() => {
-        document.getElementById("postComment").innerHTML = ""
-        document.getElementById("postComment").textContent = "Publicado"
-    
-        document.getElementById("postComment").disabled = false
-      })
-    
-    
-    });}
+
+function postComment() {
+  document.getElementById("postComment").innerHTML = ""
+  let form = document.querySelector("#commentForm")
+  let dataForm = new FormData(form)
+  let parent = document.createElement("div")
+  let loader = document.createElement("span")
+  loader.style.marginRight = "2px"
+  loader.classList.add("spinner-border", "spinner-border-sm")
+  loader.setAttribute("role", "status")
+  loader.setAttribute("aria-hidden", "true")
+  parent.appendChild(loader)
+
+  loader.after("Publicando...")
+
+  console.log(parent)
+  document.getElementById("postComment").appendChild(parent)
+  document.getElementById("postComment").disabled = true
+  fetch(form.getAttribute("action"), {
+    method: "POST",
+    body: dataForm
+  }).then(() => {
+    document.getElementById("postComment").innerHTML = ""
+    document.getElementById("postComment").textContent = "Publicado"
+
+    document.getElementById("postComment").disabled = false
+  })
+
+}
+
+
+document.getElementById("openDropdownCart").addEventListener("click", (e) => {
+  e.preventDefault()
+  let clasarr=document.getElementById("cartContainer").classList
+  if(Array.from(clasarr).indexOf("fadeOut") > -1){
+    document.getElementById("cartContainer").style.display = "block"
+    document.getElementById("cartContainer").classList.remove("fadeOut")
+    document.getElementById("cartContainer").classList.add("fadeIn")
+  }else{
+    document.getElementById("cartContainer").classList.add("fadeOut")
+    document.getElementById("cartContainer").classList.remove("fadeIn")
   }
-document.addEventListener("DOMContentLoaded", addevent, false);
+  // if (showDog === true) {
+  //   document.getElementById("cartContainer").style.display = "block"
+  //   document.getElementById("cartContainer").classList.remove("fadeOut")
+  //   document.getElementById("cartContainer").classList.add("fadeIn")
+  // } else {
+  //   document.getElementById("cartContainer").classList.add("fadeOut")
+  //   document.getElementById("cartContainer").classList.remove("fadeIn")
+
+  // }
+})
+document.addEventListener("click",(e)=>{
+  let arr= e.target.classList
+  if(Array.from(arr).includes("shopping-cart-header") ||
+   Array.from(arr).includes("shopping-cart") || 
+   Array.from(arr).includes("btn-danger")  || 
+   Array.from(arr).includes("shopping-cart-items")||
+   Array.from(arr).includes("cartDrop")||
+   Array.from(arr).includes("shopping-cart-total")||
+   Array.from(arr).includes("priceTotal")||
+   Array.from(arr).includes("goCart")||
+   Array.from(arr).includes("lighter-text")||
+   Array.from(arr).includes("icondrop")){
+  
+   } else{
+    document.getElementById("cartContainer").classList.add("fadeOut")
+    document.getElementById("cartContainer").classList.remove("fadeIn")
+   }
+})
+let showDog = false

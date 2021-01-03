@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+{% load static %}
+{% block categories %}cat_menu none
+{% endblock categories %}
+{% load poll_extras %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Subtotal</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in cartdrop.items  %}
+                                <tr>
+                                    <th scope="row"><img src="{% get_media_prefix %}{{value.image}}" alt="" width="70px"></th>
+                                    <td><h6>{{value.name}}</h6>
+                                       
+                                        
+                                    </td>
+                                    <td>S./{{value.price}}</td>
+                                    <td>
+                                            <input type="number" id="typeNumber" class="form-control" value="{{value.quantity}}" />
+                                    </td>
+                                    <td>S./234</td>
+                                </tr>
+                                {% endfor %}
+                             
+                               
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-4">
+                        <table class="table table-bordered ">
+                            <thead class="table-dark"></thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Subtotal</th>
+                                    <td>S./ 369</td>
+                                </tr>
+                                <tr>
+                                    <td>Costo de envio</td>
+                                    <td>S/. 20</td>
+                                </tr>
+                                <tr>
+                                    <td>Descuento</td>
+                                    <td>S./0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>S./. 1000.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> <button class="btn indigo btn-primary btn-block">CheckOut</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
