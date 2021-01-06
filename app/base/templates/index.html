@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/datatables.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -188,13 +190,21 @@
               </div> {% endcomment %}
 
               <!-- Cart -->
-              {% with total_items=cart|length %}
 
               <div class="cart">
                 <div class="cartEnter cart_container d-flex flex-row align-items-center justify-content-end">
                   <div class="cart_icon">
                     <img src="{% static 'icons/carrito.png'%}" id="carrIconNav">
+
+                  {% if request.user %}
+                  <div class="cart_count indigo darken-1"><span id="cartCount">{{amount}}</span></div>
+                  {%else%}
+                    {% with total_items=cart|length %}
                     <div class="cart_count indigo darken-1"><span id="cartCount">{{ total_items }} </span></div>
+                    {% endwith %}
+                  {% endif %} 
+                               
+
                   </div>
                   <div class="cart_content">
                     <div class="cart_text"><a href="#" id="openDropdownCart" class="cartDrop">Mi carrito</a></div>
@@ -246,7 +256,6 @@
                 <!--end shopping-cart -->
               </div>
               <!--end container -->
-              {% endwith %}
             </div>
           </div>
         </div>
@@ -961,6 +970,8 @@
 <script src="{% static 'js/select2.min.js' %}"></script>
 <script src="{% static 'js/imgloading.min.js' %}"></script>
 <script src="{% static 'js/productList.js' %}"></script>
+<script src="{% static 'js/datatables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script text="text/javascript">

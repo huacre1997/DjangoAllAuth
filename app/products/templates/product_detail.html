@@ -165,10 +165,12 @@
 
 
                             </dl>
-
-                            <a href="#" class="btn indigo carrbutton"> <img src="{% static 'icons/recibo.png'%}"
-                                    class="carrIconButton   ">&nbsp;&nbsp;Cotizar</a>
-
+                                <input type="hidden" value="{{object.id}}" id="productId">
+                                <input type="number" id="quantity">
+                               <button data-url="{% url 'cart:add_cart' %}" id="btnCart" onclick="javascript:addCartAuth()" class="btn indigo carrbutton" id="AddCart"> <img src="{% static 'icons/recibo.png'%}"
+                                       class="carrIconButton">&nbsp;&nbsp;Agregar al carrito</button>
+   
+                           
                         </div>
                     </div>
                     <!-- /Product details -->

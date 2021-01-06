@@ -14,8 +14,9 @@ urlpatterns = [
 
     path('categorias/<slug:categoria>/', byCategory.as_view(), name="byCategory"),
     path('categorias/<slug:categoria>/<slug:slug>/', ProductDetailView.as_view(), name="product_detail_category"),
+    path('productos/',ProductList.as_view(), name="getProducList"),
 
-    path('productos/', cache_page(60 * 15)(ProductList.as_view()), name="getProducList"),
+    # path('productos/', cache_page(60 * 15)(ProductList.as_view()), name="getProducList"),
     path('productos/search/<int:pk>', getProduct, name="getProductDetail"),
     path('productos/search', Search.as_view(), name="search"),
 

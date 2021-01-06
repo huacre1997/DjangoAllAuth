@@ -44,11 +44,10 @@ class ProductDetailView(DetailView):
             row = cursor.fetchall()       
         for i in row:
             data.append(i[1])
-            print(data)
+
         for k,i in enumerate(data):
             print(k,i)
             total+=i*(k+1)
-        print(total)      
 
         from functools import reduce
         staravg=0

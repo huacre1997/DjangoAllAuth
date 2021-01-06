@@ -10,37 +10,46 @@
             <div class="card-title">
                 <div class="row">
                     <div class="col-lg-8">
-                        <table class="table">
+                        <div class="row">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-5">
+                                <div>Descripción</div>
+                                
+                            </div>
+                            <div class="col-lg-2">Precio</div>
+                            <div class="col-lg-1">Cant.</div>
+                            <div class="col-lg-2">SubTotal</div>
+                        </div>
+                        <div class="row">
+                            {% for i in object  %}
+                            <div class="col-lg-2"><img src="{{i.image}}" width="60px" height="60px" alt=""></div>
+                            <div class="col-lg-5">
+                                <div>{{i.product}}</div>
+                                <div>{{i.marca}}</div>
+                            </div>
+                            <div class="col-lg-2">S/.{{i.price}}</div>
+                            <div class="col-lg-1">{{i.quantity}}</div>
+                            <div class="col-lg-2">S/.{{i.amount}}</div>
+                            {% endfor %}
+                        </div>
+                        {% comment %} <table id="Cart" class="table table-striped table-bordered" style="width:100%">
                             <thead>
-                                <tr>
-                                    <th scope="col">Imagen</th>
-                                    <th scope="col">Producto</th>
-                                    <th scope="col">Precio</th>
-                                    <th scope="col">Cantidad</th>
-                                    <th scope="col">Subtotal</th>
 
-                                </tr>
+                                <th scope="col">Imagen</th>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Subtotal</th>
+
+
                             </thead>
                             <tbody>
-                                {% for key, value in cartdrop.items  %}
-                                <tr>
-                                    <th scope="row"><img src="{% get_media_prefix %}{{value.image}}" alt="" width="70px"></th>
-                                    <td><h6>{{value.name}}</h6>
-                                       
-                                        
-                                    </td>
-                                    <td>S./{{value.price}}</td>
-                                    <td>
-                                            <input type="number" id="typeNumber" class="form-control" value="{{value.quantity}}" />
-                                    </td>
-                                    <td>S./234</td>
-                                </tr>
-                                {% endfor %}
-                             
-                               
+
+
+
 
                             </tbody>
-                        </table>
+                        </table> {% endcomment %}
                     </div>
                     <div class="col-lg-4">
                         <table class="table table-bordered ">
@@ -75,3 +84,52 @@
     </div>
 </div>
 {% endblock content %}
+{% block js_page %}
+<script>
+    $(document).ready(function () {
+        $('#Cart').DataTable({
+            "lengthMenu": [
+                [5, 10, 25, 50, -1],
+                [5, 10, 25, 50, "All"]
+            ],
+
+            responsive: true,
+            ajax: {
+                url: "{% url 'cart:cart' %}",
+                type: "POST",
+                dataSrc: ""
+            },
+
+            columns: [{
+                    "data": 'image',
+                    className: "text-center middle",
+                },
+                {
+                    "data": 'name',
+                    className: "middle"
+                },
+                {
+                    "data": 'price',
+                    className: "middle"
+                },
+                {
+                    "data": 'quantity',
+                    className: "middle"
+                },
+
+                {
+                    "data": 'stock',
+                    className: "middle"
+
+                },
+
+
+
+
+
+
+            ],
+        });
+    });
+</script>
+{% endblock js_page %}

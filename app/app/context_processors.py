@@ -5,10 +5,16 @@ from cart.cart import Cart
 def marcas(request):
 
     from products.models import Marcas
+    from cart.models import Cart
     marca=Marcas.objects.only("id","name","slug").annotate(marca_count=Count('marca_id'))
-    print()
 
-    return {'marca':marca,"cart":Cart(request),"cartdrop":request.session.get("cart")}
+    if request.user:
+        amount=Cart.objects.amount(request.user)
+    else:
+        amount=request.session.get("cart")
+
+
+    return {'marca':marca,"amount":amount}
 
 
 def category(request):
