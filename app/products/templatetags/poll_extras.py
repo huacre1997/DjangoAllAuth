@@ -30,7 +30,8 @@ def priceSeparate(val,arg):
             return toArr[1]
     return ""
 
-
+def multiplicacion(val,quantity,*args,**kwargs):
+    return val*quantity
 # @register.filter
 # def get_item(dictionary, key):
   
@@ -57,6 +58,7 @@ def chunks(value, chunk_length):
 register.filter('url', to_url)
 register.filter('priceSeparate', priceSeparate)
 register.filter('multiply', multiply)
+register.filter('multiplicacion', multiplicacion)
 
 register.filter('to_str', to_str)
 register.filter('type_of', type_of)

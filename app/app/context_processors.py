@@ -5,16 +5,20 @@ from cart.cart import Cart
 def marcas(request):
 
     from products.models import Marcas
-    from cart.models import Cart
+    from cart.models import Cart as CartModel
     marca=Marcas.objects.only("id","name","slug").annotate(marca_count=Count('marca_id'))
 
-    if request.user:
-        amount=Cart.objects.amount(request.user)
-    else:
-        amount=request.session.get("cart")
+    if request.user.is_authenticated:
+        amount=CartModel.objects.only("quantity").get(user_id=request.user.id)
+        
+        return {'marca':marca,"amount":amount.quantity}
+    # else:
+    #     print("else")
+    #     cart=
+    # return {'marca':marca,"cart":Cart(request)}
 
 
-    return {'marca':marca,"amount":amount}
+   
 
 
 def category(request):

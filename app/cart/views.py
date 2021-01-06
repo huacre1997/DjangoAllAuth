@@ -3,21 +3,22 @@ from django.http import JsonResponse
 import json
 from django.shortcuts import render, redirect, get_object_or_404 
 from django.views.decorators.http import require_POST 
-from .cart import Cart 
+from .cart import Cart as ObjCart
 from products.models import Product
 from django.apps import apps
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from .models import Cart
+from .models import Cart ,CartItem
 from django.core import serializers
 from django.views.decorators.cache import never_cache
 @never_cache
 def CartView(request):
     
-    data=Cart.objects.prefetch_related("product").filter(user_id=request.user)
-    context={"object":data}    
+    cart=Cart.objects.get(user=request.user.id)
+    data=CartItem.objects.values("product__image","product__name","product__marca__name","product__price","count").filter(cart=cart.id)
+    context={"object":data,"cartTotal":cart.total}    
 
     return render(request,"cartList.html",context)
 # class CartView(TemplateView):
@@ -54,31 +55,52 @@ def CartView(request):
 
         # response = serializers.serialize("json", data)
         # return JsonResponse(data, safe=False)
-def cart_add(request):  
+def cart_add(request):
+    data=[]
+    post = json.loads(request.body.decode("utf-8"))
+    print(post)
+
     model = apps.get_model('products', 'Product')
     if request.user.is_authenticated:
         # idp=Product.objects.get(slug=request.POST.get["id"])
         if request.method=="POST": 
-            post = json.loads(request.body.decode("utf-8"))
+            p,cre=Cart.objects.get_or_create(user_id=request.user.id)
+            if cre:
+                
+                   
+                item= CartItem()
+                item.cart=p   
+                item.count=int(post["quantity"])
+                item.product_id=post["id"]
+                item.save()
+               
+            else:
+                print("else")
+                # prod=CartItem.objects.get(product_id=int(post["id"]))
+                # if prod:
+                #     print("elses")
+                #     print(prod.count)
+                # else:
+                #     print("else")
+                # item= CartItem()
+                # item.cart=p  
+                # item.count=int(post["quantity"])
+                # item.product_id=post["id"]
+                # item.save()
+            return JsonResponse({"quantity":""},safe=False) 
 
-            data= Cart()
-            data.user=request.user
-            data.quantity=post["quantity"]
-            data.product_id=post["id"]
-            data.save()
-            amount=Cart.objects.amount(request.user)
-            return JsonResponse({"quantity":amount},safe=False) 
-
-    else:
-        if request.method=="POST": 
-            data=[]
-            cart = Cart(request)    
-            product = get_object_or_404(model, id=id) 
-            cart.add(product=product,quantity=1,override_quantity=False) 
-            context={"total":cart.get_total_price(),
-            "cantidad":cart.__len__(),
-            "data":cart.__dict__["cart"]}
-            return JsonResponse(context,safe=False) 
+    # else:
+    #     post = json.loads(request.body.decode("utf-8"))
+    #     if request.method=="POST": 
+    #         data=[]
+    #         cart = Cart(request)    
+    #         product = get_object_or_404(model, id=id) 
+    #         cart.add(product=product,quantity=1,override_quantity=False) 
+    #         context={"total":cart.get_total_price(),
+    #         "cantidad":cart.__len__(),
+    #         "data":cart.__dict__["cart"]}
+    #         print(cart.__dict__["cart"])
+    #         return JsonResponse(context,safe=False) 
 def removeCart(request):  
     if request.user.is_authenticated():
         print("is")

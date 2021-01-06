@@ -52,6 +52,8 @@
         background: #007aff;
     }
 </style>
+{% with totalComment=comment.count %}
+
 <div class="section aeaman" id="loadDetail">
 
     <!-- container -->
@@ -124,7 +126,7 @@
                                 </div>
                             </div>
 
-                            <a class="review-link" href="#">{{ comment.count }} calificaciones </a>| <a
+                            <a class="review-link" href="#">{{ totalComment }} calificaciones </a>| <a
                                 class="text-primary" id="openModal">
                                 Agregar
                                 opinion</a>
@@ -212,7 +214,7 @@
                                         <line x1="12" y1="17" x2="12" y2="17"></line>
                                     </svg>
                                     Calificaciones
-                                        ({{ comment.count }})
+                                        ({{ totalComment }})
                                 </span>
                             </label>
                             <div class='tab-2 page'>
@@ -292,7 +294,7 @@
                                                                                         class="d-flex align-items-center">
                                                                                         <h6
                                                                                             class="comment-name by-author">
-                                                                                            {{i.author.first_name}}</h6>
+                                                                                            {{i.author__first_name}}</h6>
                                                                                         <span>|
                                                                                             {{i.created_date|date:'N d,Y H:i A'}}
                                                                                         </span>
@@ -456,6 +458,7 @@
         <!-- /row -->
     </div>
 
+    {% endwith %}
 
 
 

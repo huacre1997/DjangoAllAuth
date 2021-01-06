@@ -31,7 +31,9 @@ class ProductDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs) :
  
         return super().dispatch(request, *args, **kwargs)
-    
+    def get_queryset(self):
+        queryset=Product.objects.select_related("category").all()
+        return queryset
     def get_context_data(self, **kwargs):
         data=[]
         total=0
@@ -42,13 +44,10 @@ class ProductDetailView(DetailView):
         with connection.cursor() as cursor:
             cursor.execute("select * from getRating("+str(self.object.id)+") order by num")
             row = cursor.fetchall()       
-        for i in row:
-            data.append(i[1])
-
+        [ data.append(i[1]) for i in row]
+           
         for k,i in enumerate(data):
-            print(k,i)
             total+=i*(k+1)
-
         from functools import reduce
         staravg=0
         suma=reduce((lambda a,b: a+b),data) 
@@ -66,7 +65,7 @@ class ProductDetailView(DetailView):
         #     page_obj = post.page( self.request.GET.get('page'))  
         # else:
         #     page_obj = post.page(1)
-        context["comment"]=Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse()
+        context["comment"]=Comment.objects.values("author__first_name","comment","created_date","rate").filter(product_id=self.object.id).order_by("created_date").reverse()
         return context
     def post(self, request, *args, **kwargs):
         if self.request.POST["paramSend"]=="next":

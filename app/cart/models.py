@@ -4,26 +4,22 @@ from django.apps import apps
 
 from products.models import Product
 
-class CartManager(models.Manager):
-    
-    def amount(self,user):
-        total=0
-        d= self.get_queryset().filter(user=user)
-  
-        for i in d:
-            total+=i.quantity
-        return total
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils.datetime_safe import datetime
 class Cart(models.Model):
-    user        = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,null=True)
+    quantity = models.PositiveIntegerField(default=0)
+    total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+ 
+class CartItem(models.Model):
     product     = models.ForeignKey(Product,on_delete=models.SET_NULL,null=True)
-    quantity    = models.IntegerField()
+    count    = models.PositiveIntegerField()
     updated     = models.DateTimeField(auto_now=True)
     created   = models.DateTimeField(auto_now_add=True)
-    objects=CartManager()
+    cart = models.ForeignKey(Cart, null=True, on_delete=models.CASCADE)
 
-    @property
-    def brand(self):
-        return self.product.marca
+   
     @property
     def price(self):
         return self.product.price
@@ -31,12 +27,16 @@ class Cart(models.Model):
     def image(self):
         return self.product.image.url
     def total(self):
-        return self.quantity*self.product.price
-   
-      
-    def total(self,user):
-        total=0
-        d=self.objects.filter(user=user)
-        for i in d:
-            total+=i.quantity*i.product.price
-        return total
+        return self.count*self.product.price
+from decimal import Decimal
+@receiver(post_save, sender=CartItem)
+def update_cart(sender, instance, **kwargs):
+    print(instance.count)
+    print(instance.product.price)
+
+    line_cost = instance.count * instance.product.price
+    instance.cart.total = Decimal(instance.cart.total) + line_cost
+
+    instance.cart.quantity += instance.count
+    instance.updated = datetime.now()
+    instance.cart.save()
