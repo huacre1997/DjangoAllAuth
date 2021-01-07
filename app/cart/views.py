@@ -55,28 +55,67 @@ def CartView(request):
 
         # response = serializers.serialize("json", data)
         # return JsonResponse(data, safe=False)
+from django.core.exceptions import ObjectDoesNotExist
 def cart_add(request):
     data=[]
     post = json.loads(request.body.decode("utf-8"))
     print(post)
+    import datetime
 
     model = apps.get_model('products', 'Product')
     if request.user.is_authenticated:
         # idp=Product.objects.get(slug=request.POST.get["id"])
         if request.method=="POST": 
-            p,cre=Cart.objects.get_or_create(user_id=request.user.id)
+         
+            cre=Cart.objects.get(user_id=request.user.id)
+
             if cre:
+                try:
+                    print("aea")
+                    p=CartItem.objects.get(cart_id=cre.id)
+                    if p.product_id==post["id"]:
+                        p.updated=datetime.datetime.now()
+                        print(p.count)
+                        p.count=p.count+int(post["quantity"])
+                        print(p.count)
+
+                        p.save()
+                    else
+                except ObjectDoesNotExist:
+                    print("dno ecise")
+                    item= CartItem()
+                    item.cart_id=cre.id   
+                    item.count=int(post["quantity"])
+                    item.product_id=post["id"]
+                    item.save()
+
+                # if p.product_id==post["id"]:
+                #     p.updated=datetime.datetime.now()
+                #     print(p.count)
+                #     p.count=p.count+int(post["quantity"])
+                #     print(p.count)
+
+                #     p.save()
+                # prod=CartItem()
+                # prod.cart_id=cre.id
+                # prod.count=int(post["quantity"])
+                # prod.product_id=post["id"]
+                # prod.save()
+                # if prod.count()!=0:
+                    
+                #     prod.quantity=prod.first().count+int(post["quantity"])
+                #     prod.save()
+                # else:
+                #     print("nO SON IGALES")
+                #     item= CartItem()
+                #     item.cart_id=cre.id   
+                #     item.count=int(post["quantity"])
+                #     item.product_id=post["id"]
+                #     item.save()
                 
-                   
-                item= CartItem()
-                item.cart=p   
-                item.count=int(post["quantity"])
-                item.product_id=post["id"]
-                item.save()
-               
             else:
                 print("else")
-                # prod=CartItem.objects.get(product_id=int(post["id"]))
+             
                 # if prod:
                 #     print("elses")
                 #     print(prod.count)
@@ -87,7 +126,7 @@ def cart_add(request):
                 # item.count=int(post["quantity"])
                 # item.product_id=post["id"]
                 # item.save()
-            return JsonResponse({"quantity":""},safe=False) 
+            return JsonResponse({"quantity":cre.quantity},safe=False) 
 
     # else:
     #     post = json.loads(request.body.decode("utf-8"))

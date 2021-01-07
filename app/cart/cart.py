@@ -19,7 +19,6 @@ class Cart(object):
             print("if product_id not in self.cart")            
             self.cart[product_id] = {'quantity': 0,'price': str(product.price),"image":str(product.image),"name":str(product.name)}        
         if override_quantity:  
-            print("override_quantity")            
           
             self.cart[product_id]['quantity'] = quantity        
         else:   

@@ -31,9 +31,8 @@ class CartItem(models.Model):
 from decimal import Decimal
 @receiver(post_save, sender=CartItem)
 def update_cart(sender, instance, **kwargs):
-    print(instance.count)
-    print(instance.product.price)
-
+ 
+    instance.cart.quantity=0
     line_cost = instance.count * instance.product.price
     instance.cart.total = Decimal(instance.cart.total) + line_cost
 
