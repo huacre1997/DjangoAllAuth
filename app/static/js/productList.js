@@ -193,8 +193,7 @@ let showDog = false
 function addCartAuth(e){
       id=parseInt(document.getElementById("productId").value)
       quantity=document.getElementById("quantity").value
-      console.log(id)
-      console.log(quantity)
+     
       let data={id,quantity}
       url=document.getElementById("btnCart").dataset.url
      fetch(url, {
@@ -205,6 +204,6 @@ function addCartAuth(e){
         },body:  JSON.stringify(data)}).then(data=>data.json()).then((response)=>
           {
             console.log(response)
-            document.getElementById("cartCount").innerHTML=response.quantity
+            document.getElementById("cartCount").innerHTML=response.quantity+parseInt(quantity)
           })
   }
