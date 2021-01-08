@@ -8,5 +8,6 @@ urlpatterns = [
 
     path('carrito/', CartView, name="cart"),
     path('carrito/remove', removeCart, name="clean_cart"),
+    path('carrito/update', updateCart, name="update_cart"),
 
 ] 

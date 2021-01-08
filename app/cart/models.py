@@ -4,7 +4,7 @@ from django.apps import apps
 
 from products.models import Product
 
-from django.db.models.signals import post_save,pre_save
+from django.db.models.signals import post_save,pre_save,post_delete
 from django.dispatch import receiver
 from django.utils.datetime_safe import datetime
 class Cart(models.Model):
@@ -31,23 +31,27 @@ from decimal import Decimal
 
 @receiver(post_save, sender=CartItem)
 def update_cart(sender, instance, **kwargs):
-    if not instance._state.adding:
-        print ('this is an update')
+   
+    if kwargs["created"]:
+        print("creato")
     else:
-        print ('this is an insert')
-    if not kwargs["created"]:
-        print("no created")
-        count=instance.count-instance.cart.quantity
-        line_cost = (instance.count-instance.cart.quantity) * instance.product.price
-        
-    else:    
-        print("creted")   
-        count=instance.count
-
-        line_cost = instance.count * instance.product.price
+        print("update")
+    line_cost = instance.count * instance.product.price
     instance.cart.total = Decimal(instance.cart.total) + line_cost
 
-    instance.cart.quantity += count
+    instance.cart.quantity += instance.count
     instance.updated = datetime.now()
+
+    instance.cart.save()
+
+@receiver(post_delete, sender=CartItem)
+def delete_cart(sender, instance, **kwargs):
+   
+
+    line_cost = instance.count * instance.product.price
+    instance.cart.total = instance.cart.total- line_cost
+
+    instance.cart.quantity =instance.cart.quantity- instance.count
+  
 
     instance.cart.save()

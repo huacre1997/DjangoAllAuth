@@ -193,9 +193,10 @@ let showDog = false
 function addCartAuth(e){
       id=parseInt(document.getElementById("productId").value)
       quantity=document.getElementById("quantity").value
-     
+      document.getElementById("AddCart").disabled = true
+
       let data={id,quantity}
-      url=document.getElementById("btnCart").dataset.url
+      url=document.getElementById("AddCart").dataset.url
      fetch(url, {
         method: "POST",
         headers: {
@@ -204,6 +205,11 @@ function addCartAuth(e){
         },body:  JSON.stringify(data)}).then(data=>data.json()).then((response)=>
           {
             console.log(response)
+
+            document.getElementById("quantity").value=""
             document.getElementById("cartCount").innerHTML=response.quantity+parseInt(quantity)
+            document.getElementById("AddCart").textContent = "Agregado"
+            document.getElementById("AddCart").disabled = false
+
           })
   }

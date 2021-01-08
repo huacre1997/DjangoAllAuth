@@ -178,13 +178,12 @@ var showDog = false;
 function addCartAuth(e) {
   id = parseInt(document.getElementById("productId").value);
   quantity = document.getElementById("quantity").value;
-  console.log(id);
-  console.log(quantity);
+  document.getElementById("AddCart").disabled = true;
   var data = {
     id: id,
     quantity: quantity
   };
-  url = document.getElementById("btnCart").dataset.url;
+  url = document.getElementById("AddCart").dataset.url;
   fetch(url, {
     method: "POST",
     headers: {
@@ -195,6 +194,10 @@ function addCartAuth(e) {
   }).then(function (data) {
     return data.json();
   }).then(function (response) {
-    document.getElementById("cartCount").innerHTML = response.quantity;
+    console.log(response);
+    document.getElementById("quantity").value = "";
+    document.getElementById("cartCount").innerHTML = response.quantity + parseInt(quantity);
+    document.getElementById("AddCart").textContent = "Agregado";
+    document.getElementById("AddCart").disabled = false;
   });
 }

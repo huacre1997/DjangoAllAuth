@@ -7,130 +7,103 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <div class="card-title">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="row">
-                            <div class="col-lg-2"></div>
-                            <div class="col-lg-5">
-                                <div>Descripción</div>
-                                {% load poll_extras %}
- 
-                            </div>
-                            <div class="col-lg-2">Precio</div>
-                            <div class="col-lg-1">Cant.</div>
-                            <div class="col-lg-2">SubTotal</div>
+            <h2 class="card-title">Mi Carrito</h2>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-7">
+
+                            {% load poll_extras %}
+
+
                         </div>
-                        <div class="row">
-                            {% for i in object  %}
-                            <div class="col-lg-2"><img src="{% get_media_prefix %}{{i.product__image}}" width="60px" height="60px" alt=""></div>
-                            <div class="col-lg-5">
-                                <div>{{i.product__name}}</div>
-                                <div>{{i.product__marca__name}}</div>
+                        <div class="col-lg-2">Precio</div>
+
+                    </div>
+                    <hr>
+                    <div id="idContentCart"></div>
+                        {% if object %}
+
+                        {% for i in object  %}
+                        <div class="row cartItem">
+
+                        <div class="col-lg-3 col-md-3"><img src="{% get_media_prefix %}{{i.product__image}}" width="120px"
+                                height="120px" alt=""></div>
+                        <div class="col-lg-7 col-md-7">
+                            <p class="h5">{{i.product__name}}</p>
+
+                            <div>{{i.product__marca__name}}</div>
+                            <div style="display: grid;grid-template-columns: repeat(2,1fr);" class="groupInput">
+                                <input type="hidden" name="cartItem" id="item_{{i.product}}">
+
+                                <div class="d-flex align-items-center">
+                                    <p>Cantidad:</p><select name="" class="SelectCartCount" data-url="{% url 'cart:update_cart' %}">
+                                        <option id="SelectCartCount" value="0">0 (Eliminar)</option>
+
+                                        <option value="1" {% if i.count == 1 %}selected{% endif %}>1</option>
+                                        <option value="2" {% if i.count == 2 %}selected{% endif %}>2</option>
+                                        <option value="3" {% if i.count == 3 %}selected{% endif %}>3</option>
+                                        <option value="4" {% if i.count == 4 %}selected{% endif %}>4</option>
+                                        <option value="5" {% if i.count == 5 %}selected{% endif %}>5</option>
+                                        <option value="6" {% if i.count == 6 %}selected{% endif %}>6</option>
+                                        <option value="7" {% if i.count == 7 %}selected{% endif %}>7</option>
+                                        <option value="8" {% if i.count == 8 %}selected{% endif %}>8</option>
+                                        <option value="9" {% if i.count == 9 %}selected{% endif %}>9</option>
+
+                                    </select>
+                                </div>
+
+                                <div><button type="button" data-url="{% url 'cart:clean_cart' %}"
+                                        class="btn btn-danger btn-rounded removeItemCart">Eliminar</button>
+                                </div>
                             </div>
-                            <div class="col-lg-2">S/.{{i.product__price}}</div>
-                            <div class="col-lg-1">{{i.count}}</div>
-                            <div class="col-lg-2">S/.{{ i.product__price | multiplicacion:i.count }}</div>
-                            {% endfor %}
+
                         </div>
-                        {% comment %} <table id="Cart" class="table table-striped table-bordered" style="width:100%">
-                            <thead>
-
-                                <th scope="col">Imagen</th>
-                                <th scope="col">Producto</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Cantidad</th>
-                                <th scope="col">Subtotal</th>
-
-
-                            </thead>
-                            <tbody>
-
-
-
-
-                            </tbody>
-                        </table> {% endcomment %}
+                      
+                        <div class="col-lg-2 col-md-2">
+                            <p class="h5"> S/.{{i.product__price}}</p>
+                          
+                        </div>
+                        <hr>
                     </div>
-                    <div class="col-lg-4">
-                        <table class="table table-bordered ">
-                            <thead class="table-dark"></thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Subtotal</th>
-                                    <td>S./ {{cartTotal}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Costo de envio</td>
-                                    <td>S/. 20</td>
-                                </tr>
-                                <tr>
-                                    <td>Descuento</td>
-                                    <td>S./0.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                    <td>S./. 1000.00</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"> <button class="btn indigo btn-primary btn-block">CheckOut</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                        {% endfor %}
+                        {% else %}
+                        <div class="row">
+                            <div class="col-lg-12"><p class="note note-light">
+                                <strong>Nota:</strong> Aún no ha agregado productos a su carrito
+                              </p></div>
+                        </div>
+                      
+                        {% endif %}
+                        
+               
+                </div>
+                <div class="col-lg-4">
+                    <p class="h5"> Resumen</p>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <p id="abstractContent"> Subtotal ({{cartCount}} productos) :
+                            </p>
+                            <p class="h6" id="abstractTotalCart">S/.{{cartTotal}}</p>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <p> Descuento :
+                            </p>
+                            <p class="h6"> S/.0.00</p>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Total :
+                            <p class="h6"> S/.300,000.00</p>
+
+                        </li>
+                        <li><button class="btn indigo btn-primary btn-block">CheckOut</button></li>
+                    </ul>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock content %}
-{% block js_page %}
-<script>
-    $(document).ready(function () {
-        $('#Cart').DataTable({
-            "lengthMenu": [
-                [5, 10, 25, 50, -1],
-                [5, 10, 25, 50, "All"]
-            ],
-
-            responsive: true,
-            ajax: {
-                url: "{% url 'cart:cart' %}",
-                type: "POST",
-                dataSrc: ""
-            },
-
-            columns: [{
-                    "data": 'image',
-                    className: "text-center middle",
-                },
-                {
-                    "data": 'name',
-                    className: "middle"
-                },
-                {
-                    "data": 'price',
-                    className: "middle"
-                },
-                {
-                    "data": 'quantity',
-                    className: "middle"
-                },
-
-                {
-                    "data": 'stock',
-                    className: "middle"
-
-                },
-
-
-
-
-
-
-            ],
-        });
-    });
-</script>
-{% endblock js_page %}

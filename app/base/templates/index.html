@@ -5,14 +5,14 @@
   {% load static %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-  <title>{% block title %}Mery{% endblock title %}</title>
+  <title>{% block title %}TiendaMia{% endblock title %}</title>
   <meta property="og:title" content="{% block titlemeta %} {% endblock titlemeta %}">
   <meta name="description" property="og:description" content="{% block description %}{% endblock description %}">
   <meta property="og:url" content="www.electroniaperu.com{% block slug %}{% endblock slug %}">
   <link rel="stylesheet" href="{% static 'css/dist/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.min.css' %}">
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  {% comment %} <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> {% endcomment %}
 
   <link rel="stylesheet" href="{% static 'css/compiled.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/nouislider.min.css' %}">
@@ -133,7 +133,7 @@
           <!-- Logo -->
           <div class="col-lg-2 col-sm-3 col-3 order-1">
             <div class="logo_container">
-              <div class="logo "><a class=" text-black-50" href="{% url 'base:index' %}">Mery</a></div>
+              <div class="logo "><a class=" text-black-50" href="{% url 'base:index' %}">TiendaMia</a></div>
             </div>
           </div>
 
@@ -952,6 +952,7 @@
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/mdb.min.js' %}"></script>
 <script src="{% static 'js/filter.js' %}"></script>
+<script src="{% static 'js/cart.js' %}"></script>
 
 
 <!-- <script type="text/javascript" src="{% static 'js/modules/wow.js' %}">

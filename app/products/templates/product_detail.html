@@ -105,14 +105,9 @@
                                 <img src="{% get_media_prefix %}{{i.image}}" style="width:80%">
                             </div>
                             {% endfor %}
-
-
-
                         </div>
                     </div>
                     <!-- /Product thumb imgs -->
-
-
                     <!-- Product details -->
                     <div class="col-md-6">
                         <div class="product-details">
@@ -134,22 +129,21 @@
                                 <h3 class="fw-bold">S/.{{object.price}} <del
                                         class="product-old-price text-secondary">S/.{{object.before}}</del></h3>
                                 {% if object.amount >= 20 %}
-                                <span class="badge badge-pill badge-success mb-4">Disponible</span>
+                                <span class="badge rounded-pill bg-success">Disponible</span>
                                 {%elif object.amount < 20 %}
-                                <span class="badge badge-pill badge-warning  mb-4">Disponible</span>
+                                <span class="badge rounded-pill bg-success">Disponible</span>
                                 {%elif object.amount < 10 %}
-                                <span class="badge badge-pill badge-danger  mb-4">No disponible</span>
-
+                                <span class="badge rounded-pill bg-danger">No disponible</span>
                                 {% endif %}
 
                             </div>
                             <dl class="row">
                                 <dt class="col-sm-3">SKU:</dt>
                                 <dd class="col-sm-9">{{object.sku}}</dd>
-
-
                                 <dt class="col-sm-3">Marca:</dt>
-                                <dd class="col-sm-9">{{object.marca}}</dd>
+                                <dd class="col-sm-9">
+                                    <a
+                                href="{% url 'products:byMarcas' object.marca|slugify %}">{{object.marca|title}}</a></dd>
                                 <dt class="col-sm-3">Modelo:</dt>
                                 <dd class="col-sm-9">{{object.modelo}}</dd>
                                 <dt class="col-sm-3">Categorías:</dt>
@@ -167,298 +161,306 @@
 
 
                             </dl>
-                                <input type="hidden" value="{{object.id}}" id="productId">
-                                <input type="number" id="quantity">
-                               <button data-url="{% url 'cart:add_cart' %}" id="btnCart" onclick="javascript:addCartAuth()" class="btn indigo carrbutton" id="AddCart"> <img src="{% static 'icons/recibo.png'%}"
-                                       class="carrIconButton">&nbsp;&nbsp;Agregar al carrito</button>
-   
-                           
+
+                            <input type="hidden" value="{{object.id}}" id="productId">
+
+
                         </div>
-                    </div>
-                    <!-- /Product details -->
-                </div> 
-                    <!-- Product tab -->
-                        <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,600,700&display=swap"
-                            rel="stylesheet">
-                         
-                        <div class="layout">
-                            <input class='hide' type="radio" id="tab-1" name="tractor" checked='checked'/>
-                            <label for="tab-1" class="nav labelTab">
-                                <span>
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                        class="css-i6dzq1">
-                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                    </svg>
-                                    Caracteristicas
-                                </span>
-                            </label>
-                            <div class='tab-1 page'>
-                                <div class="page-contents">
-                                    {% autoescape off %}
-                                    {{object.caracteristicas|safe}}
-                                    {% endautoescape %}
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="d-flex align-items-center">
+                                    <p>Cantidad:</p>
+                                    <select name="" id="quantity">
+
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3" >3</option>
+                                        <option value="4">4</option>
+                                        <option value="5" >5</option>
+                                        <option value="6" >6</option>
+                                        <option value="7">7</option>
+                                        <option value="8" >8</option>
+                                        <option value="9">9</option>
+
+                                    </select>
                                 </div>
+
                             </div>
-                           
-
-                            <input class='hide' type="radio" id="tab-2" name="tractor"/>
-                            <label for="tab-2" class="nav labelTab">
-                                <span>
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                        class="css-i6dzq1">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                                        <line x1="12" y1="17" x2="12" y2="17"></line>
-                                    </svg>
-                                    Calificaciones
-                                        ({{ totalComment }})
-                                </span>
-                            </label>
-                            <div class='tab-2 page'>
-                                <div class="page-contents">
-                                    <div class="row">
-                                        <!-- Rating -->
-                                        <div class="col-lg-3 col-md-4 col-sm-12">
-                                            <div id="rating">
-                                                <div class="rating-avg">
-                                                    <span class="mr-3">{{starsAvg}}</span>
-                                                    <div id="wrapper">
-                                                        <div class="star-rating">
-                                                            <span style="width:{{starsAvg|percent}}%"></span>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <ul>
-                                                    {% for i in starsCount %}
-
-                                                    <li class="d-flex justify-content-between">
-                                                        <div class="ratingTot">
-                                                            <input type="radio"
-                                                                {% if forloop.counter == 5  %}checked{% endif %}>
-                                                            <label></label>
-                                                            <input type="radio"
-                                                                {% if forloop.counter == 4  %}checked{% endif %}>
-                                                            <label for="rating-4"></label>
-                                                            <input type="radio"
-                                                                {% if forloop.counter == 3  %}checked{% endif %}>
-                                                            <label for="rating-3"></label>
-                                                            <input type="radio"
-                                                                {% if forloop.counter == 2  %}checked{% endif %}>
-                                                            <label for="rating-2"></label>
-                                                            <input type="radio"
-                                                                {% if forloop.counter == 1  %}checked{% endif %}>
-                                                            <label for="rating-1"></label>
-
-                                                        </div>
-
-                                                        <span class="sum"> {{i}} </span>
-
-                                                    </li>
-                                                    {% endfor %}
-
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- /Rating -->
-
-                                        <!-- Reviews -->
-                                        <div class="col-lg-9 col-md-8 col-sm-12">
-                                            <h4 class=" mb-4">Opiniones de nuestros clientes</h4>
-                                            <div id="reviews" class="comments-container">
-                                                {% if comment %}
-                                                <div id="comments-list" class="animated fadeIn fast mt-3"
-                                                    style="height: 500px;">
-                                                    <div class="swiper-container">
-                                                        <div class="swiper-wrapper">
-                                                            {% for chunk in comment|chunks:4 %}
-                                                            <div class="swiper-slide">
-                                                                <ul class="comments-list reviews">
-
-                                                                    {% for i in chunk %}
-
-                                                                    <li>
-                                                                        <div class="comment-main-level">
-                                                                            <!-- Avatar -->
-                                                                            <img class="crop-circle"
-                                                                                src="{% static 'img/account.png' %}"
-                                                                                width="28px" alt="user image">
-                                                                            <div class="comment-box">
-                                                                                <div
-                                                                                    class="comment-head d-flex justify-content-between align-items-center">
-                                                                                    <div
-                                                                                        class="d-flex align-items-center">
-                                                                                        <h6
-                                                                                            class="comment-name by-author">
-                                                                                            {{i.author__first_name}}</h6>
-                                                                                        <span>|
-                                                                                            {{i.created_date|date:'N d,Y H:i A'}}
-                                                                                        </span>
-                                                                                    </div>
-
-                                                                                 
-                                                                                </div>
-                                                                                <div class="comment-content d-flex">
-                                                                                    <div
-                                                                                    class="ratingPost d-flex align-items-center">
-                                                                                    <input type="radio"
-                                                                                        {% if i.rate == 1 %}checked{% endif %}>
-                                                                                    <label></label>
-                                                                                    <input type="radio"
-                                                                                        {% if i.rate == 2 %}checked{% endif %}>
-                                                                                    <label></label>
-                                                                                    <input type="radio"
-                                                                                        {% if i.rate == 3 %}checked{% endif %}>
-                                                                                    <label></label>
-                                                                                    <input type="radio"
-                                                                                        {% if i.rate == 4 %}checked{% endif %}>
-                                                                                    <label></label>
-                                                                                    <input type="radio"
-                                                                                        {% if i.rate == 5 %}checked{% endif %}>
-                                                                                    <label></label>
-
-                                                                                </div>  {{i.comment}}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    {% endfor %}
-                                                                </ul>
-                                                            </div>
-                                                            {% endfor %}
-                                                        </div>
-
-                                                        <div class="swiper-pagination" style="bottom: 40px !important;"></div>
-                                                    </div>
-
-                                                </div>
-                                                {% comment %} <div class="pagination">
-                                                    <span class="step-links d-flex pagination_comment">
-
-
-                                                        {% for i in comment.paginator  %}
-                                                        <li class="page-item page-item_comment {% if i.number == 1 %}
-                                                      active 
-                                                    {% endif %}">
-                                                            <a page_number="{{i.number}}"
-                                                                class="page-link ">{{i.number}}</a>
-                                                        </li>
-
-                                                        {% endfor %}
-
-
-                                                    </span>
-                                                </div> {% endcomment %}
-                                                {%else%}
-                                                <div class="card ">
-                                                    <div class="card-body">Aun no hay comentarios para este producto .
-                                                    </div>
-                                                </div>
-                                                {%endif%}
-
-
-                                            </div>
-                                        </div>
-                                        <!-- /Reviews -->
-
-                                        <!-- Review Form -->
-
-                                    </div>
-
-                                </div>
+                            <div class="col-9">
+                                
+                                <div class="btn-group" role="group">
+                                    <button type="button" data-url="{% url 'cart:add_cart' %}" onclick="javascript:addCartAuth()"
+                                        class="btn btn-primary carrbutton" id="AddCart"> <img
+                                            src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Agregar
+                                        al carrito</button>
+                                        <a href="{% url 'cart:cart' %}" role="button" class="btn btn-primary" data-mdb-color="dark">Ver carrito</a>
+                                      </div>
                             </div>
-                      
 
-                            <input class='hide' type="radio" id="tab-3" name="tractor"/>
-                            <label  for="tab-3"  class="nav labelTab">
-                                <span>
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                        class="css-i6dzq1">
-                                        <path
-                                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-                                        </path>
-                                    </svg>
-                                    Contact
-                                </span>
 
-                            </label>
-                            <div class='tab-3 page'>
-                                <div class="page-contents">
-                                    <h1>Contact</h1>
-                                    <p>Eaque accusamus magnam error unde nam, atque provident omnis fugiat quam
-                                        necessitatibus vel nulla sed quibusdam fuga veritatis assumenda alias quidem
-                                        asperiores?</p>
-                                    <p><a href="#">Get in touch</a></p>
-                                </div>
-                            </div>
-                           
                         </div>
-                    <!-- /product tab content  -->
 
-                    <div class="row">
-                        <div class="col-6"></div>
-                        <div class="col-6">
-                            <div id="review-form ">
-    
-                                <form class="review-form mt-3" id="commentForm"
-                                    action="{% url 'products:product_detail' object.slug %}">
-                                    {% csrf_token %}
-                                    <h3>Califica nuestro producto</h3>
-                                    <!-- <label class="form-label" for="form1">Tu nombre</label>
-            
-                                    <input type="text" id="form1" class="form-control" name="author" /> -->
-                                    <label class="form-label" for="textAreaExample">Escribe un
-                                        comentario</label>
-                                    <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
-            
-                                    <div class="input-rating">
-                                        <span>Tu puntuación: </span>
-            
-                                        <div class="container">
-                                            <div class="feedback">
-                                                <div class="rating">
-                                                    <input type="radio" name="rate" id="rating-5" value="5">
-                                                    <label for="rating-5"></label>
-                                                    <input type="radio" name="rate" id="rating-4" value="4">
-                                                    <label for="rating-4"></label>
-                                                    <input type="radio" name="rate" id="rating-3" value="3">
-                                                    <label for="rating-3"></label>
-                                                    <input type="radio" name="rate" id="rating-2" value="2">
-                                                    <label for="rating-2"></label>
-                                                    <input type="radio" name="rate" id="rating-1" value="1">
-                                                    <label for="rating-1"></label>
-            
-                                                </div>
-                                            </div>
-                                        </div>
-            
-                                    </div>
-                                    <input type="hidden" name="paramSend" value="">
-                                </form>
-            
-                            </div>
-                            <button  class="btn indigo btn-block " id="postComment" onclick="postComment()">Publicar</button>
-                        
-                        </div>
-    
+
+
                     </div>
                 </div>
-
-            
-
+                <div class="layout">
+                    <input class='hide' type="radio" id="tab-1" name="tractor" checked='checked' />
+                    <label for="tab-1" class="nav labelTab">
+                        <span>
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                                fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            Caracteristicas
+                        </span>
+                    </label>
+                    <div class='tab-1 page'>
+                        <div class="page-contents">
+                            {% autoescape off %}
+                            {{object.caracteristicas|safe}}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+    
+    
+                    <input class='hide' type="radio" id="tab-2" name="tractor" />
+                    <label for="tab-2" class="nav labelTab">
+                        <span>
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                                fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Calificaciones
+                            ({{ totalComment }})
+                        </span>
+                    </label>
+                    <div class='tab-2 page'>
+                        <div class="page-contents">
+                            <div class="row">
+                                <!-- Rating -->
+                                <div class="col-lg-3 col-md-4 col-sm-12">
+                                    <div id="rating">
+                                        <div class="rating-avg">
+                                            <span class="mr-3">{{starsAvg}}</span>
+                                            <div id="wrapper">
+                                                <div class="star-rating">
+                                                    <span style="width:{{starsAvg|percent}}%"></span>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul>
+                                            {% for i in starsCount %}
+    
+                                            <li class="d-flex justify-content-between">
+                                                <div class="ratingTot">
+                                                    <input type="radio" {% if forloop.counter == 5  %}checked{% endif %}>
+                                                    <label></label>
+                                                    <input type="radio" {% if forloop.counter == 4  %}checked{% endif %}>
+                                                    <label for="rating-4"></label>
+                                                    <input type="radio" {% if forloop.counter == 3  %}checked{% endif %}>
+                                                    <label for="rating-3"></label>
+                                                    <input type="radio" {% if forloop.counter == 2  %}checked{% endif %}>
+                                                    <label for="rating-2"></label>
+                                                    <input type="radio" {% if forloop.counter == 1  %}checked{% endif %}>
+                                                    <label for="rating-1"></label>
+    
+                                                </div>
+    
+                                                <span class="sum"> {{i}} </span>
+    
+                                            </li>
+                                            {% endfor %}
+    
+    
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /Rating -->
+    
+                                <!-- Reviews -->
+                                <div class="col-lg-9 col-md-8 col-sm-12">
+                                    <h4 class=" mb-4">Opiniones de nuestros clientes</h4>
+                                    <div id="reviews" class="comments-container">
+                                        {% if comment %}
+                                        <div id="comments-list" class="animated fadeIn fast mt-3" style="height: 500px;">
+                                            <div class="swiper-container">
+                                                <div class="swiper-wrapper">
+                                                    {% for chunk in comment|chunks:4 %}
+                                                    <div class="swiper-slide">
+                                                        <ul class="comments-list reviews">
+    
+                                                            {% for i in chunk %}
+    
+                                                            <li>
+                                                                <div class="comment-main-level">
+                                                                    <!-- Avatar -->
+                                                                    <img class="crop-circle"
+                                                                        src="{% static 'img/account.png' %}" width="28px"
+                                                                        alt="user image">
+                                                                    <div class="comment-box">
+                                                                        <div
+                                                                            class="comment-head d-flex justify-content-between align-items-center">
+                                                                            <div class="d-flex align-items-center">
+                                                                                <h6 class="comment-name by-author">
+                                                                                    {{i.author__first_name}}</h6>
+                                                                                <span>|
+                                                                                    {{i.created_date|date:'N d,Y H:i A'}}
+                                                                                </span>
+                                                                            </div>
+    
+    
+                                                                        </div>
+                                                                        <div class="comment-content d-flex">
+                                                                            <div
+                                                                                class="ratingPost d-flex align-items-center">
+                                                                                <input type="radio"
+                                                                                    {% if i.rate == 1 %}checked{% endif %}>
+                                                                                <label></label>
+                                                                                <input type="radio"
+                                                                                    {% if i.rate == 2 %}checked{% endif %}>
+                                                                                <label></label>
+                                                                                <input type="radio"
+                                                                                    {% if i.rate == 3 %}checked{% endif %}>
+                                                                                <label></label>
+                                                                                <input type="radio"
+                                                                                    {% if i.rate == 4 %}checked{% endif %}>
+                                                                                <label></label>
+                                                                                <input type="radio"
+                                                                                    {% if i.rate == 5 %}checked{% endif %}>
+                                                                                <label></label>
+    
+                                                                            </div> {{i.comment}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+    
+                                                <div class="swiper-pagination" style="bottom: 40px !important;"></div>
+                                            </div>
+    
+                                        </div>
+                                   
+                                        {%else%}
+                                        <div class="card ">
+                                            <div class="card-body">Aun no hay comentarios para este producto .
+                                            </div>
+                                        </div>
+                                        {%endif%}
+    
+    
+                                    </div>
+                                </div>
+                                <!-- /Reviews -->
+    
+                                <!-- Review Form -->
+    
+                            </div>
+    
+                        </div>
+                    </div>
+    
+    
+                    <input class='hide' type="radio" id="tab-3" name="tractor" />
+                    <label for="tab-3" class="nav labelTab">
+                        <span>
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                                fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                <path
+                                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                                </path>
+                            </svg>
+                            Contact
+                        </span>
+    
+                    </label>
+                    <div class='tab-3 page'>
+                        <div class="page-contents">
+                            <h1>Contact</h1>
+                            <p>Eaque accusamus magnam error unde nam, atque provident omnis fugiat quam
+                                necessitatibus vel nulla sed quibusdam fuga veritatis assumenda alias quidem
+                                asperiores?</p>
+                            <p><a href="#">Get in touch</a></p>
+                        </div>
+                    </div>
+    
+                </div>
+                <!-- /product tab content  -->
+    
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6">
+                        <div id="review-form ">
+    
+                            <form class="review-form mt-3" id="commentForm"
+                                action="{% url 'products:product_detail' object.slug %}">
+                                {% csrf_token %}
+                                <h3>Califica nuestro producto</h3>
+                                <!-- <label class="form-label" for="form1">Tu nombre</label>
+                
+                                        <input type="text" id="form1" class="form-control" name="author" /> -->
+                                <label class="form-label" for="textAreaExample">Escribe un
+                                    comentario</label>
+                                <textarea class="form-control" id="textAreaExample" name="comment" rows="4"></textarea>
+    
+                                <div class="input-rating">
+                                    <span>Tu puntuación: </span>
+    
+                                    <div class="container">
+                                        <div class="feedback">
+                                            <div class="rating">
+                                                <input type="radio" name="rate" id="rating-5" value="5">
+                                                <label for="rating-5"></label>
+                                                <input type="radio" name="rate" id="rating-4" value="4">
+                                                <label for="rating-4"></label>
+                                                <input type="radio" name="rate" id="rating-3" value="3">
+                                                <label for="rating-3"></label>
+                                                <input type="radio" name="rate" id="rating-2" value="2">
+                                                <label for="rating-2"></label>
+                                                <input type="radio" name="rate" id="rating-1" value="1">
+                                                <label for="rating-1"></label>
+    
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                                <input type="hidden" name="paramSend" value="">
+                            </form>
+    
+                        </div>
+                        <button class="btn indigo btn-block " id="postComment" onclick="postComment()">Publicar</button>
+    
+                    </div>
+    
+                </div>
+                <!-- /Product details -->
             </div>
-            <!-- /product tab -->
+            <!-- Product tab -->
+            <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,600,700&display=swap" rel="stylesheet">
 
+         
         </div>
-        <!-- /row -->
-    </div>
 
-    {% endwith %}
+
+
+    </div>
+    <!-- /product tab -->
+
+</div>
+<!-- /row -->
+</div>
+
+{% endwith %}
 
 
 

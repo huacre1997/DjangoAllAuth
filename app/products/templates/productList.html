@@ -79,9 +79,9 @@
             {% load mptt_tags %}
             <div class="parentTree">
               {% recursetree category %}
-              <ul class="tree  d-flex justify-content-between align-items-center  flex-wrap  ">
+              <ul class="tree  d-flex  align-items-center  flex-wrap  ">
                 <div
-                  class="custom-control custom-checkbox d-flex justify-content-between align-items-center  flex-wrap w-100 ">
+                  class="custom-control custom-checkbox d-flex  align-items-center  flex-wrap w-100 ">
                   <!-- <i class="fa fa-angle-down mr-1"></i> 
             
                   class="catFilter">{{ node.name }} </a> -->
@@ -275,7 +275,7 @@
             </div>
             <div class="col-lg-4  col-sm-12">
 
-              <select class="cs-select cs-skin-elastic z-depth-1" name="order" id="select">
+              <select class="cs-select cs-skin-elastic shadow-1-strong" name="order" id="select">
                 <option value="all">Todos</option>
                 <option value="priceLower" {% if request.GET.order == "priceLower" %} selected {%endif%}>Precio
                   menor a mayor</option>
@@ -381,7 +381,7 @@
                             <span style="width:{{entry.rating|percent}}%"></span>
                           </div>
                         </div>
-                        <span class="badge badge-pill badge-danger animated pulse infinite">Nuevo</span>
+                        <span class="badge  rounded-pill bg-danger animated pulse infinite">Nuevo</span>
 
                       </div>
 

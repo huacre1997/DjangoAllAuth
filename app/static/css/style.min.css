@@ -1366,6 +1366,35 @@ input[type="radio"]:checked +label.nav +  .page .page-contents > * {
 .labelTab:hover{
   background: lightgray;
 }
+@keyframes hide{
+  0%{
+    opacity: 1;
+    height: 137px;
+    line-height: 100%;
+
+  }
+  75%{
+    height: 137px;
+
+    opacity:0;
+    line-height: 100%;
+
+  }
+  100%{
+    opacity:0;
+    height: 0px;
+    line-height: 0px;
+    padding: 0px;
+    margin-bottom: 0px;
+  }
+}
+.cartItem{
+ 
+  animation-name: hide;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
+}
 @media only screen and (max-width: 500px) {
   .comments-container {
     width: 280px;
