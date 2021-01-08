@@ -36,6 +36,8 @@ def update_cart(sender, instance, **kwargs):
         print("creato")
     else:
         print("update")
+    if instance.count==0:
+        instance.delete()
     line_cost = instance.count * instance.product.price
     instance.cart.total = Decimal(instance.cart.total) + line_cost
 

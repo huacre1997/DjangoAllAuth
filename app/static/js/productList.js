@@ -204,7 +204,6 @@ function addCartAuth(e){
           "X-CSRFToken": csrftoken
         },body:  JSON.stringify(data)}).then(data=>data.json()).then((response)=>
           {
-            console.log(response)
 
             document.getElementById("quantity").value=""
             document.getElementById("cartCount").innerHTML=response.quantity+parseInt(quantity)

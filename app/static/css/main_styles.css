@@ -779,9 +779,14 @@ select option
 .main_nav
 {
 	width: 100%;
-	border-top: solid 1px #f2f2f2;
-	box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
+	border-top: solid 1px rgba(0,0,0,0.2);
+	border-bottom:  solid 1px rgba(0,0,0,0.2);
+	;
+	box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
 	background: #FFFFFF;
+}
+.borderModal{
+	border: solid 1px rgba(0,0,0,0.3);
 }
 .header.scrolled .main_nav
 {

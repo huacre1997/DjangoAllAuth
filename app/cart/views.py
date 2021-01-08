@@ -115,15 +115,12 @@ def cart_add(request):
 
 def removeCart(request):
     if request.method == "POST":
-
         if request.user.is_authenticated:
             post = json.loads(request.body.decode("utf-8"))
             cre = Cart.objects.get(user_id=request.user.id)
             p = CartItem.objects.get(product_id=post["converted"],cart_id=cre.id)
-            p.delete()
-            
+            p.delete()           
             return JsonResponse({"count":p.count,"quantity":cre.quantity,"total":cre.total-(p.count*p.product.price)},safe=False)
-
         else:
             cart = Cart(request)
             cart.clear()
@@ -135,21 +132,10 @@ def updateCart(request):
             post = json.loads(request.body.decode("utf-8"))
             cre = Cart.objects.get(user_id=request.user.id)
             p = CartItem.objects.get(product_id=post["converted"],cart_id=cre.id)
-            if int(post["newCount"])<p.count:
-                minusTotal=p.count-int(post["newCount"])
-                cre.total=cre.total-(p.product.price*p.count)
-                cre.quantity=cre.quantity-minusTotal
-                cre.save
-                p.count=int(post["newCount"])
-                p.updated = datetime.datetime.now()
-     
-                p.save()
-            else:
-                cre.total=cre.total-(p.product.price*p.count)
-                cre.quantity=cre.quantity-p.count
-                cre.save
-                p.count=int(post["newCount"])
-                p.updated = datetime.datetime.now()
-    
-              
-            return JsonResponse({"aea":post},safe=False)
+            cre.total=cre.total-(p.product.price*p.count)
+            cre.quantity=cre.quantity-p.count
+            cre.save()
+            p.count=int(post["newCount"])
+            p.updated = datetime.datetime.now()
+            p.save()
+            return JsonResponse({"quantity":cre.quantity+int(post["newCount"]),"total":cre.total+(p.count*p.product.price)},safe=False)
