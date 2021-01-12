@@ -1,6 +1,16 @@
 .grid{
     display: grid !important;
 }
+.grid-gap-1{
+    display: grid !important;
+    grid-gap:1em
+
+}
+.grid-gap-2{
+    display: grid !important;
+    grid-gap:2em
+
+}
 .g-col-3{
     grid-template-columns: repeat(3,1fr);
 }

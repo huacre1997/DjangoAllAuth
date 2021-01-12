@@ -141,7 +141,61 @@ $(function () {
     })
  
   })
-/*Dropdown Menu*/
+  document.getElementById("createAddress").addEventListener("click",e=>{
+    e.preventDefault()
+    let form=document.getElementById("formAddress")
+    let formData=new FormData(form)
+    console.log(formData);
+    fetch(form.getAttribute("action"), {
+      method: "POST",
 
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken
+      },
+      body: formData
+    }).then(data=>data.json()).then(response=>console.log(response))
+  })
+  selectProvince=document.getElementById("selectProvince")
+  selectDistrict=document.getElementById("selectDistrict")
+  selectDistrict.disabled=true
+  selectProvince.disabled=true
+  url=selectProvince.dataset.url 
+  fetch(url).then(data=>data.json()).then(response=>{
+    
+    selectProvince.disabled=false
 
+    for (let index = 0; index < response.length; index++) {
+      let option=document.createElement("option")
+      option.innerText=response[index].fields.name
+      option.setAttribute("value",response[index].pk)
+      selectProvince.appendChild(option)
+    }
+  })
+  selectProvince.addEventListener("change",function(e){
+    selectDistrict.disabled=true
+
+    let id=e.target.options[e.target.options.selectedIndex].attributes[0].value
+
+    let url=selectProvince.dataset.urldis
+    
+    fetch(url,{method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken
+    },body: JSON.stringify(id)}).then(data=>data.json()).then(response=>{
+      selectDistrict.innerHTML=""
+      selectDistrict.disabled=false
+      let selectfirst=document.createElement("option")
+      selectfirst.innerText="Seleccione ditrito..."
+      selectDistrict.appendChild(selectfirst)
+   
+      for (let index = 0; index < response.length; index++) {
+        let option=document.createElement("option")
+        option.innerText=response[index].fields.name
+        option.setAttribute("value",response[index].pk)
+        selectDistrict.appendChild(option)
+      }
+    })
+  })
 })

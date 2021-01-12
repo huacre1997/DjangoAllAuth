@@ -1,11 +1,17 @@
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialAccountSign
 
-from django import forms
+from django import forms as DjForm
 from django.forms import *
 from accounts.models import CustomCliente
+from .models import Adress, District, Province
 from allauth.socialaccount import forms
 from datetime import datetime
+class AdressForm(DjForm.Form):
+    class Meta:
+        model=Adress
+        fields=["description","refrences","district","province"]
+  
 class MyCustomSignupForm(SignupForm):
     
     first_name=CharField( max_length=20, required=True)

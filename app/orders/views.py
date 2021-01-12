@@ -8,3 +8,12 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.generic.base import TemplateView
+from accounts.models import District,Province
+
+class CheckOutView(TemplateView):
+    
+    template_name = "checkout.html"
+    def get_context_data(self, **kwargs):
+        context = super(CheckOutView, self).get_context_data(**kwargs)
+        return context

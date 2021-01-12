@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+{% block categories %}cat_menu none
+{% endblock categories %}
+{% block content %}
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h1>CHECKOUT</h1>
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <input type="text" id="form6Example1" class="form-control" value="{{request.user.first_name}}" />
+                  <label class="form-label" for="form6Example1">First name</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <input type="text" id="form6Example2" class="form-control" value="{{request.user.last_name}}" />
+                  <label class="form-label" for="form6Example2">Last name</label>
+                </div>
+              </div>
+            </div>
+            <!-- Text input -->
+
+            <div class="form-outline mb-4">
+              <input disabled type="email" id="form6Example5" class="form-control" value={{request.user.dni}} />
+              <label class="form-label" for="form6Example5">DNI</label>
+            </div>
+            <!-- Number input -->
+            <div class="form-outline mb-4">
+              <input disabled type="text" id="form6Example6" class="form-control" value={{request.user.celular}} />
+              <label class="form-label" for="form6Example6">Phone</label>
+            </div>
+            <!-- Submit button -->
+            <label class="form-label" for="form6Example6">Seleccionar dirección</label>
+
+            <!-- <div class="grid-gap-1 g-col-3 mb-4">
+              <div class="address-component">
+                <i class="fas fa-map-marker-alt"></i>
+                Direccion 1</div>
+              <div class="address-component"> <i class="fas fa-map-marker-alt    "></i>
+                Direccion 2</div>
+              <div class="address-component"> <i class="fas fa-map-marker-alt    "></i>
+                Direccion 3</div>
+            </div> -->
+            <form id="formAddress" action="{% url 'base:createAddress' %}">
+              <div class="form-outline mb-4">
+                <input  type="text" name="description" id="description" class="form-control"  />
+                <label class="form-label" for="description">Dirección</label>
+              </div>
+              <div class="form-outline mb-4">
+                <input  type="text" id="refrences" name="refrences" class="form-control" />
+                <label class="form-label" for="refrences">Referencias</label>
+              </div>
+              <div class="row mb-4">
+                <div class="col-lg-6">
+                  <select class="form-control" name="province" id="selectProvince" data-url="{% url 'base:getprovince' %}" data-urldis="{% url 'base:getdistrict' %}">
+                    <option value="0" selected>Seleccione provincia..</option>
+                  </select>
+                </div>
+                <div class="col-lg-6">
+                  <select class="form-control" name="district" id="selectDistrict" >
+                    <option value="0" selected>Seleccione distrito..</option>
+                  </select>
+                </div>
+              
+              </div>
+            
+              <button id="createAddress"  class="btn btn-primary btn-block mb-4">Agregar dirección</button>
+  
+            </form>
+            <button type="submit" class="btn btn-primary btn-block mb-4">Place order</button>
+          </div>
+          <div class="col-lg-5"></div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

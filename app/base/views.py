@@ -16,8 +16,29 @@ from allauth.account.admin import EmailAddress
 from products.models import Category,Marcas,Product,Productimage
 from django.urls import reverse
 from django.template import RequestContext 
-from django.views import generic
+from accounts.models import Province,District,Adress
+from django.core import serializers
+from accounts.forms import AdressForm
+def createAddress(request):
+    if request.method=="POST":
+        form=AdressForm(request.POST)    
+        print(form)
+        # post_data = json.loads(request.body.decode(encoding='UTF-8',errors='strict'))
 
+        # print(post_data)
+    # obj=Adress.objects.create(user_id=request.user.id,)
+        return JsonResponse({"response":form},safe=False)
+
+def getProvince(request):
+    qs=Province.objects.only("name","id")
+    qs_json = serializers.serialize('json', qs)
+    return HttpResponse(qs_json, content_type='application/json')
+def getDistrict(request):
+    if request.method=="POST":
+        post = json.loads(request.body.decode("utf-8"))
+        qs=District.objects.filter(provincia_id=post)
+        qs_json = serializers.serialize('json', qs)
+        return HttpResponse(qs_json, content_type='application/json')
 def index(request):
 
     num_visits = request.session.get('num_visits', 1)
@@ -31,10 +52,10 @@ class AboutView(TemplateView):
     template_name="about.html"    
 class ContactView(TemplateView):
     template_name="contact.html"
-def handler404(request, exception, template_name="base/404.html"):
-    response = render_to_response(template_name)
-    response.status_code = 404
-    return response
+# def handler404(request, exception, template_name="base/404.html"):
+#     response = render_to_response(template_name)
+#     response.status_code = 404
+#     return response
 
 # class IndexView(TemplateView):
 #     template_name="index.html"

@@ -124,6 +124,7 @@ function postComment() {
   document.getElementById("postComment").innerHTML = ""
   let form = document.querySelector("#commentForm")
   let dataForm = new FormData(form)
+  console.log(dataForm);
   let parent = document.createElement("div")
   let loader = document.createElement("span")
   loader.style.marginRight = "2px"
