@@ -7,7 +7,9 @@ from accounts.models import CustomCliente
 from .models import Adress, District, Province
 from allauth.socialaccount import forms
 from datetime import datetime
-class AdressForm(DjForm.Form):
+from django.forms import ModelForm
+
+class AdressForm(ModelForm):
     class Meta:
         model=Adress
         fields=["description","refrences","district","province"]

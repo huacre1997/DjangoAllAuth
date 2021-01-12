@@ -80,7 +80,7 @@ class ProductDetailView(DetailView):
                 from crum import get_current_user          
                 form=RatingForm(request.POST)    
                 self.object = self.get_object()
-
+                print(form)
                 if form.is_valid():
                     data=Comment()
                     data.author=get_current_user()
@@ -193,7 +193,7 @@ class ProductList(TemplateView):
                     response=Product.objects.order_by("price")
                 elif order=="priceHigher":
                     response=Product.objects.order_by("price").reverse()
-            post = Paginator(response, 2)
+            post = Paginator(response, 3)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
@@ -221,7 +221,7 @@ class byCategory(ListView):
                 category=Product.objects.values("id","slug","name","price","rating","before","image").filter(category=node)
             else:
                 category=Product.objects.values("id","slug","name","price","before","rating","image").filter(category__parent=node.get_root().id)  
-            post = Paginator(category, 1)
+            post = Paginator(category, 3)
             if(self.request.GET.get("page")):
                 page_obj = post.page(self.request.GET.get("page"))  
             else:
@@ -277,7 +277,7 @@ class byCategory(ListView):
                 context=category.filter(marca__name=brand).order_by("price")
             elif order=="priceHigher":
                 context=category.filter(marca__name=brand).order_by("price").reverse()
-        post = Paginator(context,1)
+        post = Paginator(context,3)
         if(self.request.GET.get("page")):
             page_obj = post.page(self.request.GET.get("page"))  
         else:

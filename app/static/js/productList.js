@@ -213,3 +213,13 @@ function addCartAuth(e){
 
           })
   }
+  function createAddress(){
+    let form=document.querySelector("#formAddress")
+    let formData=new FormData(form)
+    console.log(formData);
+    fetch(form.getAttribute("action"), {
+      method: "POST",
+
+      body: formData
+    }).then(data=>data.json()).then(response=>console.log(response))
+  }

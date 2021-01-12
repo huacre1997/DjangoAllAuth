@@ -141,23 +141,9 @@ $(function () {
     })
  
   })
-  document.getElementById("createAddress").addEventListener("click",e=>{
-    e.preventDefault()
-    let form=document.getElementById("formAddress")
-    let formData=new FormData(form)
-    console.log(formData);
-    fetch(form.getAttribute("action"), {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken
-      },
-      body: formData
-    }).then(data=>data.json()).then(response=>console.log(response))
-  })
-  selectProvince=document.getElementById("selectProvince")
-  selectDistrict=document.getElementById("selectDistrict")
+  
+  selectProvince=document.getElementById("selectProvince_id")
+  selectDistrict=document.getElementById("selectDistrict_id")
   selectDistrict.disabled=true
   selectProvince.disabled=true
   url=selectProvince.dataset.url 

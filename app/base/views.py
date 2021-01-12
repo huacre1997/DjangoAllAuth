@@ -21,13 +21,20 @@ from django.core import serializers
 from accounts.forms import AdressForm
 def createAddress(request):
     if request.method=="POST":
-        form=AdressForm(request.POST)    
-        print(form)
-        # post_data = json.loads(request.body.decode(encoding='UTF-8',errors='strict'))
+        form=AdressForm(request.POST)  
+        if form.is_valid():  
+            data=Adress()
+            data.user_id=request.user.id
+            data.description=form.cleaned_data["description"]
+            data.refrences=form.cleaned_data["refrences"]
+            data.district=form.cleaned_data["district"]
+            data.province=form.cleaned_data["province"]
+            data.save()
+            return JsonResponse({"response":"ok"},safe=False)
 
-        # print(post_data)
-    # obj=Adress.objects.create(user_id=request.user.id,)
-        return JsonResponse({"response":form},safe=False)
+        else:
+            return HttpResponse(form.errors)
+
 
 def getProvince(request):
     qs=Province.objects.only("name","id")

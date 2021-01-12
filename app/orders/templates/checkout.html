@@ -5,20 +5,23 @@
 <div class="container">
   <div class="card">
     <div class="card-body">
-      <h1>CHECKOUT</h1>
+      <div class="card-title">
+        <h1>CheckOut</h1>
+
+      </div>
         <div class="row">
-          <div class="col-lg-7">
+          <div class="col-lg-8">
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
                   <input type="text" id="form6Example1" class="form-control" value="{{request.user.first_name}}" />
-                  <label class="form-label" for="form6Example1">First name</label>
+                  <label class="form-label" for="form6Example1">Nombres</label>
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <input type="text" id="form6Example2" class="form-control" value="{{request.user.last_name}}" />
-                  <label class="form-label" for="form6Example2">Last name</label>
+                  <label class="form-label" for="form6Example2">Apellidos</label>
                 </div>
               </div>
             </div>
@@ -29,51 +32,103 @@
               <label class="form-label" for="form6Example5">DNI</label>
             </div>
             <!-- Number input -->
-            <div class="form-outline mb-4">
-              <input disabled type="text" id="form6Example6" class="form-control" value={{request.user.celular}} />
-              <label class="form-label" for="form6Example6">Phone</label>
+            <div class="row mb-4">
+              <div class="col-lg-6">  <div class="form-outline mb-4">
+                <input disabled type="text" id="form6Example6" class="form-control" value={{request.user.celular}} />
+                <label class="form-label" for="form6Example6">Celular</label>
+              </div></div>
+              <div class="col-lg-6">  <div class="form-outline mb-4">
+                <input  type="text" id="form6Example6" class="form-control" />
+                <label class="form-label" for="form6Example6">Celular 2</label>
+              </div></div>
             </div>
             <!-- Submit button -->
             <label class="form-label" for="form6Example6">Seleccionar dirección</label>
 
-            <!-- <div class="grid-gap-1 g-col-3 mb-4">
-              <div class="address-component">
-                <i class="fas fa-map-marker-alt"></i>
-                Direccion 1</div>
-              <div class="address-component"> <i class="fas fa-map-marker-alt    "></i>
-                Direccion 2</div>
-              <div class="address-component"> <i class="fas fa-map-marker-alt    "></i>
-                Direccion 3</div>
-            </div> -->
+            <div class="grid-gap-1 g-col-3 mb-4">
+                  
+               
+                {% for i in address  %}
+                <div class="grid address-component" style="grid-template-columns: 10% 90%;grid-template-rows: 1fr 1fr 4fr; height: 150px;">
+                  <i style="align-self: center;justify-self: center;" class="fas fa-map-marker-alt"></i>
+                  <p><strong>{{i.getNameProvince}}</strong></p>
+                  <p style="grid-row-start: 2;grid-column-start: 2;"><strong>{{i.getNameDistrict}}</strong></p>
+                  <p style="grid-column-start: 2;grid-row-start: 3;">{{i.description}}</p>
+                </div>
+            
+                {% endfor %}
+                <div class="grid address-component" style="height: 100px; " >
+                  <i class="fa fa-plus-circle" aria-hidden="true" style="justify-self: center; font-size: 2em;"></i>
+                  <p style="justify-self: center;">Agregar nueva dirección</p>
+                </div>
+               
+            </div>
             <form id="formAddress" action="{% url 'base:createAddress' %}">
+              {% csrf_token %}
               <div class="form-outline mb-4">
-                <input  type="text" name="description" id="description" class="form-control"  />
+                <input  type="text" name="description" id="description_id" class="form-control"  />
                 <label class="form-label" for="description">Dirección</label>
               </div>
               <div class="form-outline mb-4">
-                <input  type="text" id="refrences" name="refrences" class="form-control" />
+                <input  type="text" id="refrences_id" name="refrences" class="form-control" />
                 <label class="form-label" for="refrences">Referencias</label>
               </div>
               <div class="row mb-4">
                 <div class="col-lg-6">
-                  <select class="form-control" name="province" id="selectProvince" data-url="{% url 'base:getprovince' %}" data-urldis="{% url 'base:getdistrict' %}">
+                  <select class="form-control" name="province" id="selectProvince_id" data-url="{% url 'base:getprovince' %}" data-urldis="{% url 'base:getdistrict' %}">
                     <option value="0" selected>Seleccione provincia..</option>
                   </select>
                 </div>
                 <div class="col-lg-6">
-                  <select class="form-control" name="district" id="selectDistrict" >
+                  <select class="form-control" name="district" id="selectDistrict_id" >
                     <option value="0" selected>Seleccione distrito..</option>
                   </select>
                 </div>
               
               </div>
             
-              <button id="createAddress"  class="btn btn-primary btn-block mb-4">Agregar dirección</button>
   
             </form>
-            <button type="submit" class="btn btn-primary btn-block mb-4">Place order</button>
+            <button onclick="createAddress()" class="btn btn-primary btn-block mb-4">Agregar dirección</button>
+
           </div>
-          <div class="col-lg-5"></div>
+          <div class="col-lg-4">
+            <p class="h5"> Resumen</p>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <p id="abstractContent"> Subtotal ({{cartCount}} productos) :
+                    </p>
+                    <p class="h6" id="abstractTotalCart">S/.{{cartTotal}}</p>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <p> Costo de esnvío :
+                    </p>
+                    <p class="h6"> S/.0.00</p>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="form-outline ">
+
+                    <input class="form-control" type="text" name="coupon" id="coupon_id">
+                    <label class="form-label" for="coupon">Cupón</label>
+                    
+                    </div>
+                    <button class="btn btn-primary">Aplicar</button>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <p> Descuento 
+                  </p>
+                  <p class="h6"> S/.0.00</p>
+              </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Total :
+                    <p class="h6"> S/.300,000.00</p>
+
+                </li>
+                <li><a href="{% url 'orders:checkout' %}" class="btn indigo btn-primary btn-block">Pagar</a></li>
+            </ul>
+
+        </div>
         </div>
     </div>
   </div>

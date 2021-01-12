@@ -28,3 +28,9 @@ class Adress(models.Model):
     refrences = models.CharField(max_length=100, blank=True, null=True)
     district = models.ForeignKey(District,on_delete=models.CASCADE)
     province=models.ForeignKey(Province,on_delete=models.CASCADE)
+    @property
+    def getNameProvince(self):
+        return self.province.name
+    @property
+    def getNameDistrict(self):
+        return self.district.name
