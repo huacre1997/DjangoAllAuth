@@ -10,15 +10,20 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic.base import TemplateView
 from accounts.models import District,Province,Adress
+from cart.models import Cart
+from django.views.decorators.cache import never_cache
 
 class CheckOutView(TemplateView):
     
     template_name = "checkout.html"
+    @never_cache
+    def dispatch(self, request, *args, **kwargs):
+        return super(CheckOutView, self).dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
 
         context = super(CheckOutView, self).get_context_data(**kwargs)
-        cart = Cart.objects.get(user=request.user.id)
+        cart = Cart.objects.get(user=self.request.user.id)
 
         context["address"]=Adress.objects.filter(user_id=self.request.user.id)
         context["cartTotal"]=cart.total

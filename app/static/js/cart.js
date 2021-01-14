@@ -88,3 +88,37 @@ Array.from(selectElement).forEach(element=>{
     })
     
 })
+let adresscomponent=document.getElementsByClassName("address-component")
+Array.from(adresscomponent).forEach(element=>{
+    console.log(element.className);
+    element.addEventListener("click",(e)=>{
+        console.log(e.target.childNodes);
+
+        Array.from(adresscomponent).forEach(element2=>{
+                element2.classList.add("active-adress")
+                if(element2.childNodes[2].nextSibling.childNodes[1]!=undefined){
+                    element2.childNodes[2].nextSibling.removeChild(element2.childNodes[2].nextSibling.childNodes[1])
+
+                }    
+       
+        })
+        e.target.classList.remove("active-adress")
+        let valdir=e.target.childNodes[2].nextElementSibling.className;
+        document.getElementById("address").value=parseInt(valdir.split("_").pop())
+        let img=document.createElement("img")
+        img.src="/static/icons/comprobado.png"
+        e.target.childNodes[2].nextElementSibling.appendChild(img)
+
+
+    })
+})
+
+function seeformAdress() 
+{  
+    document.getElementById("add_adress_circle").classList.add("none")
+    document.querySelector(".form_Address").classList.remove("none")
+}
+function cancelAddress(){
+    document.getElementById("add_adress_circle").classList.remove("none")
+    document.querySelector(".form_Address").classList.add("none")
+}

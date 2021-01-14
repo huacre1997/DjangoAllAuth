@@ -42,3 +42,37 @@
 .g-row-6{
     grid-template-rows: repeat(6,1fr);
 }
+
+.grid-c-10{
+    grid-template-columns: 10% 90%;
+}
+.grid-r-1-1-4{
+    grid-auto-rows: minmax(min-content, max-content);
+}
+.align-self-center{
+    align-self: center;
+}
+.align-self-end{
+    align-self: end;
+}
+.justify-self-center{
+    justify-self: center;
+}
+.justify-items-center{
+    justify-items: center;
+}
+.grid-row-start-1{
+    grid-row-start: 1;
+}
+.grid-row-start-2{
+    grid-row-start: 2;
+}
+.grid-row-start-3{
+    grid-row-start: 3;
+}
+.grid-row-start-4{
+    grid-row-start: 4;
+}
+.grid-column-start-2{
+    grid-column-start: 2;
+}

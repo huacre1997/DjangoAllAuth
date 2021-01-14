@@ -7,6 +7,7 @@ from django.db.models.signals import post_delete
 from app.settings import AUTH_USER_MODEL
 from django.apps import apps
 from cart.models import Cart
+from accounts.models import Adress
 # from decimal import Decimal
 from base.models import BaseModel
 
@@ -16,10 +17,13 @@ ORDER_STATUS_CHOICES = (
     ('enviado', 'Enviado'),
     ('reembolsado', 'Reembolsado'),
 )
-class Order(BaseModel):
+class Order(models.Model):
     client            = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE)
     cart                = models.ForeignKey(Cart,on_delete=models.CASCADE)
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
+    address             = models.ForeignKey(Adress, on_delete=models.CASCADE)
+    discount            = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+
     total               = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     active              = models.BooleanField(default=True)
     updated             = models.DateTimeField(auto_now=True)
@@ -48,7 +52,7 @@ class Order(BaseModel):
     def update_total(self):
         cart_total = self.cart.total
 
-        formatted_total = format(cart_total, '.2f')
+        formatted_total = format(cart_total, '.2f')-self.discount
         self.total = formatted_total
         self.save()
         return cart_total
