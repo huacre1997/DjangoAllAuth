@@ -9,7 +9,7 @@ from django.apps import apps
 from cart.models import Cart
 # from decimal import Decimal
 from base.models import BaseModel
-
+from accounts.models import Adress
 ORDER_STATUS_CHOICES = (
     ('creado', 'Creado'),
     ('pagado', 'Pagado'),
@@ -19,11 +19,11 @@ ORDER_STATUS_CHOICES = (
 class Order(BaseModel):
     client            = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE)
     cart                = models.ForeignKey(Cart,on_delete=models.CASCADE)
+    address =            models.ForeignKey(Adress, related_name='adress', on_delete=models.CASCADE)
     status              = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
-    total               = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
-    active              = models.BooleanField(default=True)
-    updated             = models.DateTimeField(auto_now=True)
-    timestamp           = models.DateTimeField(auto_now_add=True)
+    descount=    models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    total               =  models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
+    
 
 
 
@@ -32,8 +32,7 @@ class Order(BaseModel):
 
 #     objects = OrderManager()
 
-    class Meta:
-       ordering = ['-timestamp', '-updated']
+   
 
     def get_absolute_url(self):
         return reverse("orders:detail", kwargs={'order_id': self.order_id})
@@ -48,7 +47,7 @@ class Order(BaseModel):
     def update_total(self):
         cart_total = self.cart.total
 
-        formatted_total = format(cart_total, '.2f')
+        formatted_total = format(cart_total, '.2f')-self.descount
         self.total = formatted_total
         self.save()
         return cart_total
