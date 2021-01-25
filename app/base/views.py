@@ -30,8 +30,9 @@ def createAddress(request):
             data.district=form.cleaned_data["district"]
             data.province=form.cleaned_data["province"]
             data.save()
-            return JsonResponse({"response":"ok"},safe=False)
-
+            print("id")
+            return JsonResponse({"id":data.id,"province":data.province.name,"district":data.district.name,"description":data.description,"refrences":data.refrences},safe=False)
+                
         else:
             return HttpResponse(form.errors)
 

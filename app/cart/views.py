@@ -25,42 +25,6 @@ def CartView(request):
     context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity}
 
     return render(request, "cartList.html", context)
-# class CartView(TemplateView):
-#     template_name = "cartList.html"
-#     model=Cart
-#     def get(self,request,*args, **kwargs):
-#         if self.request.GET:
-#             print("hola")
-#         else:
-#             print("else")
-
-#         data=Cart.objects.select_related("product").filter(user_id=request.user)
-#         context={"object":data}
-
-#         return render(request,self.template_name,context)
-
-#     def post(self, *args,**kwargs):
-#         print("entro a post")
-    # return HttpResponse("aea")W
-    # def post(self,*args,**kwargs):
-    #     context=Cart.objects.select_related("product").filter(user_id=self.request.user)
-    #     data = []
-
-    #     for book in context:
-    #         data.append({'marca': book.product.marca.name,
-    #          'name': book.product.name,
-    #          'price': book.product.price,
-    #         'image': book.product.image.url,
-    #         "quantity":book.quantity,
-    #         "created":book.created,
-    #         "updated":book.updated,
-
-    #          })
-
-    # response = serializers.serialize("json", data)
-    # return JsonResponse(data, safe=False)
-
-
 def cart_add(request):
     data = []
     post = json.loads(request.body.decode("utf-8"))

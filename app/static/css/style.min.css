@@ -6,10 +6,14 @@
   cursor: pointer;
   transition: 0.5s;
 }
-.address-component:hover{
- background-color: lightgray;
+.active-adress{
+  background-color: rgba(0, 0, 0, 0.5);
 
 }
+.address-component:hover{
+ transform: translate(0,10px);
+}
+
 .address-component::after{
   content: "";
   position: absolute;
@@ -67,7 +71,9 @@ html, body {
   margin: 0px;
   padding: 0px;
 }
-
+.none{
+  display: none;
+}
 /*CUSTONM SELECT */
 div.cs-select {
   position: relative;
@@ -1267,8 +1273,8 @@ flex-wrap: nowrap;
 background: #fff;
 opacity: 1;
 max-width: 100%;
-max-height: 100vh;
-animation: show 1s;
+max-height: 200vh;
+/* animation: show 1s; */
 }
 .labelTab {
 cursor: pointer;
@@ -1315,7 +1321,7 @@ input[type="radio"]:checked +label.nav +  .page .page-contents > * {
 }
 .page-contents > * {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(200px);
   transition: opacity 0.2s, transform 0.2s;
 }
 .page-contents > *:nth-child(1) {

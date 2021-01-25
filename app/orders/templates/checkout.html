@@ -1,7 +1,9 @@
 {% extends "index.html" %}
 {% block categories %}cat_menu none
 {% endblock categories %}
+{% load static %}
 {% block content %}
+
 <div class="container">
   <div class="card">
     <div class="card-body">
@@ -9,128 +11,271 @@
         <h1>CheckOut</h1>
 
       </div>
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="row mb-4">
-              <div class="col">
-                <div class="form-outline">
-                  <input type="text" id="form6Example1" class="form-control" value="{{request.user.first_name}}" />
-                  <label class="form-label" for="form6Example1">Nombres</label>
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-outline">
-                  <input type="text" id="form6Example2" class="form-control" value="{{request.user.last_name}}" />
-                  <label class="form-label" for="form6Example2">Apellidos</label>
-                </div>
-              </div>
-            </div>
-            <!-- Text input -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="layout">
+            <input class='hide' type="radio" id="tab-1" name="tractor" checked='checked' />
+            <label for="tab-1" class="nav labelTab">
+              <span>
+                <span class="badge rounded-pill bg-primary">1</span>
 
-            <div class="form-outline mb-4">
-              <input disabled type="email" id="form6Example5" class="form-control" value={{request.user.dni}} />
-              <label class="form-label" for="form6Example5">DNI</label>
-            </div>
-            <!-- Number input -->
-            <div class="row mb-4">
-              <div class="col-lg-6">  <div class="form-outline mb-4">
-                <input disabled type="text" id="form6Example6" class="form-control" value={{request.user.celular}} />
-                <label class="form-label" for="form6Example6">Celular</label>
-              </div></div>
-              <div class="col-lg-6">  <div class="form-outline mb-4">
-                <input  type="text" id="form6Example6" class="form-control" />
-                <label class="form-label" for="form6Example6">Celular 2</label>
-              </div></div>
-            </div>
-            <!-- Submit button -->
-            <label class="form-label" for="form6Example6">Seleccionar dirección</label>
+                Datos
+              </span>
+            </label>
+            <div class='tab-1 page'>
+              <div class="page-contents">
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+                      <input disabled type="text" id="order_input_name" class="form-control"
+                        value="{{request.user.first_name}}" />
+                      <label class="form-label" for="order_input_name">Nombres</label>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <input disabled type="text" id="order_input_last" class="form-control"
+                        value="{{request.user.last_name}}" />
+                      <label class="form-label" for="order_input_last">Apellidos</label>
+                    </div>
+                  </div>
+                </div>
+                <!-- Text input -->
 
-            <div class="grid-gap-1 g-col-3 mb-4">
-                  
-               
-                {% for i in address  %}
-                <div class="grid address-component" style="grid-template-columns: 10% 90%;grid-template-rows: 1fr 1fr 4fr; height: 150px;">
-                  <i style="align-self: center;justify-self: center;" class="fas fa-map-marker-alt"></i>
-                  <p><strong>{{i.getNameProvince}}</strong></p>
-                  <p style="grid-row-start: 2;grid-column-start: 2;"><strong>{{i.getNameDistrict}}</strong></p>
-                  <p style="grid-column-start: 2;grid-row-start: 3;">{{i.description}}</p>
+
+                <div class="form-outline mb-4">
+                  <input disabled type="text" id="order_input_dni" class="form-control" value={{request.user.dni}} />
+                  <label class="form-label" for="order_input_dni">DNI</label>
                 </div>
-            
-                {% endfor %}
-                <div class="grid address-component" style="height: 100px; " >
-                  <i class="fa fa-plus-circle" aria-hidden="true" style="justify-self: center; font-size: 2em;"></i>
-                  <p style="justify-self: center;">Agregar nueva dirección</p>
+                <div class="form-outline mb-4">
+                  <input disabled type="email" id="order_input_email" class="form-control"
+                    value={{request.user.email}} />
+                  <label class="form-label" for="order_input_email">Email</label>
                 </div>
-               
+                <!-- Number input -->
+                <div class="row mb-4">
+                  <div class="col-lg-6">
+                    <div class="form-outline mb-4">
+                      <input disabled type="tel" id="order_input_tel" class="form-control"
+                        value={{request.user.celular}} />
+                      <label class="form-label" for="order_input_tel">Celular</label>
+                    </div>
+                  </div>
+                  <!-- <div class="col-lg-6">  <div class="form-outline mb-4">
+                        <input  type="tel" id="form6Example6" class="form-control" />
+                        <label class="form-label" for="form6Example6">Celular 2</label>
+                      </div></div> -->
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button id="btn_edit_order" class="btn btn-secondary btn-rounded"
+                    data-url="{% url 'orders:edit_data' %}" onclick="editData()">Editar</button>
+
+                  <input id="btn_next_step2" type="button" value="Continuar" onclick="next_step()"
+                    class="btn btn-primary btn-rounded">
+                </div>
+              </div>
             </div>
-            <form id="formAddress" action="{% url 'base:createAddress' %}">
-              {% csrf_token %}
-              <div class="form-outline mb-4">
-                <input  type="text" name="description" id="description_id" class="form-control"  />
-                <label class="form-label" for="description">Dirección</label>
-              </div>
-              <div class="form-outline mb-4">
-                <input  type="text" id="refrences_id" name="refrences" class="form-control" />
-                <label class="form-label" for="refrences">Referencias</label>
-              </div>
-              <div class="row mb-4">
-                <div class="col-lg-6">
-                  <select class="form-control" name="province" id="selectProvince_id" data-url="{% url 'base:getprovince' %}" data-urldis="{% url 'base:getdistrict' %}">
-                    <option value="0" selected>Seleccione provincia..</option>
-                  </select>
+
+
+
+            <input disabled class='hide' type="radio" id="tab-2" name="tractor" />
+            <label for="tab-2" class="nav labelTab">
+              <span>
+                <span class="badge rounded-pill bg-primary">2</span>
+
+                Dirección
+
+              </span>
+            </label>
+            <div class='tab-2 page'>
+              <div class="page-contents">
+                <div class="row">
+                  <div class="col">
+                    <label class="form-label" for="form6Example6">Seleccionar dirección</label>
+
+                    <div class="grid-gap-1 g-col-3 mb-4" id="grid_adress_container">
+
+
+
+
+
+                      {% for i in address  %}
+                      <div class="grid address-component grid-c-10 grid-r-1-1-4">
+                        <i class="align-self-center justify-self-center fas fa-map-marker-alt"></i>
+                        <p class="address_{{i.id}} d-flex justify-content-between">
+                          <strong>{{i.getNameProvince}}</strong></p>
+                        <p class="grid-row-start-2 grid-column-start-2"><strong>{{i.getNameDistrict}}</strong></p>
+                        <p class="grid-row-start-3 grid-column-start-2">{{i.description}}</p>
+                        <p class="grid-row-start-4 grid-column-start-2" style="font-size: 0.8em;">Ref: {{i.refrences}}
+                        </p>
+                      </div>
+
+                      {% endfor %}
+
+                      {% if address.count < 3 %}
+                      <!-- <div class="grid address-component" style="height: 100px; " >
+                                <i class="fa fa-plus-circle" aria-hidden="true" style="justify-self: center; font-size: 2em;"></i>
+                                <p style="justify-self: center;">Agregar nueva dirección</p>
+                              </div> -->
+                      <div class="grid justify-items-center" id="add_adress_circle">
+                        <button onclick="seeformAdress()" type="button"
+                          class="btn btn-primary btn-floating align-self-end">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                        <p>Agregar dirección</p>
+                      </div>
+                      {% endif %}
+                    </div>
+                    <input id="btn_next_step3" type="button" value="Continuar" onclick="next_step_3()"
+                      class="btn btn-primary btn-rounded">
+
+                    <div class="form_Address none">
+                      <form id="formAddress" action="{% url 'base:createAddress' %}">
+                        {% csrf_token %}
+                        <div class="form-outline mb-4">
+                          <input type="text" name="description" id="description_id" class="form-control" />
+                          <label class="form-label" for="description">Dirección</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <input type="text" id="refrences_id" name="refrences" class="form-control" />
+                          <label class="form-label" for="refrences">Referencias</label>
+                        </div>
+                        <div class="row mb-4">
+                          <div class="col-lg-6">
+                            <select class="form-control" name="province" id="selectProvince_id"
+                              data-url="{% url 'base:getprovince' %}" data-urldis="{% url 'base:getdistrict' %}">
+                              <option value="0" selected>Seleccione provincia..</option>
+                            </select>
+                          </div>
+                          <div class="col-lg-6">
+                            <select class="form-control" name="district" id="selectDistrict_id">
+                              <option value="0" selected>Seleccione distrito..</option>
+                            </select>
+                          </div>
+                        </div>
+
+
+                      </form>
+                      <div class="row">
+                        <div class="col-lg-6"> <button onclick="createAddress()"
+                            class="btn btn-primary btn-block btn-rounded mb-4">Agregar dirección</button>
+                        </div>
+                        <div class="col-lg-6"> <button onclick="cancelAddress()"
+                            class="btn btn-primary btn-block btn-rounded mb-4">Cancelar</button></div>
+                      </div>
+
+                    </div>
+                    <input type="hidden" id="address">
+
+                  </div>
                 </div>
-                <div class="col-lg-6">
-                  <select class="form-control" name="district" id="selectDistrict_id" >
-                    <option value="0" selected>Seleccione distrito..</option>
-                  </select>
-                </div>
-              
               </div>
-            
-  
-            </form>
-            <button onclick="createAddress()" class="btn btn-primary btn-block mb-4">Agregar dirección</button>
+            </div>
+
+
+            <input disabled class='hide' type="radio" id="tab-3" name="tractor" />
+            <label for="tab-3" class="nav labelTab">
+              <span>
+                <span class="badge rounded-pill bg-primary">3</span>
+
+                Métodos de pago
+              </span>
+
+            </label>
+            <div class='tab-3 page'>
+              <div class="page-contents">
+                <script src="https://www.paypal.com/sdk/js?client-id=AYRJdMjOMSHzkclga9bXdSKPbE7lxUApV34JV7WpvOWcmVBBRfneP7n2q-__8UX0gcHx_8SrRThjVhGu"></script>
+                <!-- <button class="btn btn-primary btn-rounded d-flex align-items-center m-auto mb-3"><i class="fab fa-paypal" style="font-size: 2em;margin-right: 5px;"></i> Paypal</button>
+                    <button class="btn btn-primary btn-rounded d-flex align-items-center m-auto"><i class="fab fa-cc-visa" style="font-size: 2em;margin-right: 5px;"></i> Tarjeta de Débito</button> -->
+                <div id="paypal-button-container"></div>
+                
+
+              </div>
+            </div>
 
           </div>
-          <div class="col-lg-4">
-            <p class="h5"> Resumen</p>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <p id="abstractContent"> Subtotal ({{cartCount}} productos) :
-                    </p>
-                    <p class="h6" id="abstractTotalCart">S/.{{cartTotal}}</p>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <p> Costo de esnvío :
-                    </p>
-                    <p class="h6"> S/.0.00</p>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <div class="form-outline ">
 
-                    <input class="form-control" type="text" name="coupon" id="coupon_id">
-                    <label class="form-label" for="coupon">Cupón</label>
-                    
-                    </div>
-                    <button class="btn btn-primary">Aplicar</button>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <p> Descuento 
-                  </p>
-                  <p class="h6"> S/.0.00</p>
-              </li>
+          <!-- Submit button -->
 
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Total :
-                    <p class="h6"> S/.300,000.00</p>
-
-                </li>
-                <li><a href="{% url 'orders:checkout' %}" class="btn indigo btn-primary btn-block">Pagar</a></li>
-            </ul>
 
         </div>
+        <div class="col-lg-4">
+          <p class="h5"> Resumen</p>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <p id="abstractContent"> Subtotal ({{cartCount}} productos) :
+              </p>
+              <p class="h6" id="abstractTotalCart">S/.{{cartTotal}}</p>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <p> Costo de esnvío :
+              </p>
+              <p class="h6"> S/.0.00</p>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div class="form-outline ">
+
+                <input class="form-control" type="text" name="coupon" id="coupon_id">
+                <label class="form-label" for="coupon">Cupón</label>
+
+              </div>
+              <button class="btn btn-primary">Aplicar</button>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <p> Descuento
+              </p>
+              <p class="h6"> S/.0.00</p>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Total :
+              <p class="h6"> S/.300,000.00</p>
+
+            </li>
+            <li><a href="{% url 'orders:checkout' %}" class="btn indigo btn-primary btn-block">Pagar</a></li>
+          </ul>
+
         </div>
+      </div>
     </div>
   </div>
 </div>
 {% endblock content %}
+{% block js_page %}
+
+<script>
+  
+  
+  var amount="{{cartTotal|safe}}"
+  paypal.Buttons({
+        createOrder: function (data, actions) {
+          // This function sets up the details of the transaction, including the amount and line item details.
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: amount
+              }
+            }]
+          });
+        },
+        onApprove: function (data) {
+          console.log(document.getElementById("address").value)
+            return fetch("/checkout/", {
+              method: "POST",
+              headers: {
+                'content-type': 'application/json',
+                "X-CSRFToken": csrftoken
+              },
+              body: JSON.stringify({
+                orderID: data.orderID,
+                address:document.getElementById("address").value
+              })
+            }).then(function (res) {
+              return res.json();
+            }).then(function (details) {
+              console.log(details)
+            })
+
+   } }).render('#paypal-button-container');
+</script>
+{% endblock js_page %}

@@ -7,11 +7,15 @@ from products.models import Product
 from django.db.models.signals import post_save,pre_save,post_delete
 from django.dispatch import receiver
 from django.utils.datetime_safe import datetime
+class CartManager(models.Manager):
+    def get_Total(self, user):
+        
+        return self.model.objects.get(user=user)
 class Cart(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,null=True)
     quantity = models.PositiveIntegerField(default=0)
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
- 
+    objects=CartManager()
 class CartItem(models.Model):
     product     = models.ForeignKey(Product,on_delete=models.SET_NULL,null=True)
     count    = models.PositiveIntegerField()
@@ -27,6 +31,7 @@ class CartItem(models.Model):
         return self.product.image.url
     def total(self):
         return self.count*self.product.price
+    
 from decimal import Decimal
 
 @receiver(post_save, sender=CartItem)

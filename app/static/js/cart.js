@@ -88,3 +88,79 @@ Array.from(selectElement).forEach(element=>{
     })
     
 })
+let adresscomponent=document.getElementsByClassName("address-component")
+Array.from(adresscomponent).forEach(element=>{
+    console.log(element.className);
+    element.addEventListener("click",(e)=>{
+        Array.from(adresscomponent).forEach(element2=>{
+                element2.classList.add("active-adress")
+                if(element2.childNodes[2].nextSibling.childNodes[1]!=undefined){
+                    element2.childNodes[2].nextSibling.removeChild(element2.childNodes[2].nextSibling.childNodes[1])
+
+                }    
+       
+        })
+        e.target.classList.remove("active-adress")
+        let valdir=e.target.childNodes[2].nextElementSibling.className;
+        document.getElementById("address").value=parseInt(valdir.split("_").pop())
+        let img=document.createElement("img")
+        img.src="/static/icons/comprobado.png"
+        e.target.childNodes[2].nextElementSibling.appendChild(img)
+
+
+    })
+})
+function next_step() { 
+    document.getElementById("tab-2").disabled=false
+
+    document.getElementById("tab-2").click()
+ }
+ function next_step_3() { 
+     if ( !document.getElementById("address").value=="") {
+        document.getElementById("tab-3").disabled=false
+
+        document.getElementById("tab-3").click()
+     }
+     else{
+        alert("Seleccione una dirección");
+     }
+ }
+function seeformAdress() 
+{  
+    document.getElementById("add_adress_circle").classList.add("none")
+    document.querySelector(".form_Address").classList.remove("none")
+}
+function cancelAddress(){
+    document.getElementById("add_adress_circle").classList.remove("none")
+    document.querySelector(".form_Address").classList.add("none")
+}
+function editData(){
+     document.getElementById("order_input_name").disabled=false
+    document.getElementById("order_input_last").disabled=false
+    document.getElementById("btn_edit_order").removeAttribute("onclick")
+    document.getElementById("btn_edit_order").innerHTML="Guardar"
+    let url=document.getElementById("btn_edit_order").dataset.url
+    document.getElementById("btn_edit_order").setAttribute("onclick",`save_data(${url})`)
+    document.getElementById("btn_next_step2").disabled=true
+}
+function save_data(url){
+    let name=document.getElementById("order_input_name").value
+    let last=document.getElementById("order_input_last").value
+
+    document.getElementById("btn_next_step2").disabled=false
+    document.getElementById("btn_edit_order").removeAttribute("onclick")
+    document.getElementById("btn_edit_order").innerHTML="Editar"
+    document.getElementById("btn_edit_order").setAttribute("onclick","editData()")
+    document.getElementById("order_input_name").disabled=true
+    document.getElementById("order_input_last").disabled=true
+    let data={name,last}
+    fetch(url,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+           "X-CSRFToken":csrftoken
+        },
+        body:JSON.stringify(data)
+    }).then(data=>data.json()).then(response=>console.log(response))
+
+}
