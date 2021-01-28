@@ -1,4 +1,4 @@
-from allauth.account.forms import SignupForm
+from allauth.account.forms import PasswordField, SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialAccountSign
 
 from django import forms as DjForm
@@ -8,6 +8,7 @@ from .models import Adress, District, Province
 from allauth.socialaccount import forms
 from datetime import datetime
 from django.forms import ModelForm
+from django.contrib.auth.models import User
 
 class AdressForm(ModelForm):
     class Meta:
@@ -55,6 +56,56 @@ class MyCustomSignupForm(SignupForm):
         user.fechanac =self.cleaned_data['fechanac']
         user.save()
         return user
+class ChangePassword(DjForm.Form):
+    before_pass = PasswordField(max_length=100, required=True)
+    new_pass = PasswordField(max_length=100, required=True)
+    new_pass_repeat = PasswordField(max_length=100, required=True)
+    user=None
+    def __init__(self, *args, **kwargs):
+        if kwargs:
+            self.user = kwargs.pop('user')
+        super(ChangePassword, self).__init__(*args, **kwargs)
+    class Meta:
+       
+        widgets = {
+             'before_pass': PasswordInput(render_value=True,attrs={
+                "name": "before_pass",
+                "id": "before_pass",
+               
+            }),
+            'new_pass': PasswordInput(render_value=True,attrs={
+                "name": "new_pass",
+                "id": "new_pass",
+                
+            }),
+            'new_pass_repeat': PasswordInput(render_value=True, attrs={
+                "name": "new_pass_repeat",
+                "id": "new_pass_repeat",
+              
+            })
+
+        }
+
+    def clean_before_pass(self):
+        old_pass=self.cleaned_data["before_pass"]
+
+        user = CustomCliente.objects.get(pk=self.user.id)
+        print(user.password) 
+        if not user.check_password(old_pass):
+            raise ValidationError("Las contraseña ingresada no es correcta.")
+     
+        return old_pass
+    def clean(self):
+        cleaned_data = super(ChangePassword,self).clean()
+
+        n_pass = cleaned_data.get("new_pass")
+        r_pass = cleaned_data.get("new_pass_repeat")
+       
+        if r_pass != n_pass:
+            raise ValidationError("Las contraseñas no coinciden.")
+
+   
+        return self.cleaned_data
 class MyCustomSocialSignupForm(SocialAccountSign):
     dni = CharField(max_length=8,label="Dni",required=True)
     celular = CharField(max_length=9,label="Celular",required=True)

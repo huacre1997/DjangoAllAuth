@@ -636,7 +636,7 @@ body.modal-open {
 }
 
 /* ----tab problem fix css ----*/
-.tab-content .tab-pane {
+.tab_profile-content .tab_profile-pane {
     display: block;
     height: 0;
     max-width: 100%;
@@ -645,7 +645,7 @@ body.modal-open {
     visibility: hidden;
 }
 
-.tab-content .tab-pane.active {
+.tab_profile-content .tab_profile-pane.active {
     height: auto;
     opacity: 1;
     overflow: visible;

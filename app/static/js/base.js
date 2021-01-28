@@ -3,16 +3,26 @@ $(function () {
     width: 'resolve' // need to override the changed default
   });
 
-  var swiper = new Swiper('.swiper-container', {
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-      renderBullet: function (index, className) {
-        console.log(index)
-        return '<span class="' + className + '">' + (index + 1) + '</span>';
+    var swiper2 = new Swiper('.swiper-container', {
+      spaceBetween: 30,
+      autoplay: {
+        delay: 2000,
+        disableOnInteraction: false,
       },
-    },
-  });
+      flipEffect: {
+        slideShadows: false,
+      },
+            loop: true,
+
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
 
   $(document).on("click", "#closeModal", function () {
     $(".modal-backdrop").removeClass("modal-backdrop fade show ")
@@ -95,13 +105,13 @@ $(function () {
  
   })
   
-  selectProvince=document.getElementById("selectProvince_id")
-  selectDistrict=document.getElementById("selectDistrict_id")
-  selectDistrict.disabled=true
-  selectProvince.disabled=true
+ selectProvince=document.getElementById("selectProvince_id")
+selectDistrict=document.getElementById("selectDistrict_id")
+if (selectProvince!=null){
   url=selectProvince.dataset.url 
+
   fetch(url).then(data=>data.json()).then(response=>{
-    
+  
     selectProvince.disabled=false
 
     for (let index = 0; index < response.length; index++) {
@@ -111,30 +121,59 @@ $(function () {
       selectProvince.appendChild(option)
     }
   })
-  selectProvince.addEventListener("change",function(e){
-    selectDistrict.disabled=true
 
-    let id=e.target.options[e.target.options.selectedIndex].attributes[0].value
 
-    let url=selectProvince.dataset.urldis
-    
-    fetch(url,{method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrftoken
-    },body: JSON.stringify(id)}).then(data=>data.json()).then(response=>{
-      selectDistrict.innerHTML=""
-      selectDistrict.disabled=false
-      let selectfirst=document.createElement("option")
-      selectfirst.innerText="Seleccione ditrito..."
-      selectDistrict.appendChild(selectfirst)
-   
-      for (let index = 0; index < response.length; index++) {
-        let option=document.createElement("option")
-        option.innerText=response[index].fields.name
-        option.setAttribute("value",response[index].pk)
-        selectDistrict.appendChild(option)
-      }
-    })
+
+
+selectProvince.addEventListener("change",function(e){
+  selectDistrict.disabled=true
+
+  let id=e.target.options[e.target.options.selectedIndex].attributes[0].value
+
+  let url=selectProvince.dataset.urldis
+  
+  fetch(url,{method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-CSRFToken": csrftoken
+  },body: JSON.stringify(id)}).then(data=>data.json()).then(response=>{
+    selectDistrict.innerHTML=""
+    selectDistrict.disabled=false
+    let selectfirst=document.createElement("option")
+    selectfirst.innerText="Seleccione ditrito..."
+    selectDistrict.appendChild(selectfirst)
+ 
+    for (let index = 0; index < response.length; index++) {
+      let option=document.createElement("option")
+      option.innerText=response[index].fields.name
+      option.setAttribute("value",response[index].pk)
+      selectDistrict.appendChild(option)
+    }
   })
+})
+
+}
+document.getElementById("profile").addEventListener("click",function () {
+  window.location.href=this.dataset.url;
+})
+let adresscomponent=document.getElementsByClassName("address_profile")
+Array.from(adresscomponent).forEach(element=>{
+    console.log(element.className);
+    element.addEventListener("click",(e)=>{
+        Array.from(adresscomponent).forEach(element2=>{
+                element2.classList.add("active-adress")
+                if(element2.childNodes[2].nextSibling.childNodes[1]!=undefined){
+                    element2.childNodes[2].nextSibling.removeChild(element2.childNodes[2].nextSibling.childNodes[1])
+
+                }    
+       
+        })
+        e.target.classList.remove("active-adress")
+        let valdir=e.target.childNodes[2].nextElementSibling.className;
+        console.log(parseInt(valdir.split("_").pop()));
+        console.log(e.target.childNodes[4].nextElementSibling)
+     
+
+    })
+})
 })

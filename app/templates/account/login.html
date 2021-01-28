@@ -1,10 +1,9 @@
 {% load i18n %}
 {% load account socialaccount %}
-
+{% load static %}
 {% block content %}
 <div class="container">
-<h1>{% trans "Sign In" %}</h1>
-
+<h2 class="mb-4">{% trans "Sign In" %}</h2>
 {% get_providers as socialaccount_providers %}
 {% if socialaccount_providers %}
 <!-- <p>{% blocktrans with site.name as site_name %}Please sign in with one
@@ -27,17 +26,18 @@
 <form id="formlogin" class="login">
   {% csrf_token %}
 
-  <div class="md-form">
-    <i class="fas fa-user prefix"></i>
+  <div class="form-outline mb-4">
     <input type="email" name="login" class="form-control" required=""
-      id="materialLoginFormEmail">
-    <label for="materialLoginFormEmail">E-mail</label>
+      id="login">
+    <label for="login" class="form-label">    <i class="fa fa-user" aria-hidden="true"></i>
+
+      E-mail</label>
 
   </div>
-  <div class="md-form">
-    <i class="fas fa-lock prefix"></i>
-    <input class="form-control" type="password" name="password"  required="" id="materialLoginFormPassword">
-    <label for="materialLoginFormPassword">Password</label>
+  <div class="form-outline">
+    <input class="form-control" type="password" name="password"  required="" id="password">
+    <label for="password" class="form-label"> <i class="fa fa-lock" aria-hidden="true"></i>
+      Password</label>
 
   </div>
   {% if redirect_field_value %}
@@ -55,6 +55,7 @@
 
   <!-- Social login -->
 </form>
+
 <div class="login-or" style="text-align: center;">-{% trans 'or' %}-</div>
 
 <div class="socialaccount_ballot">
@@ -102,4 +103,5 @@
     });
   });
 </script>
+<script src="{% static 'js/mdb.min.js' %}"></script>
 {% endblock js_page %}

@@ -634,23 +634,28 @@ $(document).ready(function () {
 	}
   var inputNumberMin = document.getElementById('input-numberMin');
   var inputNumberMax = document.getElementById('input-numberMax');
-  priceSlider.noUiSlider.on('update', function (values, handle) {
+  if (priceSlider!=null){
+    priceSlider.noUiSlider.on('update', function (values, handle) {
 
-    var value = values[handle];
-
-    if (handle) {
-        inputNumberMax.value = value;
-    } else {
-        inputNumberMin.value = value;
-    }
-});
-
+      var value = values[handle];
+  
+      if (handle) {
+          inputNumberMax.value = value;
+      } else {
+          inputNumberMin.value = value;
+      }
+  });
+  }
+ 
+if(inputNumberMax!=null){
 inputNumberMax.addEventListener('change', function () {
   priceSlider.noUiSlider.set([null, this.value]);
-});
+});}
+if(inputNumberMin!=null){
+
 inputNumberMin.addEventListener('change', function () {
   priceSlider.noUiSlider.set([this.value, null]);
-});
+});}
 $('.input-number').each(function() {
   var $this = $(this),
   $input = $this.find('input[type="number"]'),
