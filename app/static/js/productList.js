@@ -242,7 +242,7 @@ function createAddress() {
     let pnamePro = document.createElement("p")
     let namePro = document.createElement("strong")
     namePro.textContent = response.province
-    pnamePro.classList.add("address_" + response.id, "justify-content-between", "d-flex")
+    pnamePro.classList.add("address_" + response.id, "justify-content-between", "d-flex","justify-self-end")
     pnamePro.appendChild(namePro)
     let txt3=document.createTextNode("")
 

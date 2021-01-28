@@ -61,6 +61,9 @@
 .justify-items-center{
     justify-items: center;
 }
+.justify-self-end{
+    justify-self: end;
+}
 .grid-row-start-1{
     grid-row-start: 1;
 }
