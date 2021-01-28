@@ -88,7 +88,7 @@ Array.from(selectElement).forEach(element=>{
     })
     
 })
-let adresscomponent=document.getElementsByClassName("address-component")
+let adresscomponent=document.getElementsByClassName("address-orders")
 Array.from(adresscomponent).forEach(element=>{
     console.log(element.className);
     element.addEventListener("click",(e)=>{
@@ -134,6 +134,16 @@ function cancelAddress(){
     document.getElementById("add_adress_circle").classList.remove("none")
     document.querySelector(".form_Address").classList.add("none")
 }
+const fetch_edit_account=(data,url)=>{
+    fetch(url,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+           "X-CSRFToken":csrftoken
+        },
+        body:JSON.stringify(data)
+    }).then(data=>data.json()).then(response=>console.log(response))
+}
 function editData(){
      document.getElementById("order_input_name").disabled=false
     document.getElementById("order_input_last").disabled=false
@@ -154,13 +164,7 @@ function save_data(url){
     document.getElementById("order_input_name").disabled=true
     document.getElementById("order_input_last").disabled=true
     let data={name,last}
-    fetch(url,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json",
-           "X-CSRFToken":csrftoken
-        },
-        body:JSON.stringify(data)
-    }).then(data=>data.json()).then(response=>console.log(response))
+    fetch_edit_account(data,url)
+    
 
 }

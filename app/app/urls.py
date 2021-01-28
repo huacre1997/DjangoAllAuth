@@ -26,6 +26,7 @@ urlpatterns = [
     path("",include(("base.urls","base"),namespace="base")),
     path("",include(("orders.urls","orders"),namespace="orders")),
     path("",include(("cart.urls","cart"),namespace="cart")),
+    path("",include(("accounts.urls","accounts"),namespace="accounts")),
 
     path("",include(("products.urls","products"),namespace="products")),
     path('__debug__/', include(debug_toolbar.urls)),

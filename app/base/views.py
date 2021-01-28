@@ -18,23 +18,6 @@ from django.urls import reverse
 from django.template import RequestContext 
 from accounts.models import Province,District,Adress
 from django.core import serializers
-from accounts.forms import AdressForm
-def createAddress(request):
-    if request.method=="POST":
-        form=AdressForm(request.POST)  
-        if form.is_valid():  
-            data=Adress()
-            data.user_id=request.user.id
-            data.description=form.cleaned_data["description"]
-            data.refrences=form.cleaned_data["refrences"]
-            data.district=form.cleaned_data["district"]
-            data.province=form.cleaned_data["province"]
-            data.save()
-            print("id")
-            return JsonResponse({"id":data.id,"province":data.province.name,"district":data.district.name,"description":data.description,"refrences":data.refrences},safe=False)
-                
-        else:
-            return HttpResponse(form.errors)
 
 
 def getProvince(request):
@@ -51,9 +34,15 @@ def index(request):
 
     num_visits = request.session.get('num_visits', 1)
     request.session['num_visits'] = num_visits + 1
+    products =  Product.objects.values("id","name","price","before","rating","slug","image","created").order_by("created").reverse()
+    image=Productimage.objects.all()
+    offers =  Product.objects.values("id","name","price","before","rating","slug","image","created").filter(before__gte=0).order_by("created").reverse()
 
     context = {
         'num_visits': num_visits,
+        "products":products,
+        "img":image,
+        "offers":offers
     }
     return render(request, 'index.html', context=context)
 class AboutView(TemplateView):

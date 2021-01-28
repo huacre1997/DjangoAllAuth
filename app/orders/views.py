@@ -51,14 +51,7 @@ class CheckOutView(TemplateView):
         context["cartCount"]=cart.quantity
 
         return context
-def editName(request):
-    if request.method=="POST":
-        post = json.loads(request.body.decode("utf-8"))
-        data=CustomCliente.objects.get(id=request.user.id)
-        data.first_name=post["name"]
-        data.last_name=post["last"]
-        data.save()
-    return JsonResponse({"response":"ok"},safe=False)
+
 # 1. Import the PayPal SDK client created in `Set up Server-Side SDK` section.
 from .pay import PayPalClient
 from paypalcheckoutsdk.orders import OrdersCaptureRequest

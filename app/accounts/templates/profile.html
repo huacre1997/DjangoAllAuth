@@ -1,0 +1,206 @@
+{% extends "index.html" %}
+{% block categories %}cat_menu none
+{% endblock categories %}
+{% block content %}
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-3">
+          <!-- Tab navs -->
+          <div class="nav flex-column nav-tabs text-center" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-tabs-home-tab" data-mdb-toggle="tab" href="#v-tabs-home" role="tab"
+              aria-controls="v-tabs-home" aria-selected="true">Mis datos </a>
+            <a class="nav-link" id="v-tabs-address-tab" data-mdb-toggle="tab" href="#v-tabs-address" role="tab"
+              aria-controls="v-tabs-address" aria-selected="true">Mis direcciones </a>
+            <a class="nav-link" id="v-tabs-profile-tab" data-mdb-toggle="tab" href="#v-tabs-profile" role="tab"
+              aria-controls="v-tabs-profile" aria-selected="false">Mis ordenes</a>
+            <a class="nav-link" id="v-tabs-messages-tab" data-mdb-toggle="tab" href="#v-tabs-messages" role="tab"
+              aria-controls="v-tabs-messages" aria-selected="false">Historial</a>
+          </div>
+          <!-- Tab navs -->
+        </div>
+
+        <div class="col-9">
+          <!-- Tab content -->
+          <div class="tab_profile-content" id="v-tabs-tabContent">
+            <div class="tab_profile-pane fade show active" id="v-tabs-home" role="tabpanel"
+              aria-labelledby="v-tabs-home-tab">
+              <div class="row mb-4">
+
+                <h1>Datos Personales</h1>
+              </div>
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+              <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="text" id="name_profile" class="form-control" value="{{obj.first_name}}" />
+                    <label class="form-label" for="name_profile">Nombres</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="text" id="last_profile" class="form-control" value="{{obj.last_name}}" />
+                    <label class="form-label" for="last_profile">Apellidos</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline">
+                    <input disabled type="text" id="cel_profile" class="form-control" value="{{obj.celular}}" />
+                    <label class="form-label" for="cel_profile">Celular</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline">
+                    <input disabled type="text" id="dni_profile" class="form-control" value="{{obj.dni}}" />
+                    <label class="form-label" for="dni_profile">DNI</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="form-outline">
+                    <input disabled type="text" id="email_pprofile" class="form-control" value="{{obj.email}}" />
+                    <label class="form-label" for="email_pprofile">Email</label>
+                  </div>
+                </div>
+
+              </div>
+
+
+
+              <!-- Checkbox -->
+
+
+              <!-- Submit button -->
+              <button id="edit_profile" data-url="{% url 'accounts:edit_data' %}"
+                class="btn btn-primary btn-block mb-4">Guardar</button>
+
+              <hr>
+              <form id="form_change_password" class="row g-3 needs-validation" novalidate>
+                <div class="col-12 ">
+                  {% csrf_token %}
+                  <h1>Cambiar contraseña</h1>
+                </div>
+                <div class="col-12">
+
+                  <div class="form-outline">
+                    <input type="password" id="before_pass" class="form-control" name="before_pass" required />
+                    <label class="form-label" for="before_pass">Contraseña actual</label>
+                    <div class="invalid-feedback" id="invalid_before_pass">Este campo es requerido.</div>
+
+                  </div>
+                </div>
+                <div class="col-12">
+
+                  <div class="form-outline">
+                    <input type="password" id="new-password" class="form-control" name="new-password" required />
+                    <label class="form-label" for="new-password"> Nueva Contraseña</label>
+                    <div class="invalid-feedback" id="invalid_new_pass">Este campo es requerido.</div>
+
+                  </div>
+                </div>
+                <div class="col-12">
+
+                  <div class="form-outline">
+                    <input required type="password" id="new_pass_repeat" class="form-control" name="new_pass_repeat"
+                      value="" />
+                    <label class="form-label" for="new_pass_repeat">Repetir Contraseña</label>
+                    <div class="invalid-feedback" id="invalid_repeat_pass">Este campo es requerido.</div>
+
+                  </div>
+                </div>
+                <button type="submit" id="btn_change_password" data-url="{% url 'accounts:change_password' %}"
+                  class="btn btn-primary btn-block mb-4">Actualizar contraseña</button>
+
+              </form>
+
+            </div>
+            <div class="tab_profile-pane fade" id="v-tabs-address" role="tabpanel" aria-labelledby="v-tabs-address-tab">
+              <h2 class="mb-4">Direcciones activas</h2>
+              <div class="grid-gap-1 g-col-3 mb-4" id="grid_adress_container">
+
+              {% for i  in address  %}
+              <div class="grid address-component grid-c-10 grid-r-1-1-4 address_profile">
+                <i class="align-self-center justify-self-center fas fa-map-marker-alt"></i>
+                <p class="address_{{i.id}} d-flex justify-content-between">
+                  <strong>{{i.getNameProvince}}</strong></p>
+                <p class="grid-row-start-2 grid-column-start-2"><strong>{{i.getNameDistrict}}</strong></p>
+                <p class="grid-row-start-3 grid-column-start-2">{{i.description}}</p>
+                <p class="grid-row-start-4 grid-column-start-2" style="font-size: 0.8em;">Ref: {{i.refrences}}
+                </p>
+              </div>
+              {% endfor %}
+            </div>
+              <hr>
+              <div class="form_Address">
+                
+                <form id="formAddress" action="{% url 'accounts:createAddress' %}">
+                  {% csrf_token %}
+                  <div class="mb-4">
+                    <h2>Agregar dirección</h2>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input type="text" name="description" id="description_id" class="form-control" />
+                    <label class="form-label" for="description">Dirección</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input type="text" id="refrences_id" name="refrences" class="form-control" />
+                    <label class="form-label" for="refrences">Referencias</label>
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col-lg-6">
+                      <select disabled class="form-control" name="province" id="selectProvince_id"
+                        data-url="{% url 'base:getprovince' %}" data-urldis="{% url 'base:getdistrict' %}">
+                        <option value="0" selected>Seleccione provincia..</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-6">
+                      <select disabled class="form-control" name="district" id="selectDistrict_id">
+                        <option value="0" selected>Seleccione distrito..</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                </form>
+                <div class="row">
+                  <div class="col-lg-6"> <button onclick="createAddress()"
+                      class="btn btn-primary btn-block btn-rounded mb-4">Guardar</button>
+                  </div>
+                  <div class="col-lg-6"> <button onclick="cancelAddress()"
+                      class="btn btn-primary btn-block btn-rounded mb-4">Cancelar</button></div>
+                </div>
+
+              </div>
+            </div>
+            <div class="tab_profile-pane fade" id="v-tabs-profile" role="tabpanel" aria-labelledby="v-tabs-profile-tab">
+
+            </div>
+            <div class="tab_profile-pane fade" id="v-tabs-messages" role="tabpanel"
+              aria-labelledby="v-tabs-messages-tab">
+              Messages content
+            </div>
+          </div>
+          <!-- Tab content -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block js_page %}
+  <script>
+    
+
+  document.getElementById("edit_profile").addEventListener("click",function(e){
+    let name=document.getElementById("name_profile").value
+    let last=document.getElementById("last_profile").value
+    let data={name,last}
+    fetch_edit_account(data,e.target.dataset.url)
+    
+})
+  </script>
+{% endblock js_page %}

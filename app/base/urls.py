@@ -17,7 +17,6 @@ urlpatterns = [
     path('logout/',LogoutView.as_view(next_page="/"),name="logout"),
     path("province/",getProvince,name="getprovince"),
     path("district/",getDistrict,name="getdistrict"),
-    path("createAddress/",createAddress,name="createAddress")
 
     # path('activate/<uidb64>/<token>/',activate, name='activate'),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)    

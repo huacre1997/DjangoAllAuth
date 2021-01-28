@@ -492,6 +492,16 @@
 {% endblock content %}
 {% block js_page%}
 <script>
+      var swiper = new Swiper('.swiper-container', {
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: function (index, className) {
+        console.log(index)
+        return '<span class="' + className + '">' + (index + 1) + '</span>';
+      },
+    },
+  });
     const callUrlComment = (url) => {
         let before = document.getElementById("comments-list")
         const data = new FormData();

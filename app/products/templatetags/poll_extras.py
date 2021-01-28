@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 from  products.models import Marcas,Category
+import random
 register = template.Library()
 @register.inclusion_tag('productList.html')
 def show_results(poll):
@@ -12,6 +13,9 @@ def show_results(poll):
 def to_str(value):
     """converts int to string"""
     return str(value)
+def randomId(id):
+    numero=random.randint(100,9999)
+    return str(f"{numero}{id}")
 def multiply(value):
    
     return value%5==0
@@ -59,6 +63,7 @@ register.filter('url', to_url)
 register.filter('priceSeparate', priceSeparate)
 register.filter('multiply', multiply)
 register.filter('multiplicacion', multiplicacion)
+register.filter('randomId', randomId)
 
 register.filter('to_str', to_str)
 register.filter('type_of', type_of)

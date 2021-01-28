@@ -51,7 +51,7 @@ body {
 }
 
 .dropdown3 {
-  font-size: 18px;
+  font-size: 14px;
   perspective: 1000px;
   z-index: 100;
 }
@@ -96,7 +96,7 @@ body {
 .dropdown_menu {
   position: absolute;
   top: 100%;
-  left: -100px;
+  left: 0;
   width: 200px;
   perspective: 1000px;
   z-index: -1;
