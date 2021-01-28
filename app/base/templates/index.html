@@ -510,77 +510,45 @@
                       <span>Nuevo</span></span>
                   </div>
                   {% endif %}
+   
+                  <li class="image_container">
 
-                  <img src="{% get_media_prefix %}{{item.image}} " class="w-100">
-
-
-
-
-
-
-                  <a>
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
+                    <img src="{% get_media_prefix %}{{item.image}} " class="imgProduct">
+  
+                    
+                  </li>
                 </div>
                 <div class="card-body">
-
-                  <h5 class="card-title mb-1"><strong><a class="dark-grey-text">{{item.name}}</a></strong></h5>
-                 
-    
-                 
-                    
-
+                  <h5 class="card-title mb-1"><strong><a class="dark-grey-text">{{item.name}}</a></strong></h5>            
                   <div id="wrapper2">
                     <div class="star-rating_Title">
                       <span style="width:{{item.rating|percent}}%"></span>
                     </div>
                   </div>
-
                   <div class="d-flex align-items-end mb-2">
                     <strong class="price_card" style="margin-right: 5px;">S/.{{item.price}}</strong>   
                      
                      {% if item.before %}
                      <del >S/.{{item.before}}</del>
                      {% endif %}
-                       
-
+                      
                 </div>
                   <a href="{% url 'products:product_detail'  item.slug %}" role="button"
                     class="btn btn-primary indigo btn-block  carrbutton seeDetail">Ver detalles</a>
-
-
                 </div>
               </div>
-
-
-
             </div>
             <!-- Card -->
-
-
             {% endfor %}
           </div>
-          <!-- Grid column -->
-
-          <!-- Grid column -->
-
-
         </div>
-        <!-- Grid row -->
-
-        <!-- Grid row -->
-
-        <!-- Grid row -->
 
       </section>
       <!-- Section: Block Content -->
       <section>
-
         <h3 class="font-weight-bold dark-grey-text text-center mb-5">Ofertas que vuelan</h3>
-
         <!-- Grid row -->
         <div class="row">
-
           {% load mptt_tags %}
           <!-- Grid column -->
           <div class="owl-carousel owl-theme">
@@ -592,16 +560,7 @@
               <div class="card card-ecommerce">
 
                 <div class="view overlay">
-                  <!-- <div class="ribbon-wrapper2">
-                    <div class="glow">&nbsp;</div>
-                    <div class="ribbon-front">
-                        Preventa
-                    </div>
-                    <div class="ribbon-edge-topleft"></div>
-                    <div class="ribbon-edge-topright"></div>
-                    <div class="ribbon-edge-bottomleft"></div>
-                    <div class="ribbon-edge-bottomright"></div>
-                </div> -->
+
                 <div class="ribbon">
 
                   <span class="ribbon1">
@@ -609,15 +568,13 @@
                     <span>OFERTA</span></span>
                 </div>
                 
-                <div class="imgProduct">
+                <li class="image_container">
 
-                  <img src="{% get_media_prefix %}{{item.image}} " class="w-100">
+                  <img src="{% get_media_prefix %}{{item.image}} " class="imgProduct">
 
-                </div>
-
-                  <a>
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
+                  
+                </li>
+               
                 </div>
                 <div class="card-body">
 
@@ -774,8 +731,7 @@
 
     </div>
     <div class="footer-copyright py-3">
-      © 2019 Copyright:
-      <a href="#" target="_blank"> MDBootstrap.com </a>
+      © 2021 Copyright:
     </div>
   </footer>
 

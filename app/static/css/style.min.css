@@ -867,7 +867,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 }
 
 .image_container {
-  height: 250px;
+  height: 300px;
   width: 100%;
   display: block;
   float: left;

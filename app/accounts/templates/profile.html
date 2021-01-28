@@ -122,26 +122,30 @@
               <h2 class="mb-4">Direcciones activas</h2>
               <div class="grid-gap-1 g-col-3 mb-4" id="grid_adress_container">
 
-              {% for i  in address  %}
-              <div class="grid address-component grid-c-10 grid-r-1-1-4 address_profile">
-                <i class="align-self-center justify-self-center fas fa-map-marker-alt"></i>
-                <p class="address_{{i.id}} d-flex justify-content-between">
-                  <strong>{{i.getNameProvince}}</strong></p>
-                <p class="grid-row-start-2 grid-column-start-2"><strong>{{i.getNameDistrict}}</strong></p>
-                <p class="grid-row-start-3 grid-column-start-2">{{i.description}}</p>
-                <p class="grid-row-start-4 grid-column-start-2" style="font-size: 0.8em;">Ref: {{i.refrences}}
-                </p>
+                {% for i  in address  %}
+                <div class="grid address-component grid-c-10 grid-r-1-1-4 address_profile">
+                  <i class="align-self-center justify-self-center fas fa-map-marker-alt"></i>
+                  <p class="address_{{i.id}} d-flex justify-content-between">
+                    <strong data-id="{{i.province.id}}">{{i.getNameProvince}}</strong>               
+                  </p>
+                  <p class="grid-row-start-2 grid-column-start-2"><strong
+                      data-id="{{i.district.id}}">{{i.getNameDistrict}}</strong></p>
+                  <p class="grid-row-start-3 grid-column-start-2">{{i.description}}</p>
+                  <p class="grid-row-start-4 grid-column-start-2" style="font-size: 0.8em;">Ref: {{i.refrences}}
+                  </p>
+                </div>
+                {% endfor %}
               </div>
-              {% endfor %}
-            </div>
               <hr>
               <div class="form_Address">
-                
-                <form id="formAddress" action="{% url 'accounts:createAddress' %}">
+
+                <form id="formAddress_profile" action="{% url 'accounts:createAddress' %}">
                   {% csrf_token %}
                   <div class="mb-4">
                     <h2>Agregar dirección</h2>
                   </div>
+                  <input type="hidden" id="method_address" name="method_address" value="post">
+                  <input type="hidden" id="address_profile" name="address_profile">
                   <div class="form-outline mb-4">
                     <input type="text" name="description" id="description_id" class="form-control" />
                     <label class="form-label" for="description">Dirección</label>
@@ -167,11 +171,11 @@
 
                 </form>
                 <div class="row">
-                  <div class="col-lg-6"> <button onclick="createAddress()"
+                  <div class="col-lg-6"> <button id="save-edit-address"
                       class="btn btn-primary btn-block btn-rounded mb-4">Guardar</button>
                   </div>
-                  <div class="col-lg-6"> <button onclick="cancelAddress()"
-                      class="btn btn-primary btn-block btn-rounded mb-4">Cancelar</button></div>
+                  <div class="col-lg-6"> <button onclick="cleanAddress()"
+                      class="btn btn-primary btn-block btn-rounded mb-4">Limpiar</button></div>
                 </div>
 
               </div>
@@ -192,15 +196,16 @@
 </div>
 {% endblock content %}
 {% block js_page %}
-  <script>
-    
+<script>
+  document.getElementById("edit_profile").addEventListener("click", function (e) {
+    let name = document.getElementById("name_profile").value
+    let last = document.getElementById("last_profile").value
+    let data = {
+      name,
+      last
+    }
+    fetch_edit_account(data, e.target.dataset.url)
 
-  document.getElementById("edit_profile").addEventListener("click",function(e){
-    let name=document.getElementById("name_profile").value
-    let last=document.getElementById("last_profile").value
-    let data={name,last}
-    fetch_edit_account(data,e.target.dataset.url)
-    
-})
-  </script>
+  })
+</script>
 {% endblock js_page %}

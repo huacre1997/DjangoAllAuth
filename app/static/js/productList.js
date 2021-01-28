@@ -218,7 +218,24 @@ function addCartAuth(e) {
 
   })
 }
+function cleanAddress() {
+  document.getElementById("method_address").value="post"
 
+  document.getElementById("address_profile").value=""
+  document.getElementById("description_id").setAttribute("value","" )
+  document.getElementById("description_id").classList.remove("active" )
+
+  document.getElementById("refrences_id").setAttribute("value","")
+  document.getElementById("refrences_id").classList.remove("active" )
+
+ document.getElementById("selectProvince_id").value=0
+ document.getElementById("selectDistrict_id").value=0
+ let adresscomponent=document.getElementsByClassName("address_profile")
+ Array.from(adresscomponent).forEach(element=>{
+  element.classList.remove("active-adress")
+})
+
+}
 function createAddress() {
   let form = document.querySelector("#formAddress")
   let formData = new FormData(form)

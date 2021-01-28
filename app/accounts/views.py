@@ -54,18 +54,29 @@ def editName(request):
 
 def createAddress(request):
     if request.method=="POST":
-        form=AdressForm(request.POST)  
-        if form.is_valid():  
-            data=Adress()
-            data.user_id=request.user.id
-            data.description=form.cleaned_data["description"]
-            data.refrences=form.cleaned_data["refrences"]
-            data.district=form.cleaned_data["district"]
-            data.province=form.cleaned_data["province"]
-          
-            data.save()
-            print("id")
-            return JsonResponse({"id":data.id,"province":data.province.name,"district":data.district.name,"description":data.description,"refrences":data.refrences},safe=False)
-                
+        if request.POST["method_address"]=="post":
+            form=AdressForm(request.POST)  
+            
+            if form.is_valid():  
+                data=Adress()
+                data.user_id=request.user.id
+                data.description=form.cleaned_data["description"]
+                data.refrences=form.cleaned_data["refrences"]
+                data.district=form.cleaned_data["district"]
+                data.province=form.cleaned_data["province"]
+            
+                data.save()
+                print("id")
+                return JsonResponse({"id":data.id,"province":data.province.name,"district":data.district.name,"description":data.description,"refrences":data.refrences},safe=False)
+                    
+            else:
+                return HttpResponse(form.errors)
         else:
-            return HttpResponse(form.errors)
+            print(request.POST["address_profile"])
+            data=Adress.objects.get(id=request.POST["address_profile"])
+            data.description=request.POST["description"]
+            data.refrences=request.POST["refrences"]
+            data.district.id=int(request.POST["district"])
+            data.province.id=int(request.POST["province"])
+            data.save()
+            return JsonResponse({"response":"edit"},safe=False)
