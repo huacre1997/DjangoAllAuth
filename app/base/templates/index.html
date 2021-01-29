@@ -204,9 +204,12 @@
                   <div class="cart_icon">
                     <img src="{% static 'icons/carrito.png'%}" id="carrIconNav">
 
-                    {% if request.user %}
+                    {% if request.user.is_authenticated %}
+                    
                     <div class="cart_count indigo darken-1"><span id="cartCount">{{amount}}</span></div>
                     {%else%}
+                    
+                      
                     {% with total_items=cart|length %}
                     <div class="cart_count indigo darken-1"><span id="cartCount">{{ total_items }} </span></div>
                     {% endwith %}
@@ -215,7 +218,7 @@
 
                   </div>
                   <div class="cart_content">
-                    <div class="cart_text"><a href="#" id="openDropdownCart" class="cartDrop">Mi carrito</a></div>
+                    <div class="cart_text"><a href="{% url 'cart:cart' %}" id="openDropdownCart" class="cartDrop">Mi carrito</a></div>
 
                     <div class="cart_price"></div>
 
@@ -223,7 +226,7 @@
 
                 </div>
               </div>
-
+<!-- 
               <div class="containerDrop animated fadeOut faster " style="display: none;" id="cartContainer">
                 <div class="shopping-cart">
                   <div class="shopping-cart-header">
@@ -240,7 +243,6 @@
                       <span class="main-color-text priceTotal">S/.&nbsp;{{ cart.get_total_price }}</span>
                     </div>
                   </div>
-                  <!--end shopping-cart-header -->
 
                   <ul class="shopping-cart-items">
                     {% for key, value in cartdrop.items  %}
@@ -262,8 +264,7 @@
 
                   <a href="{% url 'cart:cart' %}" class="btn btn-primary btn-block goCart">Ver detalles</a>
                 </div>
-                <!--end shopping-cart -->
-              </div>
+              </div> -->
               <!--end container -->
             </div>
           </div>

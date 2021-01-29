@@ -16,13 +16,11 @@ class Cart(object):
         product_id = str(product.id)   
           
         if product_id not in self.cart:
-            print("if product_id not in self.cart")            
-            self.cart[product_id] = {'quantity': 0,'price': str(product.price),"image":str(product.image),"name":str(product.name)}        
+            self.cart[product_id] = {'quantity': 0,'price': str(product.price),"image":str(product.image),"name":str(product.name),"marca":str(product.marca)}        
         if override_quantity:  
           
             self.cart[product_id]['quantity'] = quantity        
         else:   
-            print("else")            
          
             self.cart[product_id]['quantity'] += quantity        
         self.save()
@@ -31,7 +29,18 @@ class Cart(object):
     def remove(self, product):  
         product_id = str(product.id)        
         if product_id in self.cart:            
-            del self.cart[product_id]            
+            # del self.cart[product_id]            
+            self.save() 
+
+    def update(self, product,quantity):  
+        product_id = str(product.id)        
+        if product_id in self.cart: 
+            if quantity==0:
+                del self.cart[product_id]            
+
+            else:  
+                self.cart[product_id]['quantity'] = quantity 
+            
             self.save() 
     def __iter__(self):     
         product_ids = self.cart.keys()      

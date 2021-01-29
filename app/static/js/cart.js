@@ -32,9 +32,20 @@ for (let i = 0; i < x.length; i++) {
           "Content-Type": "application/json",
           "X-CSRFToken": csrftoken
         },body:  JSON.stringify(data)}).then(data=>data.json()).then(response=>{
+            console.log(response);
+            if(response.status!=0){
             document.getElementById("cartCount").innerHTML=response.quantity-response.count
             document.getElementById("abstractContent").innerHTML=`Subtotal (${response.quantity-response.count} productos) :`
             document.getElementById("abstractTotalCart").innerHTML=`S/. ${response.total}`
+            document.getElementById("abstract_TotalCart").innerHTML=`S/. ${response.total}`
+
+            }else{
+                document.getElementById("cartCount").innerHTML=response.quantity
+                document.getElementById("abstractContent").innerHTML=`Subtotal (${response.quantity} productos) :`
+                document.getElementById("abstractTotalCart").innerHTML=`S/. ${response.total}`
+                document.getElementById("abstract_TotalCart").innerHTML=`S/. ${response.total}`
+
+            }
             element.closest(".cartItem").style.animationPlayState="running"
             element.closest(".cartItem").addEventListener("animationend",()=>{
                 element.closest(".cartItem").remove()
@@ -45,12 +56,14 @@ for (let i = 0; i < x.length; i++) {
                 document.getElementById("idContentCart").appendChild(row)
 
             }
+        
         })
       })
 }
-const selectElement = document.getElementsByClassName('SelectCartCount');
+const selectElementAuth = document.getElementsByClassName('SelectCartCountAuth');
 
-Array.from(selectElement).forEach(element=>{
+
+Array.from(selectElementAuth).forEach(element=>{
     element.addEventListener("change",(e)=>{
         let newCount=e.target.value
         let pinpt=element.closest(".groupInput").firstChild.nextSibling.id
@@ -68,6 +81,7 @@ Array.from(selectElement).forEach(element=>{
                 document.getElementById("cartCount").innerHTML=response.quantity
                 document.getElementById("abstractContent").innerHTML=`Subtotal (${response.quantity} productos) :`
                 document.getElementById("abstractTotalCart").innerHTML=`S/. ${response.total}`
+                document.getElementById("abstract_TotalCart").innerHTML=`S/. ${response.total}`
                 if (newCount==0) {
                     element.closest(".cartItem").style.animationPlayState="running"
 

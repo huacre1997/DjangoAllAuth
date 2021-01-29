@@ -225,4 +225,16 @@ $(function () {
 
     })
   })
+
+  window.onscroll = function() {myFunction()};
+
+  function myFunction() {
+    if (document.documentElement.scrollTop > 290) {
+      document.getElementById("sectionAbstract").classList.add("fixedAbstract")
+    } else {
+      document.getElementById("sectionAbstract").classList.remove("fixedAbstract")
+
+    }
+  }
+  
 })

@@ -1036,7 +1036,13 @@ body #wrapper .star-rating_Title {
    position: absolute;
    top: 80px;
 }
-
+.fixedAbstract{
+  position: fixed;
+  top: 0;
+  right: 30px;
+  width: 389.33px !important;
+  height: 741.56px;
+}
  .shopping-cart {
 	 margin-top: 20px ;
 	 float: right;

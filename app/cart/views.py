@@ -18,17 +18,20 @@ import datetime
 
 @never_cache
 def CartView(request):
+    if request.user.is_authenticated:
+        cart = Cart.objects.get(user=request.user.id)
+        data = CartItem.objects.values("product","product__image", "product__name",
+                                    "product__marca__name", "product__price", "count").filter(cart=cart.id)
+        context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity}
+        return render(request, "cartList.html", context)
 
-    cart = Cart.objects.get(user=request.user.id)
-    data = CartItem.objects.values("product","product__image", "product__name",
-                                   "product__marca__name", "product__price", "count").filter(cart=cart.id)
-    context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity}
-
-    return render(request, "cartList.html", context)
+    else:
+        cartSession=ObjCart(request)
+        context = {"object": cartSession.cart}
+        return render(request, "cartList.html", context)
 def cart_add(request):
     data = []
     post = json.loads(request.body.decode("utf-8"))
-    print(post)
 
     model = apps.get_model('products', 'Product')
     if request.user.is_authenticated:
@@ -52,7 +55,6 @@ def cart_add(request):
                         break
 
                 else:
-                    print("forlse")
                     item = CartItem()
                     item.cart_id = cre.id
                     item.count = int(post["quantity"])
@@ -65,28 +67,30 @@ def cart_add(request):
     else:
         pro=Product.objects.get(id=post["id"])
         cart=ObjCart(request)
-        cart.add(pro)
+        cart.add(pro,int(post["quantity"]))
         cart.save()
-        print(cart)
-        return JsonResponse({"response":pro.name},safe=False)
+        return JsonResponse({"quantity":int(post["quantity"]),"total":cart.get_total_price()},safe=False)
     
 def removeCart(request):
     if request.method == "POST":
+        post = json.loads(request.body.decode("utf-8"))
+
         if request.user.is_authenticated:
-            post = json.loads(request.body.decode("utf-8"))
             cre = Cart.objects.get(user_id=request.user.id)
             p = CartItem.objects.get(product_id=post["converted"],cart_id=cre.id)
             p.delete()           
             return JsonResponse({"count":p.count,"quantity":cre.quantity,"total":cre.total-(p.count*p.product.price)},safe=False)
         else:
-            cart = Cart(request)
-            cart.clear()
-            print(cart.__dict__)
-            return JsonResponse(cart.__dict__["cart"], safe=False)
+            pro=Product.objects.get(id=post["converted"])
+
+            cart = ObjCart(request)
+            cart.update(pro,0)
+            return JsonResponse({"status":0,"quantity":len(cart),"total":cart.get_total_price()}, safe=False)
 def updateCart(request):
     if request.method == "POST":
+        post = json.loads(request.body.decode("utf-8"))
+        print(post)
         if request.user.is_authenticated:
-            post = json.loads(request.body.decode("utf-8"))
             cre = Cart.objects.get(user_id=request.user.id)
             p = CartItem.objects.get(product_id=post["converted"],cart_id=cre.id)
             cre.total=cre.total-(p.product.price*p.count)
@@ -96,3 +100,9 @@ def updateCart(request):
             p.updated = datetime.datetime.now()
             p.save()
             return JsonResponse({"quantity":cre.quantity+int(post["newCount"]),"total":cre.total+(p.count*p.product.price)},safe=False)
+        else:
+            pro=Product.objects.get(id=post["converted"])
+            cartSession=ObjCart(request)
+            cartSession.update(pro,int(post["newCount"]))
+
+            return JsonResponse({"quantity":len(cartSession),"total":cartSession.get_total_price()},safe=False)

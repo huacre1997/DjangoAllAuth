@@ -20,7 +20,8 @@ def marcas(request):
     else:
         print()
         print("else")
-        print(cart)
+        vasss=Cart(request)
+        print(vasss)
 
     return {'marca':marca,"cart":Cart(request)}
 

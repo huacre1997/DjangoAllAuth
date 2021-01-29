@@ -69,19 +69,19 @@ Array.from(document.getElementsByClassName("custom-control-input")).forEach(elem
 
   }
 })
-document.getElementById("cartEmpty").addEventListener("click", function () {
-  fetch(this.dataset.url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrftoken
-    }
-  }).then(response => response.json()).then(data => {
-    document.querySelector(".shopping-cart-items").innerHTML = ""
-    document.querySelector(".priceTotal").innerHTML = "S/. 0"
-    document.getElementById("cartCount").innerHTML = "0"
-  })
-})
+// document.getElementById("cartEmpty").addEventListener("click", function () {
+//   fetch(this.dataset.url, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "X-CSRFToken": csrftoken
+//     }
+//   }).then(response => response.json()).then(data => {
+//     document.querySelector(".shopping-cart-items").innerHTML = ""
+//     document.querySelector(".priceTotal").innerHTML = "S/. 0"
+//     document.getElementById("cartCount").innerHTML = "0"
+//   })
+// })
 let addCart = (url) => {
   fetch(url, {
     method: "POST",
@@ -119,7 +119,34 @@ let addCart = (url) => {
 
   })
 }
+function addCartAuth(e) {
+  id = parseInt(document.getElementById("productId").value)
+  quantity = document.getElementById("quantity").value
+  document.getElementById("AddCart").disabled = true
+  console.log(parseInt(quantity));
 
+  let data = {
+    id,
+    quantity
+  }
+  url = document.getElementById("AddCart").dataset.url
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken
+    },
+    body: JSON.stringify(data)
+  }).then(data => data.json()).then((response) => {
+    console.log(response)
+    document.getElementById("quantity").value = ""
+    document.getElementById("cartCount").innerHTML = response.quantity + parseInt(document.getElementById("cartCount").innerHTML )
+    document.getElementById("AddCart").textContent = "Agregado"
+    document.getElementById("AddCart").disabled = false
+    document.querySelector(".priceTotal").innerHTML =  `S/. ${response.total}`
+
+  })
+}
 function postComment() {
   document.getElementById("postComment").innerHTML = ""
   let form = document.querySelector("#commentForm")
@@ -192,32 +219,7 @@ document.addEventListener("click", (e) => {
 })
 let showDog = false
 
-function addCartAuth(e) {
-  id = parseInt(document.getElementById("productId").value)
-  quantity = document.getElementById("quantity").value
-  document.getElementById("AddCart").disabled = true
 
-  let data = {
-    id,
-    quantity
-  }
-  url = document.getElementById("AddCart").dataset.url
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrftoken
-    },
-    body: JSON.stringify(data)
-  }).then(data => data.json()).then((response) => {
-    console.log(response)
-    document.getElementById("quantity").value = ""
-    document.getElementById("cartCount").innerHTML = response.quantity + parseInt(quantity)
-    document.getElementById("AddCart").textContent = "Agregado"
-    document.getElementById("AddCart").disabled = false
-
-  })
-}
 function cleanAddress() {
   document.getElementById("method_address").value="post"
 
