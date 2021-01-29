@@ -508,11 +508,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
         z-index:999;
       }
       @media only screen and (max-width: 1200px) {
-        .image_container{
+        .image_container_products{
         height: 12.5em;}
       }
       @media (max-width: 600px) {
-        .image_container{
+        .image_container_products{
         height: 100%;}
       }
 
@@ -807,8 +807,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   width: 28px !important;
   height: 22px !important;
 
-  right: -12px !important;
-  top: -6px !important
+ 
 }
 
 
@@ -866,8 +865,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   max-height: 140px;
 }
 
-.image_container {
-  height: 300px;
+.image_container_products {
+  height: 250px;
   width: 100%;
   display: block;
   float: left;
@@ -877,7 +876,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   background-repeat: no-repeat;
 }
 
-.image_container img,
+.image_container_products img,
 #status {
   -webkit-transition: opacity 0.4s;
      -moz-transition: opacity 0.4s;
@@ -914,14 +913,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
   }
 }
 
-.image_container.is-broken {
+.image_container_products.is-broken {
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/82/broken.png');
   background-color: grey;
   
 }
 
-.image_container.is-loading img,
-.image_container.is-broken img {
+.image_container_products.is-loading img,
+.image_container_products.is-broken img {
   opacity: 0;
 }
 
@@ -1232,12 +1231,12 @@ height: 450px;	-webkit-transform: translate3d(0%, 0, 0);
 	outline: 0;
 }
 
-.image_container img{
+.image_container_products img{
   width: 100%;
   height: auto;
 }
 @supports(object-fit: cover){
-    .image_container img{
+    .image_container_products img{
       height: 100%;
       object-fit: cover;
       object-position: center center;

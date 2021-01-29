@@ -35,14 +35,14 @@ def index(request):
     num_visits = request.session.get('num_visits', 1)
     request.session['num_visits'] = num_visits + 1
     products =  Product.objects.values("id","name","price","before","rating","slug","image","created").order_by("created").reverse()
-    image=Productimage.objects.all()
     offers =  Product.objects.values("id","name","price","before","rating","slug","image","created").filter(before__gte=0).order_by("created").reverse()
+    top =  Product.objects.values("id","name","price","before","rating","slug","image","created").filter(rating__gte=4)
 
     context = {
         'num_visits': num_visits,
         "products":products,
-        "img":image,
-        "offers":offers
+        "offers":offers,
+        "top":top
     }
     return render(request, 'index.html', context=context)
 class AboutView(TemplateView):

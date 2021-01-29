@@ -3,26 +3,26 @@ $(function () {
     width: 'resolve' // need to override the changed default
   });
 
-    var swiper2 = new Swiper('.swiper-container', {
-      spaceBetween: 30,
-      autoplay: {
-        delay: 2000,
-        disableOnInteraction: false,
-      },
-      flipEffect: {
-        slideShadows: false,
-      },
-            loop: true,
+  var swiper3 = new Swiper('.swiper-index', {
+    spaceBetween: 30,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
+    },
+    flipEffect: {
+      slideShadows: false,
+    },
+    loop: true,
 
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
+    pagination: {
+      el: '.swiper-pagination-index',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
 
   $(document).on("click", "#closeModal", function () {
     $(".modal-backdrop").removeClass("modal-backdrop fade show ")
@@ -80,142 +80,149 @@ $(function () {
 
   });
   var myModalEl = document.getElementById('exampleModalCenter')
-// myModalEl.addEventListener('hidden.bs.modal', function (event) {
-//   console.log("cerrado");
-//   document.querySelector(".modal-body").innerHTML=""
+  // myModalEl.addEventListener('hidden.bs.modal', function (event) {
+  //   console.log("cerrado");
+  //   document.querySelector(".modal-body").innerHTML=""
 
-// })
+  // })
   Array.from(document.getElementsByClassName("Details")).forEach((element) => {
 
     element.addEventListener("click", function (e) {
       let url = e.target.closest(".Details").getAttribute("tag-url")
-      e.target.closest(".Details").classList.add("bg-dark","is-loading")
-      fetch(url).then(data=>data.json()).then(
+      e.target.closest(".Details").classList.add("bg-dark", "is-loading")
+      fetch(url).then(data => data.json()).then(
         function (response) {
-        document.querySelector(".modal-body").innerHTML=response.response
+          document.querySelector(".modal-body").innerHTML = response.response
           $('#exampleModalCenter').modal('show')
-          e.target.closest(".Details").classList.remove("bg-dark","is-loading")
+          e.target.closest(".Details").classList.remove("bg-dark", "is-loading")
 
 
-   
+
 
         }
       )
     })
- 
-  })
-  
- selectProvince=document.getElementById("selectProvince_id")
-selectDistrict=document.getElementById("selectDistrict_id")
-if (selectProvince!=null){
-  url=selectProvince.dataset.url 
 
-  fetch(url).then(data=>data.json()).then(response=>{
-  
-    selectProvince.disabled=false
-
-    for (let index = 0; index < response.length; index++) {
-      let option=document.createElement("option")
-      option.innerText=response[index].fields.name
-      option.setAttribute("value",response[index].pk)
-      selectProvince.appendChild(option)
-    }
   })
 
+  selectProvince = document.getElementById("selectProvince_id")
+  selectDistrict = document.getElementById("selectDistrict_id")
+  if (selectProvince != null) {
+    url = selectProvince.dataset.url
+
+    fetch(url).then(data => data.json()).then(response => {
+      selectProvince.disabled = false
+
+      for (let index = 0; index < response.length; index++) {
+        let option = document.createElement("option")
+        option.innerText = response[index].fields.name
+        option.setAttribute("value", response[index].pk)
+        selectProvince.appendChild(option)
+      }
+    })
 
 
 
-selectProvince.addEventListener("change",function(e){
-  selectDistrict.disabled=true
 
-  let id=e.target.options[e.target.options.selectedIndex].attributes[0].value
+    selectProvince.addEventListener("change", function (e) {
+      selectDistrict.disabled = true
 
-  let url=selectProvince.dataset.urldis
-  
-  fetch(url,{method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "X-CSRFToken": csrftoken
-  },body: JSON.stringify(id)}).then(data=>data.json()).then(response=>{
-    selectDistrict.innerHTML=""
-    selectDistrict.disabled=false
-    let selectfirst=document.createElement("option")
-    selectfirst.innerText="Seleccione ditrito..."
-    selectDistrict.appendChild(selectfirst)
- 
-    for (let index = 0; index < response.length; index++) {
-      let option=document.createElement("option")
-      option.innerText=response[index].fields.name
-      option.setAttribute("value",response[index].pk)
-      selectDistrict.appendChild(option)
-    }
-  })
-})
+      let id = e.target.options[e.target.options.selectedIndex].attributes[0].value
 
-}
-let linkprofile=document.getElementById("profile")
-document.getElementById("save-edit-address").addEventListener("click",function () {
-  let form = document.querySelector("#formAddress_profile")
-  let formData = new FormData(form)
+      let url = selectProvince.dataset.urldis
 
- fetch(form.getAttribute("action"), {
-  method: "POST",
-
-  body: formData
-}).then(data => data.json()).then(response=>console.log(response))
-  })
-if (linkprofile!=null) {
-  linkprofile.addEventListener("click",function () {
-    window.location.href=this.dataset.url;
-  })
-}
-
-let adresscomponent=document.getElementsByClassName("address_profile")
-Array.from(adresscomponent).forEach(element=>{
-    element.addEventListener("click",(e)=>{
-        Array.from(adresscomponent).forEach(element2=>{
-                element2.classList.add("active-adress")
-             
-       
-        })
-        e.target.classList.remove("active-adress")
-        let valdir=e.target.childNodes[2].nextElementSibling.className;
-   
-        document.getElementById("method_address").value="edit"
-        document.getElementById("address_profile").value=parseInt(valdir.split("_").pop())
-        document.getElementById("description_id").setAttribute("value",e.target.childNodes[7].textContent )
-        document.getElementById("description_id").classList.add("active")
-        document.getElementById("refrences_id").setAttribute("value",e.target.childNodes[9].textContent.slice(5))
-        document.getElementById("refrences_id").classList.add("active")
-       document.getElementById("selectProvince_id").value=e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id
-
-        // document.getElementById("selectProvince_id").setAttribute("value",e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
-        // document.getElementById("selectDistrict_id").setAttribute("value",e.target.childNodes[5].childNodes[0].dataset.id)
-        let url=selectProvince.dataset.urldis
-
-        fetch(url,{method: "POST",
+      fetch(url, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRFToken": csrftoken
-        },body: JSON.stringify(e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)}).then(data=>data.json()).then(response=>{
-          selectDistrict.innerHTML=""
-          selectDistrict.disabled=false
-          let selectfirst=document.createElement("option")
-          selectfirst.setAttribute("value",0)
+        },
+        body: JSON.stringify(id)
+      }).then(data => data.json()).then(response => {
+        selectDistrict.innerHTML = ""
+        selectDistrict.disabled = false
+        let selectfirst = document.createElement("option")
+        selectfirst.innerText = "Seleccione ditrito..."
+        selectDistrict.appendChild(selectfirst)
 
-          selectfirst.innerText="Seleccione ditrito..."
-          selectDistrict.appendChild(selectfirst)
-       
-          for (let index = 0; index < response.length; index++) {
-            let option=document.createElement("option")
-            option.innerText=response[index].fields.name
-            option.setAttribute("value",response[index].pk)
-            selectDistrict.appendChild(option)
-          }
-          document.getElementById("selectDistrict_id").value=e.target.childNodes[5].childNodes[0].dataset.id
+        for (let index = 0; index < response.length; index++) {
+          let option = document.createElement("option")
+          option.innerText = response[index].fields.name
+          option.setAttribute("value", response[index].pk)
+          selectDistrict.appendChild(option)
+        }
+      })
+    })
 
-        })
+  }
+  let linkprofile = document.getElementById("profile")
+  let lsd = document.getElementById("save-edit-address")
+  if (lsd != null) {
+    lsd.addEventListener("click", function () {
+      let form = document.querySelector("#formAddress_profile")
+      let formData = new FormData(form)
+
+      fetch(form.getAttribute("action"), {
+        method: "POST",
+
+        body: formData
+      }).then(data => data.json()).then(response => console.log(response))
+    })
+  }
+  if (linkprofile != null) {
+    linkprofile.addEventListener("click", function () {
+      window.location.href = this.dataset.url;
+    })
+  }
+
+  let adresscomponent = document.getElementsByClassName("address_profile")
+  Array.from(adresscomponent).forEach(element => {
+    element.addEventListener("click", (e) => {
+      Array.from(adresscomponent).forEach(element2 => {
+        element2.classList.add("active-adress")
+
+
+      })
+      e.target.classList.remove("active-adress")
+      let valdir = e.target.childNodes[2].nextElementSibling.className;
+
+      document.getElementById("method_address").value = "edit"
+      document.getElementById("address_profile").value = parseInt(valdir.split("_").pop())
+      document.getElementById("description_id").setAttribute("value", e.target.childNodes[7].textContent)
+      document.getElementById("description_id").classList.add("active")
+      document.getElementById("refrences_id").setAttribute("value", e.target.childNodes[9].textContent.slice(5))
+      document.getElementById("refrences_id").classList.add("active")
+      document.getElementById("selectProvince_id").value = e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id
+      // document.getElementById("selectProvince_id").setAttribute("value",e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
+      // document.getElementById("selectDistrict_id").setAttribute("value",e.target.childNodes[5].childNodes[0].dataset.id)
+      let url = selectProvince.dataset.urldis
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify(e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
+      }).then(data => data.json()).then(response => {
+        selectDistrict.innerHTML = ""
+        selectDistrict.disabled = false
+        let selectfirst = document.createElement("option")
+        selectfirst.setAttribute("value", 0)
+
+        selectfirst.innerText = "Seleccione ditrito..."
+        selectDistrict.appendChild(selectfirst)
+
+        for (let index = 0; index < response.length; index++) {
+          let option = document.createElement("option")
+          option.innerText = response[index].fields.name
+          option.setAttribute("value", response[index].pk)
+          selectDistrict.appendChild(option)
+        }
+        document.getElementById("selectDistrict_id").value = e.target.childNodes[5].childNodes[0].dataset.id
+      
+      })
 
     })
-})
+  })
 })

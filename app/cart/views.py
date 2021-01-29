@@ -62,21 +62,14 @@ def cart_add(request):
                 print("else")
 
             return JsonResponse({"quantity": cre.quantity}, safe=False)
-
-    # else:
-    #     post = json.loads(request.body.decode("utf-8"))
-    #     if request.method=="POST":
-    #         data=[]
-    #         cart = Cart(request)
-    #         product = get_object_or_404(model, id=id)
-    #         cart.add(product=product,quantity=1,override_quantity=False)
-    #         context={"total":cart.get_total_price(),
-    #         "cantidad":cart.__len__(),
-    #         "data":cart.__dict__["cart"]}
-    #         print(cart.__dict__["cart"])
-    #         return JsonResponse(context,safe=False)
-
-
+    else:
+        pro=Product.objects.get(id=post["id"])
+        cart=ObjCart(request)
+        cart.add(pro)
+        cart.save()
+        print(cart)
+        return JsonResponse({"response":pro.name},safe=False)
+    
 def removeCart(request):
     if request.method == "POST":
         if request.user.is_authenticated:

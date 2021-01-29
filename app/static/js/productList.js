@@ -210,7 +210,7 @@ function addCartAuth(e) {
     },
     body: JSON.stringify(data)
   }).then(data => data.json()).then((response) => {
-
+    console.log(response)
     document.getElementById("quantity").value = ""
     document.getElementById("cartCount").innerHTML = response.quantity + parseInt(quantity)
     document.getElementById("AddCart").textContent = "Agregado"

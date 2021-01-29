@@ -126,8 +126,11 @@
                                 Agregar
                                 opinion</a>
                             <div>
-                                <h3 class="fw-bold">S/.{{object.price}} <del
-                                        class="product-old-price text-secondary">S/.{{object.before}}</del></h3>
+                                <h3 class="fw-bold">S/.{{object.price}} 
+                                    {% if object.before %}
+                                    <del
+                                    class="product-old-price">S/.{{object.before}}</del>{%endif%}                                  
+                                 </h3>
                                 {% if object.amount >= 20 %}
                                 <span class="badge rounded-pill bg-success">Disponible</span>
                                 {%elif object.amount < 20 %}
@@ -288,7 +291,7 @@
                                     <div id="reviews" class="comments-container">
                                         {% if comment %}
                                         <div id="comments-list" class="animated fadeIn fast mt-3" style="height: 500px;">
-                                            <div class="swiper-container">
+                                            <div class="swiper-container swiperComment">
                                                 <div class="swiper-wrapper">
                                                     {% for chunk in comment|chunks:4 %}
                                                     <div class="swiper-slide">
@@ -347,7 +350,6 @@
     
                                                 <div class="swiper-pagination" style="bottom: 40px !important;"></div>
                                             </div>
-    
                                         </div>
                                    
                                         {%else%}
@@ -492,7 +494,7 @@
 {% endblock content %}
 {% block js_page%}
 <script>
-      var swiper = new Swiper('.swiper-container', {
+      var swiper3 = new Swiper('.swiperComment', {
     pagination: {
       el: '.swiper-pagination',
       clickable: true,

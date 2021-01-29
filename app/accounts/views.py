@@ -2,7 +2,7 @@ from django.http import request
 from django.http.response import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
-from .models import CustomCliente,Adress
+from .models import CustomCliente,Adress, District, Province
 from .forms import ChangePassword
 import json
 from .forms import AdressForm
@@ -54,8 +54,9 @@ def editName(request):
 
 def createAddress(request):
     if request.method=="POST":
+        form=AdressForm(request.POST)  
+
         if request.POST["method_address"]=="post":
-            form=AdressForm(request.POST)  
             
             if form.is_valid():  
                 data=Adress()
@@ -72,11 +73,14 @@ def createAddress(request):
             else:
                 return HttpResponse(form.errors)
         else:
-            print(request.POST["address_profile"])
+            print(request.POST)
             data=Adress.objects.get(id=request.POST["address_profile"])
+            province=Province.objects.get(id=request.POST["province"])
+            district=District.objects.get(id=request.POST["district"])
+
             data.description=request.POST["description"]
             data.refrences=request.POST["refrences"]
-            data.district.id=int(request.POST["district"])
-            data.province.id=int(request.POST["province"])
+            data.district=district
+            data.province=province
             data.save()
             return JsonResponse({"response":"edit"},safe=False)
