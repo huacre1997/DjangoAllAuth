@@ -17,10 +17,11 @@ from cart.models import Cart
 from django.views.decorators.cache import never_cache
 from .models import Order
 from .pay import *
-class CheckOutView(TemplateView):
+class CheckOutView(TemplateView,LoginRequiredMixin):
     template_name = "checkout.html"
-    def dispatch(self, request, *args, **kwargs):
-        return super(CheckOutView, self).dispatch(request, *args, **kwargs)
+
+    login_url = '/productos'
+
     def post(self, *args,**kwargs):
         cart=Cart.objects.get(user=self.request.user.id)
         data=json.loads(self.request.body.decode("utf-8"))
@@ -44,11 +45,11 @@ class CheckOutView(TemplateView):
     def get_context_data(self, **kwargs):
 
         context = super(CheckOutView, self).get_context_data(**kwargs)
-        cart = Cart.objects.get(user=self.request.user.id)
+        # cart = Cart.objects.get(user=self.request.user.id)
 
         context["address"]=Adress.objects.filter(user_id=self.request.user.id)
-        context["cartTotal"]=cart.total
-        context["cartCount"]=cart.quantity
+        # context["cartTotal"]=cart.total
+        # context["cartCount"]=cart.quantity
 
         return context
 

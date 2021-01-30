@@ -176,7 +176,8 @@ $(function () {
   }
 
   let adresscomponent = document.getElementsByClassName("address_profile")
-  Array.from(adresscomponent).forEach(element => {
+  if(adresscomponent!=null){
+  Array.from(adresscomponent).forEach(element => {  
     element.addEventListener("click", (e) => {
       Array.from(adresscomponent).forEach(element2 => {
         element2.classList.add("active-adress")
@@ -225,16 +226,18 @@ $(function () {
 
     })
   })
-
+}
+let scrollAbstract= document.getElementById("sectionAbstract")
+if(scrollAbstract!=null){
   window.onscroll = function() {myFunction()};
 
   function myFunction() {
     if (document.documentElement.scrollTop > 290) {
-      document.getElementById("sectionAbstract").classList.add("fixedAbstract")
+      scrollAbstract.classList.add("fixedAbstract")
     } else {
-      document.getElementById("sectionAbstract").classList.remove("fixedAbstract")
+      scrollAbstract.classList.remove("fixedAbstract")
 
     }
   }
-  
+}
 })

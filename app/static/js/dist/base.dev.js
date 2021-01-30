@@ -157,49 +157,68 @@ $(function () {
   }
 
   var adresscomponent = document.getElementsByClassName("address_profile");
-  Array.from(adresscomponent).forEach(function (element) {
-    element.addEventListener("click", function (e) {
-      Array.from(adresscomponent).forEach(function (element2) {
-        element2.classList.add("active-adress");
-      });
-      e.target.classList.remove("active-adress");
-      var valdir = e.target.childNodes[2].nextElementSibling.className;
-      document.getElementById("method_address").value = "edit";
-      document.getElementById("address_profile").value = parseInt(valdir.split("_").pop());
-      document.getElementById("description_id").setAttribute("value", e.target.childNodes[7].textContent);
-      document.getElementById("description_id").classList.add("active");
-      document.getElementById("refrences_id").setAttribute("value", e.target.childNodes[9].textContent.slice(5));
-      document.getElementById("refrences_id").classList.add("active");
-      document.getElementById("selectProvince_id").value = e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id; // document.getElementById("selectProvince_id").setAttribute("value",e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
-      // document.getElementById("selectDistrict_id").setAttribute("value",e.target.childNodes[5].childNodes[0].dataset.id)
 
-      var url = selectProvince.dataset.urldis;
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrftoken
-        },
-        body: JSON.stringify(e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
-      }).then(function (data) {
-        return data.json();
-      }).then(function (response) {
-        selectDistrict.innerHTML = "";
-        selectDistrict.disabled = false;
-        var selectfirst = document.createElement("option");
-        selectfirst.setAttribute("value", 0);
-        selectfirst.innerText = "Seleccione ditrito...";
-        selectDistrict.appendChild(selectfirst);
+  if (adresscomponent != null) {
+    Array.from(adresscomponent).forEach(function (element) {
+      element.addEventListener("click", function (e) {
+        Array.from(adresscomponent).forEach(function (element2) {
+          element2.classList.add("active-adress");
+        });
+        e.target.classList.remove("active-adress");
+        var valdir = e.target.childNodes[2].nextElementSibling.className;
+        document.getElementById("method_address").value = "edit";
+        document.getElementById("address_profile").value = parseInt(valdir.split("_").pop());
+        document.getElementById("description_id").setAttribute("value", e.target.childNodes[7].textContent);
+        document.getElementById("description_id").classList.add("active");
+        document.getElementById("refrences_id").setAttribute("value", e.target.childNodes[9].textContent.slice(5));
+        document.getElementById("refrences_id").classList.add("active");
+        document.getElementById("selectProvince_id").value = e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id; // document.getElementById("selectProvince_id").setAttribute("value",e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
+        // document.getElementById("selectDistrict_id").setAttribute("value",e.target.childNodes[5].childNodes[0].dataset.id)
 
-        for (var index = 0; index < response.length; index++) {
-          var option = document.createElement("option");
-          option.innerText = response[index].fields.name;
-          option.setAttribute("value", response[index].pk);
-          selectDistrict.appendChild(option);
-        }
+        var url = selectProvince.dataset.urldis;
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken
+          },
+          body: JSON.stringify(e.target.childNodes[3].childNodes[0].nextElementSibling.dataset.id)
+        }).then(function (data) {
+          return data.json();
+        }).then(function (response) {
+          selectDistrict.innerHTML = "";
+          selectDistrict.disabled = false;
+          var selectfirst = document.createElement("option");
+          selectfirst.setAttribute("value", 0);
+          selectfirst.innerText = "Seleccione ditrito...";
+          selectDistrict.appendChild(selectfirst);
 
-        document.getElementById("selectDistrict_id").value = e.target.childNodes[5].childNodes[0].dataset.id;
+          for (var index = 0; index < response.length; index++) {
+            var option = document.createElement("option");
+            option.innerText = response[index].fields.name;
+            option.setAttribute("value", response[index].pk);
+            selectDistrict.appendChild(option);
+          }
+
+          document.getElementById("selectDistrict_id").value = e.target.childNodes[5].childNodes[0].dataset.id;
+        });
       });
     });
-  });
+  }
+
+  var scrollAbstract = document.getElementById("sectionAbstract");
+
+  if (scrollAbstract != null) {
+    var myFunction = function myFunction() {
+      if (document.documentElement.scrollTop > 290) {
+        scrollAbstract.classList.add("fixedAbstract");
+      } else {
+        scrollAbstract.classList.remove("fixedAbstract");
+      }
+    };
+
+    window.onscroll = function () {
+      myFunction();
+    };
+  }
 });

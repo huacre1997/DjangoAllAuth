@@ -177,28 +177,29 @@ function postComment() {
 
 }
 
+// let openDropdownCart=document.getElementById("openDropdownCart")
+// if(openDropdownCart!=null){
+// openDropdownCart.addEventListener("click", (e) => {
+//   e.preventDefault()
+//   let clasarr = document.getElementById("cartContainer").classList
+//   if (Array.from(clasarr).indexOf("fadeOut") > -1) {
+//     document.getElementById("cartContainer").style.display = "block"
+//     document.getElementById("cartContainer").classList.remove("fadeOut")
+//     document.getElementById("cartContainer").classList.add("fadeIn")
+//   } else {
+//     document.getElementById("cartContainer").classList.add("fadeOut")
+//     document.getElementById("cartContainer").classList.remove("fadeIn")
+//   }
+//   if (showDog === true) {
+//     document.getElementById("cartContainer").style.display = "block"
+//     document.getElementById("cartContainer").classList.remove("fadeOut")
+//     document.getElementById("cartContainer").classList.add("fadeIn")
+//   } else {
+//     document.getElementById("cartContainer").classList.add("fadeOut")
+//     document.getElementById("cartContainer").classList.remove("fadeIn")
 
-document.getElementById("openDropdownCart").addEventListener("click", (e) => {
-  e.preventDefault()
-  let clasarr = document.getElementById("cartContainer").classList
-  if (Array.from(clasarr).indexOf("fadeOut") > -1) {
-    document.getElementById("cartContainer").style.display = "block"
-    document.getElementById("cartContainer").classList.remove("fadeOut")
-    document.getElementById("cartContainer").classList.add("fadeIn")
-  } else {
-    document.getElementById("cartContainer").classList.add("fadeOut")
-    document.getElementById("cartContainer").classList.remove("fadeIn")
-  }
-  // if (showDog === true) {
-  //   document.getElementById("cartContainer").style.display = "block"
-  //   document.getElementById("cartContainer").classList.remove("fadeOut")
-  //   document.getElementById("cartContainer").classList.add("fadeIn")
-  // } else {
-  //   document.getElementById("cartContainer").classList.add("fadeOut")
-  //   document.getElementById("cartContainer").classList.remove("fadeIn")
-
-  // }
-})
+//   }
+// })}
 document.addEventListener("click", (e) => {
   let arr = e.target.classList
   if (Array.from(arr).includes("shopping-cart-header") ||
