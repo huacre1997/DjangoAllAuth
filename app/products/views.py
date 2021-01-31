@@ -26,7 +26,6 @@ class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
     form_class=RatingForm
-    print("Entro al detail")
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs) :
  
@@ -367,7 +366,10 @@ def getProduct(request,pk):
         data = {
                 'response': render_to_string("modal.html", {'product': item,"n":row[0]}, request=request)}
         return JsonResponse(data,safe=False)
+import re
+
 class Search(TemplateView):
+    
     template_name="productList.html"
     def get(self, *args, **kwargs):
         return render(self.request,self.template_name,self.results())
@@ -377,10 +379,16 @@ class Search(TemplateView):
         return HttpResponse(render_block_to_string("productList.html","content",context=self.results(),request=self.request))
 
     def results(self):
-        search=self.request.GET.get("q")
+        search_reg=self.request.GET.get("q")
         brand=self.request.GET.get("brand")
         categ=self.request.GET.get("sc")
         order=self.request.GET.get("order")
+        
+        patron = re.compile(r'[a-u]s\Z',re.I)
+        if patron.match(search_reg)!=None:
+            search=patron.sub("",search_reg)
+        else:
+            search=search_reg
       
         if categ==None or categ=="":
             categ=categ
@@ -463,6 +471,7 @@ class Search(TemplateView):
         elif price==None and  order==None and search and brand==None and categ :
             context=searchby.filter(name__icontains=search,category__in=categ)      
         elif price==None and  order==None and search and brand==None and (categ==None or categ=="") :
+            print("only search")
             context=searchby.filter(name__icontains=search)       
         elif price==None and  order==None and search and (categ=="" or categ==None)  and brand :
             context=searchby.filter(marca__name=brand,name__icontains=search)
@@ -514,5 +523,5 @@ class Search(TemplateView):
         else:
             page_obj = post.page(1)
                 
-        context={"entries":page_obj,"tag3":search}
+        context={"entries":page_obj,"tag3":search_reg}
         return context

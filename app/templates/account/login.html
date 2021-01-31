@@ -81,26 +81,40 @@
 
 {% block js_page %}
 <script>
+  let url="{% url 'base:login' %}"
   $("#formlogin").submit(function (e) {
+    let form=document.getElementById("formlogin")
+
+    let formData = new FormData(form)
+
     console.log("ENtro al form");
     e.preventDefault();
-    $.ajax({
-      type: "POST",
-      url: "{% url 'base:login' %}",
-      data: $(this).serialize(),
+    fetch(url, {
+    method: "POST",
 
-      success: function (response) {
-
-        console.log(response);
+    body: formData
+  }).then(data => data.json()).then(response => {
+    console.log(response);
         if (!response.stat) {
           TopMessage(response.error, "error")
           $("#id_password").val("")
         }
         else {
-          location.href = '{% url "base:index" %}';
+          location.reload();
+
+          
         }
-      }
-    });
+  })
+    // $.ajax({
+    //   type: "POST",
+    //   url: "{% url 'base:login' %}",
+    //   data: $(this).serialize(),
+
+    //   success: function (response) {
+
+     
+    //   }
+    // });
   });
 </script>
 <script src="{% static 'js/mdb.min.js' %}"></script>

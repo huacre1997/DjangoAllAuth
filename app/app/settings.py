@@ -187,7 +187,7 @@ CKEDITOR_CONFIGS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-LOGOUT_REDIRECT_URL="/"
+
 
 MEDIA_URL = "/media/"
 STATIC_URL = '/static/'
@@ -195,7 +195,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND  
 EMAIL_HOST = 'smtp.gmail.com'  
@@ -205,7 +204,7 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True  
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ACCOUNT_UNIQUE_EMAIL=True
-LOGIN_REDIRECT_URL="/"
-
 ACCOUNT_SIGNUP_REDIRECT_URL="/"
+# ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS=False
+
 EL_PAGINATION_PER_PAGE=2   

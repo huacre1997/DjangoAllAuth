@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic.base import TemplateView
 from requests import models
-from accounts.models import District,Province,Adress,CustomCliente
+from accounts.models import *
 from cart.models import Cart
 from django.views.decorators.cache import never_cache
 from .models import Order
@@ -20,7 +20,7 @@ from .pay import *
 class CheckOutView(TemplateView,LoginRequiredMixin):
     template_name = "checkout.html"
 
-    login_url = '/productos'
+    redirect_field_name = 'index'
 
     def post(self, *args,**kwargs):
         cart=Cart.objects.get(user=self.request.user.id)

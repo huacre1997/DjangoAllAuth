@@ -63,13 +63,13 @@ def cart_add(request):
             else:
                 print("else")
 
-            return JsonResponse({"quantity": cre.quantity}, safe=False)
+            return JsonResponse({"status":1,"quantity": cre.quantity}, safe=False)
     else:
         pro=Product.objects.get(id=post["id"])
         cart=ObjCart(request)
         cart.add(pro,int(post["quantity"]))
         cart.save()
-        return JsonResponse({"quantity":int(post["quantity"]),"total":cart.get_total_price()},safe=False)
+        return JsonResponse({"status":0,"quantity":int(post["quantity"]),"total":cart.get_total_price()},safe=False)
     
 def removeCart(request):
     if request.method == "POST":

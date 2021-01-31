@@ -123,7 +123,6 @@ function addCartAuth(e) {
   id = parseInt(document.getElementById("productId").value)
   quantity = document.getElementById("quantity").value
   document.getElementById("AddCart").disabled = true
-  console.log(parseInt(quantity));
 
   let data = {
     id,
@@ -140,10 +139,17 @@ function addCartAuth(e) {
   }).then(data => data.json()).then((response) => {
     console.log(response)
     document.getElementById("quantity").value = ""
-    document.getElementById("cartCount").innerHTML = response.quantity + parseInt(document.getElementById("cartCount").innerHTML )
+    if(response.status!=0){
+      console.log("if");
+      document.getElementById("cartCount").innerHTML = response.quantity + parseInt(quantity) 
+
+    }else{
+      document.getElementById("cartCount").innerHTML = response.quantity + parseInt(document.getElementById("cartCount").innerHTML )
+
+    }
     document.getElementById("AddCart").textContent = "Agregado"
     document.getElementById("AddCart").disabled = false
-    document.querySelector(".priceTotal").innerHTML =  `S/. ${response.total}`
+    // document.querySelector(".priceTotal").innerHTML =  `S/. ${response.total}`
 
   })
 }
@@ -214,8 +220,11 @@ document.addEventListener("click", (e) => {
     Array.from(arr).includes("icondrop")) {
 
   } else {
-    document.getElementById("cartContainer").classList.add("fadeOut")
-    document.getElementById("cartContainer").classList.remove("fadeIn")
+    if( document.getElementById("cartContainer")!=null){
+      document.getElementById("cartContainer").classList.add("fadeOut")
+      document.getElementById("cartContainer").classList.remove("fadeIn")
+    }
+  
   }
 })
 let showDog = false

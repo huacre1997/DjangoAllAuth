@@ -3,7 +3,6 @@ from django.urls import path,include
 from django.conf import settings
 from .views import *
 from django.conf.urls.static import static
-from .views import LoginFormView,RegisterView,LoginView, index
 
 from django.contrib.auth.views import LogoutView
 
@@ -14,7 +13,7 @@ urlpatterns = [
 
     path('login',LoginFormView.as_view(),name="login"),
     path('signup',RegisterView.as_view(),name="register"),
-    path('logout/',LogoutView.as_view(next_page="/"),name="logout"),
+    path('logout/',Logout.as_view(),name="logout"),
     path("province/",getProvince,name="getprovince"),
     path("district/",getDistrict,name="getdistrict"),
 

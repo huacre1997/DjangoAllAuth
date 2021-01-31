@@ -18,6 +18,7 @@ from django.urls import reverse
 from django.template import RequestContext 
 from accounts.models import Province,District,Adress
 from django.core import serializers
+from django.contrib.auth.views import LogoutView
 
 
 def getProvince(request):
@@ -127,3 +128,6 @@ class LoginFormView(LoginView):
         context["title"] = "Login"
         context["login"]=LoginForm
         return context
+class Logout(LogoutView):
+    def get(self, request, *args, **kwargs):
+        return redirect(request.META['HTTP_REFERER'])
