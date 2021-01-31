@@ -135,6 +135,7 @@ $(document).on("mouseleave",".cartEnter",
   $("#btnLogin").on("click", function () {
     $("#navbarSupportedContent").removeClass("show");
     url = $(this).attr("hreft");
+    console.log(url);
     const login = $.confirm({
       title: "",
       columnClass: "col-lg-5 col-md-7 col-xs-9",

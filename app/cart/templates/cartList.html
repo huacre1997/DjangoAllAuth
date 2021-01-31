@@ -32,9 +32,9 @@
                         <div class="col-lg-3 col-md-3"><img src="{% get_media_prefix %}{{i.product__image}}" width="120px"
                                 height="120px" alt=""></div>
                         <div class="col-lg-7 col-md-7">
-                            <p class="h5">{{i.product__name}}</p>
-
-                            <div>{{i.product__marca__name}}</div>
+                            <div class="mb-2"><a class="h5" href="{% url 'products:product_detail' i.product__slug %}">{{i.product__name}}</a>
+                            </div>
+                            <div class="mb-2">{{i.product__marca__name}}</div>
                             <div style="display: grid;grid-template-columns: repeat(2,1fr);" class="groupInput">
                                 <input type="hidden" name="cartItem" id="item_{{i.product}}">
 

@@ -12,6 +12,10 @@ class Cart(object):
         if not cart:         
             cart = self.session[settings.CART_SESSION_ID] = {}        
         self.cart = cart
+    def exists(self, id):
+        return True if str(id) in list(self.cart.keys()) else False
+           
+        
     def add(self, product, quantity=1, override_quantity=False):
         product_id = str(product.id)   
           

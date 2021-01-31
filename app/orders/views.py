@@ -10,17 +10,19 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView,View
 from requests import models
 from accounts.models import *
 from cart.models import Cart
 from django.views.decorators.cache import never_cache
 from .models import Order
 from .pay import *
-class CheckOutView(TemplateView,LoginRequiredMixin):
+class CheckOutView(LoginRequiredMixin,TemplateView):
     template_name = "checkout.html"
-
-    redirect_field_name = 'index'
+    login_url = '/login'
+    def dispatch(self, request, *args, **kwargs):
+        return super(CheckOutView, self).dispatch(request, *args, **kwargs)
+    
 
     def post(self, *args,**kwargs):
         cart=Cart.objects.get(user=self.request.user.id)

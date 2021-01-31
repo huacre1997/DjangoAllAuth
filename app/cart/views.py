@@ -20,7 +20,7 @@ import datetime
 def CartView(request):
     if request.user.is_authenticated:
         cart = Cart.objects.get(user=request.user.id)
-        data = CartItem.objects.values("product","product__image", "product__name",
+        data = CartItem.objects.values("product","product__image", "product__name","product__slug",
                                     "product__marca__name", "product__price", "count").filter(cart=cart.id)
         context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity}
         return render(request, "cartList.html", context)
@@ -39,10 +39,11 @@ def cart_add(request):
         if request.method == "POST":
 
             cre = Cart.objects.get(user_id=request.user.id)
-
             if cre:
 
                 p = CartItem.objects.filter(cart_id=cre.id)
+                before=cre.quantity
+
                 for i in p:
                     if i.product_id == post["id"]:
                         prod = p.get(product_id=post["id"])
@@ -60,10 +61,10 @@ def cart_add(request):
                     item.count = int(post["quantity"])
                     item.product_id = post["id"]
                     item.save()  
+                return JsonResponse({"status":1,"quantity":before}, safe=False)
             else:
-                print("else")
-
-            return JsonResponse({"status":1,"quantity": cre.quantity}, safe=False)
+                return JsonResponse({"status":"No existe cart"}, safe=False)
+           
     else:
         pro=Product.objects.get(id=post["id"])
         cart=ObjCart(request)

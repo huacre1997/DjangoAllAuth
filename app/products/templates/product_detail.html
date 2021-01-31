@@ -192,10 +192,20 @@
                             <div class="col-9">
                                 
                                 <div class="btn-group" role="group">
+                                    
+                                    {% if exists  %}
+                                    <button type="button" 
+                                    class="btn btn-primary carrbutton"> <img
+                                        src="{% static 'icons/comprobado.png'%}" class="carrIconButton">&nbsp;&nbsp;Agregado
+                                    al carrito</button>
+                                    {% else %}
+                                            
                                     <button type="button" data-url="{% url 'cart:add_cart' %}" onclick="javascript:addCartAuth()"
-                                        class="btn btn-primary carrbutton" id="AddCart"> <img
-                                            src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Agregar
-                                        al carrito</button>
+                                    class="btn btn-primary carrbutton" id="AddCart"> <img
+                                        src="{% static 'icons/recibo.png'%}" class="carrIconButton">&nbsp;&nbsp;Agregar
+                                    al carrito</button>
+                                    {% endif %}
+                                                
                                         <a href="{% url 'cart:cart' %}" role="button" class="btn btn-primary" data-mdb-color="dark">Ver carrito</a>
                                       </div>
                             </div>

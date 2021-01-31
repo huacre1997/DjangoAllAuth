@@ -147,10 +147,18 @@ function addCartAuth(e) {
       document.getElementById("cartCount").innerHTML = response.quantity + parseInt(document.getElementById("cartCount").innerHTML )
 
     }
-    document.getElementById("AddCart").textContent = "Agregado"
-    document.getElementById("AddCart").disabled = false
-    // document.querySelector(".priceTotal").innerHTML =  `S/. ${response.total}`
+    let btn=document.createElement("button")
+    let img=document.createElement("img")
 
+    img.src="/static/icons/comprobado.png"
+    img.classList.add("carrIconButton")
+    btn.appendChild(img)
+    img.after("  Agregado al carrito")
+
+    btn.classList.add("btn","btn-primary","carrbutton")
+    // document.getElementById("AddCart").appendChild(img)
+    // document.querySelector(".priceTotal").innerHTML =  `S/. ${response.total}`
+    document.getElementById("AddCart").parentNode.replaceChild(btn,  document.getElementById("AddCart"))
   })
 }
 function postComment() {

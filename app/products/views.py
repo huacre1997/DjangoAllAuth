@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView
 from .models import *
+from cart.models import CartItem
 from django.http import JsonResponse
 from django.shortcuts import redirect,HttpResponse,HttpResponseRedirect
 from django.views import View
@@ -21,11 +22,14 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.decorators import method_decorator
 from django.urls import resolve
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from functools import reduce
+from django.views.decorators.cache import never_cache
+from cart.cart import Cart as ObjCart
 class ProductDetailView(DetailView):
     model=Product
     template_name="product_detail.html"
     form_class=RatingForm
+    @never_cache
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs) :
  
@@ -35,23 +39,18 @@ class ProductDetailView(DetailView):
         return queryset
     def get_context_data(self, **kwargs):
         data=[]
-        total=0
-        
+        total,staravg=0,0
         context = super().get_context_data(**kwargs)
-        context["image"] = Productimage.objects.filter(product=self.object.id)
         q=Comment.objects.values("rate").filter(product=self.object.id).order_by("rate").reverse().annotate(Count('rate'))
         with connection.cursor() as cursor:
             cursor.execute("select * from getRating("+str(self.object.id)+") order by num")
             row = cursor.fetchall()       
         [ data.append(i[1]) for i in row]
-           
         for k,i in enumerate(data):
             total+=i*(k+1)
-        from functools import reduce
-        staravg=0
         suma=reduce((lambda a,b: a+b),data) 
-        if suma!=0:
-            staravg=round(total/suma,1)
+        if suma!=0: staravg=round(total/suma,1)
+          
         context["starsAvg"]=staravg
         # current_url = resolve(self.request.path_info)
         context["starsCount"]=data[::-1]
@@ -59,11 +58,21 @@ class ProductDetailView(DetailView):
             context["nameBrand"]=self.kwargs["marca"]
         if "categoria" in self.kwargs.keys():
             context["nameCategory"]=self.kwargs["categoria"]
+        if self.request.user.is_authenticated:
+            itemcart=CartItem.objects.filter(product_id=self.object.id)
+            if itemcart.exists():context["exists"]=1
+        else:
+            itemSession=ObjCart(self.request)
+            val=itemSession.exists(self.object.id)
+            if val:context["exists"]=1
+
         # post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),5)
         # if  self.request.GET.get('page'):
         #     page_obj = post.page( self.request.GET.get('page'))  
         # else:
         #     page_obj = post.page(1)
+        context["image"] = Productimage.objects.filter(product=self.object.id)
+
         context["comment"]=Comment.objects.values("author__first_name","comment","created_date","rate").filter(product_id=self.object.id).order_by("created_date").reverse()
         return context
     def post(self, request, *args, **kwargs):
@@ -107,7 +116,10 @@ from render_block import render_block_to_string
 class ProductList(TemplateView):
     model=Product
     template_name="productList.html"
-   
+    @never_cache
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProductList, self).dispatch(request, *args, **kwargs)
+    
     def get(self,context,**kwargs):
         if self.request.GET:
             return render(self.request,self.template_name,self.getFilter())
@@ -385,9 +397,11 @@ class Search(TemplateView):
         order=self.request.GET.get("order")
         
         patron = re.compile(r'[a-u]s\Z',re.I)
-        if patron.match(search_reg)!=None:
+        if patron.search(search_reg)!=None:
+            print("if")
             search=patron.sub("",search_reg)
         else:
+            print("else")
             search=search_reg
       
         if categ==None or categ=="":
