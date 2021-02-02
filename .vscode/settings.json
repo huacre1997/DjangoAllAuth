@@ -1,6 +1,8 @@
 {
-    "python.pythonPath": "pdhn\\Scripts\\python.exe",
+    "python.pythonPath": "D:\\Program Files\\Python39\\python.exe",
     "compile-hero.disable-compile-files-on-did-save-code": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": false,
+    "python.linting.mypyEnabled": false,
+    "python.linting.flake8Enabled": true
 }

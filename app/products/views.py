@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView,ListView,DetailView
 from .models import *
-from cart.models import CartItem
+from cart.models import CartItem,Cart
 from django.http import JsonResponse
 from django.shortcuts import redirect,HttpResponse,HttpResponseRedirect
 from django.views import View
@@ -59,12 +59,21 @@ class ProductDetailView(DetailView):
         if "categoria" in self.kwargs.keys():
             context["nameCategory"]=self.kwargs["categoria"]
         if self.request.user.is_authenticated:
-            itemcart=CartItem.objects.filter(product_id=self.object.id)
-            if itemcart.exists():context["exists"]=1
+            cartid=Cart.objects.values("id").filter(user_id= self.request.user.id)
+  
+            itemcart=CartItem.objects.filter(product_id=self.object.id,cart_id=cartid[0]["id"])
+            if itemcart.exists():
+                print("if auth")
+                context["exists"]=1
+               
         else:
             itemSession=ObjCart(self.request)
             val=itemSession.exists(self.object.id)
-            if val:context["exists"]=1
+            if val:
+                print("if session")
+
+                context["exists"]=1
+
 
         # post = Paginator(Comment.objects.filter(product_id=self.object.id).order_by("created_date").reverse(),5)
         # if  self.request.GET.get('page'):

@@ -1043,6 +1043,7 @@ body #wrapper .star-rating_Title {
   width: 389.33px !important;
   height: 741.56px;
 }
+
  .shopping-cart {
 	 margin-top: 20px ;
 	 float: right;
@@ -1117,3 +1118,39 @@ body #wrapper .star-rating_Title {
 	 display: table;
 	 clear: both;
 }
+.img_cart{
+  width: 120px;
+  height: 120px;
+}
+@media (max-width: 768px) { 
+  .fixedAbstract{
+    position: relative;
+    width: 100% !important;
+    height:100%;
+    right: 0;
+  }
+  .img_cart{
+    width: 50px;
+    height: 50px;
+  }
+ }
+
+@media (min-width: 1200px) { 
+
+  .fixedAbstract{
+  
+    right: 2.3%;
+   
+  }
+
+ }
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1500px) { 
+  .fixedAbstract{
+  
+    right: 16.3%;
+   
+  }
+
+ }

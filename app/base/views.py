@@ -116,6 +116,7 @@ class LoginFormView(LoginView):
                 pass
             return JsonResponse(data)
         else:
+            print(form.errors)
             data = {
                 "error":form.errors["__all__"][0],
                 'stat': False,

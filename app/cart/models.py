@@ -31,7 +31,8 @@ class CartItem(models.Model):
         return self.product.image.url
     def total(self):
         return self.count*self.product.price
-    
+  
+
 from decimal import Decimal
 
 @receiver(post_save, sender=CartItem)

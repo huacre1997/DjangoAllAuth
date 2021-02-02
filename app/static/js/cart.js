@@ -13,6 +13,9 @@ let txt="Aún no ha agregado productos a su carrito"
 strong.after(txt)
 col.appendChild(p)
 row.appendChild(col)
+if (document.getElementById("btnCheck")!=null) {
+    
+
 document.getElementById("btnCheck").addEventListener("click",function(){
     fetch(this.dataset.url).then(data=>data.json()).then(function(response){
         if(response.auth==0){
@@ -42,7 +45,7 @@ document.getElementById("btnCheck").addEventListener("click",function(){
               });
         }
     })
-})
+})}
 for (let i = 0; i < x.length; i++) {
     const element = x[i];
     element.addEventListener("click",function () {
@@ -82,6 +85,8 @@ for (let i = 0; i < x.length; i++) {
             
             
             if (document.getElementsByClassName("cartItem").length==1) {
+                document.getElementById("col-price").remove()
+
                 document.getElementById("idContentCart").appendChild(row)
 
             }
@@ -120,8 +125,9 @@ Array.from(selectElementAuth).forEach(element=>{
                     
                     console.log(document.getElementsByClassName("cartItem").length)
                     if (document.getElementsByClassName("cartItem").length==1) {
+                        document.getElementById("col-price").remove()
                         document.getElementById("idContentCart").appendChild(row)
-        
+                        
                     }
                 }
             })

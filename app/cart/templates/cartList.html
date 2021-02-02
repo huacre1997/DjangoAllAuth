@@ -9,119 +9,136 @@
         <div class="card-body">
             <h2 class="card-title">Mi Carrito</h2>
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-lg-3"></div>
-                        <div class="col-lg-7">
+                <div class="col-lg-8" id="sectionCartItems">
+                        {% if object %}
 
-                            {% load poll_extras %}
+                            <div class="row" id="col-price">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-7">
+                                </div>
+                                <div class="col-lg-2 col-sm-2 offset-sm-10">Precio</div>
 
-
-                        </div>
-                        <div class="col-lg-2 col-sm-2 offset-sm-10">Precio</div>
-
-                    </div>
+                            </div>
+                        {%else%}
+                        {%endif%}
+                    
                     <hr>
                     <div id="idContentCart"></div>
                         {% if request.user.is_authenticated %}
-                        {% if object %}
+                            {% if object %}
 
-                        {% for i in object  %}
-                        <div class="row cartItem">
+                                {% for i in object  %}
+                                    <div class="row cartItem">
 
-                        <div class="col-lg-3 col-md-3"><img src="{% get_media_prefix %}{{i.product__image}}" width="120px"
-                                height="120px" alt=""></div>
-                        <div class="col-lg-7 col-md-7">
-                            <div class="mb-2"><a class="h5" href="{% url 'products:product_detail' i.product__slug %}">{{i.product__name}}</a>
-                            </div>
-                            <div class="mb-2">{{i.product__marca__name}}</div>
-                            <div style="display: grid;grid-template-columns: repeat(2,1fr);" class="groupInput">
-                                <input type="hidden" name="cartItem" id="item_{{i.product}}">
+                                    <div class="col-lg-3 col-md-3 col-sm-2"><img class="img_cart" src="{% get_media_prefix %}{{i.product__image}}" width="120px"
+                                            height="120px" alt=""></div>
+                                    <div class="col-lg-7 col-md-7 col-sm-8">
+                                        <div class="mb-2"><a class="h5" href="{% url 'products:product_detail' i.product__slug %}">{{i.product__name}}</a>
+                                        </div>
+                                        <div class="mb-2">{{i.product__marca__name}}</div>
+                                        <div style="display: grid;grid-template-columns: repeat(2,1fr);" class="groupInput">
+                                            <input type="hidden" name="cartItem" id="item_{{i.product}}">
 
-                                <div class="d-flex align-items-center">
-                                    <p>Cantidad:</p><select name="" class="SelectCartCountAuth" data-url="{% url 'cart:update_cart' %}">
-                                        <option value="0">0 (Eliminar)</option>
+                                            <div class="d-flex align-items-center">
+                                                <p>Cantidad:</p><select name="" class="SelectCartCountAuth" data-url="{% url 'cart:update_cart' %}">
+                                                    <option value="0">0 (Eliminar)</option>
 
-                                        <option value="1" {% if i.count == 1 %}selected{% endif %}>1</option>
-                                        <option value="2" {% if i.count == 2 %}selected{% endif %}>2</option>
-                                        <option value="3" {% if i.count == 3 %}selected{% endif %}>3</option>
-                                        <option value="4" {% if i.count == 4 %}selected{% endif %}>4</option>
-                                        <option value="5" {% if i.count == 5 %}selected{% endif %}>5</option>
-                                        <option value="6" {% if i.count == 6 %}selected{% endif %}>6</option>
-                                        <option value="7" {% if i.count == 7 %}selected{% endif %}>7</option>
-                                        <option value="8" {% if i.count == 8 %}selected{% endif %}>8</option>
-                                        <option value="9" {% if i.count == 9 %}selected{% endif %}>9</option>
+                                                    <option value="1" {% if i.count == 1 %}selected{% endif %}>1</option>
+                                                    <option value="2" {% if i.count == 2 %}selected{% endif %}>2</option>
+                                                    <option value="3" {% if i.count == 3 %}selected{% endif %}>3</option>
+                                                    <option value="4" {% if i.count == 4 %}selected{% endif %}>4</option>
+                                                    <option value="5" {% if i.count == 5 %}selected{% endif %}>5</option>
+                                                    <option value="6" {% if i.count == 6 %}selected{% endif %}>6</option>
+                                                    <option value="7" {% if i.count == 7 %}selected{% endif %}>7</option>
+                                                    <option value="8" {% if i.count == 8 %}selected{% endif %}>8</option>
+                                                    <option value="9" {% if i.count == 9 %}selected{% endif %}>9</option>
 
-                                    </select>
+                                                </select>
+                                            </div>
+
+                                            <div><button type="button" data-url="{% url 'cart:clean_cart' %}"
+                                                    class="btn btn-danger btn-rounded removeItemCart">Eliminar</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                
+                                    <div class="col-lg-2 col-md-2 col-sm-2">
+                                        <p class="h5"> S/.{{i.product__price}}</p>
+                                    
+                                    </div>
+                                    <hr>
+                                    </div>
+
+                                {% endfor %}
+                            {% else %}
+                                <div class="row mb-3">
+                                    <div class="col-lg-12"><p class="note note-light">
+                                        <strong>Nota:</strong> Aún no ha agregado productos a su carrito
+                                    </p></div>
                                 </div>
-
-                                <div><button type="button" data-url="{% url 'cart:clean_cart' %}"
-                                        class="btn btn-danger btn-rounded removeItemCart">Eliminar</button>
-                                </div>
-                            </div>
-
-                        </div>
-                      
-                        <div class="col-lg-2 col-md-2">
-                            <p class="h5"> S/.{{i.product__price}}</p>
-                          
-                        </div>
-                        <hr>
-                    </div>
-
-                        {% endfor %}
-                        {% else %}
-                        <div class="row mb-3">
-                            <div class="col-lg-12"><p class="note note-light">
-                                <strong>Nota:</strong> Aún no ha agregado productos a su carrito
-                              </p></div>
-                        </div>
                         
-                        {% endif %}
+                            {% endif %}
                         {%else%}
-                        {% for key,i in object.items  %}
-                        <div class="row cartItem">
+                        
+                            {% with total_items=cart|length %}
+                            
+                                {% if total_items != 0 %}
+                                    {% for key,i in object.items  %}
+                                        <div class="row cartItem">
 
-                            <div class="col-lg-3 col-md-3 col-sm-3"><img src="{% get_media_prefix %}{{i.image}}" width="120px"
-                                    height="120px" alt=""></div>
-                            <div class="col-lg-7 col-md-7 col-sm-7">
-                                <p class="h5">{{i.name}}</p>
-    
-                                <div>{{i.marca}}</div>
-                                <div style="display: grid;grid-template-columns: repeat(2,1fr);" class="groupInput">
-                                    <input type="hidden" name="cartItem" id="item_{{key}}">
-    
-                                    <div class="d-flex align-items-center">
-                                        <p>Cantidad:</p><select name="" class="SelectCartCountAuth" data-url="{% url 'cart:update_cart' %}">
-                                            <option  value="0">0 (Eliminar)</option>
-    
-                                            <option value="1" {% if i.quantity == 1 %}selected{% endif %}>1</option>
-                                            <option value="2" {% if i.quantity == 2 %}selected{% endif %}>2</option>
-                                            <option value="3" {% if i.quantity == 3 %}selected{% endif %}>3</option>
-                                            <option value="4" {% if i.quantity == 4 %}selected{% endif %}>4</option>
-                                            <option value="5" {% if i.quantity == 5 %}selected{% endif %}>5</option>
-                                            <option value="6" {% if i.quantity == 6 %}selected{% endif %}>6</option>
-                                            <option value="7" {% if i.quantity == 7 %}selected{% endif %}>7</option>
-                                            <option value="8" {% if i.quantity == 8 %}selected{% endif %}>8</option>
-                                            <option value="9" {% if i.quantity == 9 %}selected{% endif %}>9</option>
-    
-                                        </select>
+                                            <div class="col-lg-3 col-md-3 col-sm-3"><img src="{% get_media_prefix %}{{i.image}}" width="120px"
+                                                    height="120px" alt=""></div>
+                                            <div class="col-lg-7 col-md-7 col-sm-7">
+                                                <p class="h5">{{i.name}}</p>
+                    
+                                                <div>{{i.marca}}</div>
+                                                <div style="display: grid;grid-template-columns: repeat(2,1fr);" class="groupInput">
+                                                    <input type="hidden" name="cartItem" id="item_{{key}}">
+                    
+                                                    <div class="d-flex align-items-center">
+                                                        <p>Cantidad:</p><select name="" class="SelectCartCountAuth" data-url="{% url 'cart:update_cart' %}">
+                                                            <option  value="0">0 (Eliminar)</option>
+                    
+                                                            <option value="1" {% if i.quantity == 1 %}selected{% endif %}>1</option>
+                                                            <option value="2" {% if i.quantity == 2 %}selected{% endif %}>2</option>
+                                                            <option value="3" {% if i.quantity == 3 %}selected{% endif %}>3</option>
+                                                            <option value="4" {% if i.quantity == 4 %}selected{% endif %}>4</option>
+                                                            <option value="5" {% if i.quantity == 5 %}selected{% endif %}>5</option>
+                                                            <option value="6" {% if i.quantity == 6 %}selected{% endif %}>6</option>
+                                                            <option value="7" {% if i.quantity == 7 %}selected{% endif %}>7</option>
+                                                            <option value="8" {% if i.quantity == 8 %}selected{% endif %}>8</option>
+                                                            <option value="9" {% if i.quantity == 9 %}selected{% endif %}>9</option>
+                    
+                                                        </select>
+                                                    </div>
+                    
+                                                    <div><button type="button" data-url="{% url 'cart:clean_cart' %}"
+                                                            class="btn btn-danger btn-rounded removeItemCart">Eliminar</button>
+                                                    </div>
+                                                </div>
+                    
+                                            </div>
+                                        
+                                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                                <p class="h5"> S/.{{i.price}}</p>
+                                            
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    {%endfor%}
+                                {% else %}
+                                    <div class="row mb-3">
+                                        <div class="col-lg-12"><p class="note note-light">
+                                            <strong>Nota:</strong> Aún no ha agregado productos a su carrito
+                                        </p></div>
                                     </div>
-    
-                                    <div><button type="button" data-url="{% url 'cart:clean_cart' %}"
-                                            class="btn btn-danger btn-rounded removeItemCart">Eliminar</button>
-                                    </div>
-                                </div>
-    
-                            </div>
-                          
-                            <div class="col-lg-2 col-md-2 col-sm-2">
-                                <p class="h5"> S/.{{i.price}}</p>
-                              
-                            </div>
-                            <hr>
-                        </div>
-                        {%endfor%}
+                            
+                                {% endif %}
+                                    
+                        
+                            {% endwith %}
+
                         {%endif%}
                
                 </div>

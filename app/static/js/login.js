@@ -140,21 +140,18 @@ $(function (e) {
   //   login.open()
   // });
   document.getElementById("btnLogin").addEventListener("click",function(){
-    console.log(login)
     var login = $.confirm({
       title: "",
       columnClass: "col-lg-5 col-md-7 col-xs-9",
       closeIcon: true,
       content: function () {
         var self = this;
-  
         return $.ajax({
             url: "/login",
             dataType: "json",
             method: "get",
           })
           .done(function (response) {
-            console.log(response.html)
             self.setContent(response.html);
           })
       },
@@ -166,12 +163,9 @@ $(function (e) {
       },
       
       onContentReady: function (e) {
-        console.log(e)
         this.buttons.okButton.hide();
-  
       },
       
-   
     });
   })
 });

@@ -19,9 +19,19 @@ import datetime
 @never_cache
 def CartView(request):
     if request.user.is_authenticated:
-        cart = Cart.objects.get(user=request.user.id)
+        data=ObjCart(request)
+
+        cart,status = Cart.objects.get_or_create(user_id=request.user.id)
+        if  status:
+            for k,i in data.cart.items():
+                item=CartItem()
+                item.product_id=k
+                item.count=i["quantity"]
+                item.cart_id=cart.id
+                item.save()
+        
         data = CartItem.objects.values("product","product__image", "product__name","product__slug",
-                                    "product__marca__name", "product__price", "count").filter(cart=cart.id)
+                                    "product__marca__name", "product__price", "count").filter(cart=cart.id).order_by("created")
         context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity}
         return render(request, "cartList.html", context)
 
