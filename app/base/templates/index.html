@@ -123,9 +123,9 @@
               {% else %}
               <div class="grid g-col-3">
                 <div>
-              <div class="user_icon"><img src="../media/images/user.svg" alt=""></div>
-              <a href="{% url 'base:register' %}">Registrarse</a></div>
-            <a id="btnLogin" hreft="{% url 'base:login' %}" style="cursor: pointer;">| Login</a>
+           
+              <a href="{% url 'base:register' %}"><i class="fa fa-user" aria-hidden="true"></i> Registrarse</a></div>
+            <a id="btnLogin" hreft="{% url 'base:login' %}" style="cursor: pointer;color:#1266f1">| <i class="fa fa-lock" aria-hidden="true"></i> Login</a>
             </div>
               {% endif %}
 

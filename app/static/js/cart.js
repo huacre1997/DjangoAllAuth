@@ -13,7 +13,36 @@ let txt="Aún no ha agregado productos a su carrito"
 strong.after(txt)
 col.appendChild(p)
 row.appendChild(col)
-
+document.getElementById("btnCheck").addEventListener("click",function(){
+    fetch(this.dataset.url).then(data=>data.json()).then(function(response){
+        if(response.auth==0){
+            var login = $.confirm({
+                title: "",
+                columnClass: "col-lg-5 col-md-7 col-xs-9",
+                closeIcon: true,
+                content: function () {
+                  var self = this;
+                  return $.ajax({
+                      url: "/login",
+                      dataType: "json",
+                    })
+                    .done(function (response) {
+                      self.setContent(response.html);
+                    })
+                },
+                buttons: {
+                  okButton: {
+                    text: "ok",
+                    action: function () {},
+                  },
+                },               
+                onContentReady: function (e) {
+                  this.buttons.okButton.hide();            
+                },                        
+              });
+        }
+    })
+})
 for (let i = 0; i < x.length; i++) {
     const element = x[i];
     element.addEventListener("click",function () {

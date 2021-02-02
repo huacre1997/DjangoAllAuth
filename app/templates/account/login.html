@@ -70,18 +70,17 @@
     <p class="btn-text">Ingresar con Google</p>
   </div>
 </a>
-<style>
+<!-- <style>
   .jconfirm {
     z-index: 1031 !important;
   }
-</style>
+</style> -->
 
 </div>
 {% endblock %}
 
 {% block js_page %}
 <script>
-  let url="{% url 'base:login' %}"
   $("#formlogin").submit(function (e) {
     let form=document.getElementById("formlogin")
 
@@ -89,7 +88,7 @@
 
     console.log("ENtro al form");
     e.preventDefault();
-    fetch(url, {
+    fetch("{% url 'base:login' %}", {
     method: "POST",
 
     body: formData

@@ -11,16 +11,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic.base import TemplateView,View
+from paypalhttp.serializers.json_serializer import Json
 from requests import models
 from accounts.models import *
 from cart.models import Cart
 from django.views.decorators.cache import never_cache
 from .models import Order
 from .pay import *
-class CheckOutView(LoginRequiredMixin,TemplateView):
+class CheckOutView(TemplateView):
     template_name = "checkout.html"
-    login_url = '/login'
+    # login_url = '/login'
     def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return JsonResponse({"auth":1})
+        else:
+            return JsonResponse({"auth":0})
+
         return super(CheckOutView, self).dispatch(request, *args, **kwargs)
     
 
@@ -47,11 +53,11 @@ class CheckOutView(LoginRequiredMixin,TemplateView):
     def get_context_data(self, **kwargs):
 
         context = super(CheckOutView, self).get_context_data(**kwargs)
-        # cart = Cart.objects.get(user=self.request.user.id)
+        cart = Cart.objects.get(user=self.request.user.id)
 
         context["address"]=Adress.objects.filter(user_id=self.request.user.id)
-        # context["cartTotal"]=cart.total
-        # context["cartCount"]=cart.quantity
+        context["cartTotal"]=cart.total
+        context["cartCount"]=cart.quantity
 
         return context
 

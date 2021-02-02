@@ -796,7 +796,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
           width: calc(50% - 7px);
         }
         .noUi-connect {
-          background-color: #3f51b5 !important;
+          /* background-color: #3f51b5 !important; */
+          background-color: #1266f1 !important;
         }
         
 .noUi-horizontal {
