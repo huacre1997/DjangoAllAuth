@@ -55,7 +55,6 @@ class GetOrder(PayPalClient):
         request = OrdersGetRequest(order_id)
         #3. Call PayPal to get the transaction
         response = self.client.execute(request)
-        print(response.result)
         print ('Status Code: ', response.status_code)
         print ('Status: ', response.result.status)
         print('Order ID: ', response.result.id)

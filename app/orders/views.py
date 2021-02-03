@@ -36,7 +36,6 @@ class CheckOutView(TemplateView):
         order_id=data["orderID"]
         detalle=GetOrder().get_order(order_id)
         detalle_precio=Decimal(detalle.result.purchase_units[0].amount.value)
-        print(data["address"])
         if detalle_precio==cart.total:
             trx=CaptureOrder().capture_order(order_id,debug=True)
             ord=Order()

@@ -6,6 +6,8 @@ from .models import CustomCliente,Adress, District, Province
 from .forms import ChangePassword
 import json
 from .forms import AdressForm
+from allauth.socialaccount.admin import SocialAccount
+from django.shortcuts import get_object_or_404
 
 class ProfileView(DetailView):
     model = CustomCliente
@@ -13,13 +15,16 @@ class ProfileView(DetailView):
     context_object_name = 'obj'
     def get_object(self):
         if 'pk' not in self.kwargs:
-            print(self.request.user.id)
             return CustomCliente.objects.get(id=self.request.user.id)
         return super(ProfileView, self).get_object()
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = ChangePassword()
         context["address"]=Adress.objects.filter(user=self.request.user.id)
+     
+        user_object = SocialAccount.objects.filter(user_id =self.request.user.id)
+        if user_object.exists():
+            context["noSocial"]=1
         return context
 from django.contrib.auth import update_session_auth_hash
 
@@ -67,13 +72,11 @@ def createAddress(request):
                 data.province=form.cleaned_data["province"]
             
                 data.save()
-                print("id")
                 return JsonResponse({"id":data.id,"province":data.province.name,"district":data.district.name,"description":data.description,"refrences":data.refrences},safe=False)
                     
             else:
                 return HttpResponse(form.errors)
         else:
-            print(request.POST)
             data=Adress.objects.get(id=request.POST["address_profile"])
             province=Province.objects.get(id=request.POST["province"])
             district=District.objects.get(id=request.POST["district"])

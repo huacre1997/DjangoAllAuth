@@ -90,7 +90,6 @@ class ChangePassword(DjForm.Form):
         old_pass=self.cleaned_data["before_pass"]
 
         user = CustomCliente.objects.get(pk=self.user.id)
-        print(user.password) 
         if not user.check_password(old_pass):
             raise ValidationError("Las contraseña ingresada no es correcta.")
      

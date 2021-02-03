@@ -79,6 +79,7 @@
                 class="btn btn-primary btn-block mb-4">Guardar</button>
 
               <hr>
+              {% if not noSocial  %}
               <form id="form_change_password" class="row g-3 needs-validation" novalidate>
                 <div class="col-12 ">
                   {% csrf_token %}
@@ -116,7 +117,7 @@
                   class="btn btn-primary btn-block mb-4">Actualizar contraseña</button>
 
               </form>
-
+{%endif%}
             </div>
             <div class="tab_profile-pane fade" id="v-tabs-address" role="tabpanel" aria-labelledby="v-tabs-address-tab">
               <h2 class="mb-4">Direcciones activas</h2>

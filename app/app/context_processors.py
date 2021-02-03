@@ -13,7 +13,6 @@ def marcas(request):
     if  request.user.is_authenticated:
         data=Cart(request)
         p,status=CartModel.objects.only("quantity").get_or_create(user_id=request.user.id)
-        print(data.cart)
         data.clear()
 
         return {'marca':marca,"amount":p.quantity}
