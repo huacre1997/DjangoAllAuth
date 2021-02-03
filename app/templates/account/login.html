@@ -2,84 +2,190 @@
 {% load account socialaccount %}
 {% load static %}
 {% block content %}
-<div class="container">
-  <h2 class="mb-4">{% trans "Sign In" %}</h2>
-  {% get_providers as socialaccount_providers %}
-  {% if socialaccount_providers %}
-  <!-- <p>{% blocktrans with site.name as site_name %}Please sign in with one
-  of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-  for a {{ site_name }} account and sign in below:{% endblocktrans %}</p> -->
+<!-- Pills navs -->
+<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="ex3-tab-1" data-mdb-toggle="pill" href="#ex3-pills-1" role="tab"
+      aria-controls="ex3-pills-1" aria-selected="true">Login</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="ex3-tab-2" data-mdb-toggle="pill" href="#ex3-pills-2" role="tab" aria-controls="ex3-pills-2"
+      aria-selected="false">Unete aquí</a>
+  </li>
 
-  <div class="socialaccount_ballot">
+</ul>
+<!-- Pills navs -->
 
-
-
-  </div>
-
-  {% include "socialaccount/snippets/login_extra.html" %}
-
-  {% else %}
-  <p>{% blocktrans %}If you have not created an account yet, then please
-    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-  {% endif %}
-
-  <form id="formlogin" class="login">
-    {% csrf_token %}
-
-    <div class="form-outline mb-4">
-      <input type="email" name="login" class="form-control" required="" id="login">
-      <label for="login" class="form-label"> <i class="fa fa-user" aria-hidden="true"></i>
-
-        E-mail</label>
-
-    </div>
-    <div class="form-outline">
-      <input class="form-control" type="password" name="password" required="" id="password">
-      <label for="password" class="form-label"> <i class="fa fa-lock" aria-hidden="true"></i>
-        Password</label>
-
-    </div>
-    {% if redirect_field_value %}
-    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-    {% endif %}
+<!-- Pills content -->
+<div class="tab_profile-content" id="ex2-content">
+  <div class="tab_profile-pane fade show active" id="ex3-pills-1" role="tabpanel" aria-labelledby="ex3-tab-1">
+    <div>
 
 
-    <a class="button secondaryAction"
-      href="{% url 'account_reset_password' %}">{% trans "¿Olvidaste tu contraseña?" %}</a>
-    <button class="btn btn-primary btn-block my-4" id="btn-login-submit" type="submit">Entrar</button>
 
-    <!-- Register -->
-    <p class="text-center">No eres miembro?
-      <a href="">Registrate aquí</a>
-    </p>
+      <div class="container">
+        <h2 class="mb-4">{% trans "Sign In" %}</h2>
+        {% get_providers as socialaccount_providers %}
+        {% if socialaccount_providers %}
+        <!-- <p>{% blocktrans with site.name as site_name %}Please sign in with one
+    of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+    for a {{ site_name }} account and sign in below:{% endblocktrans %}</p> -->
 
-    <!-- Social login -->
-  </form>
-
-  <div class="login-or" style="text-align: center;">-{% trans 'or' %}-</div>
-
-  <div class="socialaccount_ballot">
+        <div class="socialaccount_ballot">
 
 
-  </div>
-  <a title="Google" class="socialaccount_provider google" href="/accounts/google/login/?process=login">
-    <div class="google-btn justify-content-center">
-      <div class="google-icon-wrapper">
-        <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+
+        </div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+        {% else %}
+        <p>{% blocktrans %}If you have not created an account yet, then please
+          <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+        {% endif %}
+
+
+        <form id="formlogin" class="login">
+          {% csrf_token %}
+
+          <div class="form-outline mb-4">
+            <input type="email" name="login" class="form-control" required="" id="login">
+            <label for="login" class="form-label"> <i class="fa fa-user" aria-hidden="true"></i>
+
+              E-mail</label>
+
+          </div>
+          <div class="form-outline">
+            <input class="form-control" type="password" name="password" required="" id="password">
+            <label for="password" class="form-label"> <i class="fa fa-lock" aria-hidden="true"></i>
+              Password</label>
+
+          </div>
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+
+
+          <a class="button secondaryAction"
+            href="{% url 'account_reset_password' %}">{% trans "¿Olvidaste tu contraseña?" %}</a>
+          <button class="btn btn-primary btn-block my-4" id="btn-login-submit" type="submit">Entrar</button>
+
+          <p class="text-center">No eres miembro?
+            <a href="">Registrate aquí</a>
+          </p>
+
+        </form>
+
+        <div class="login-or" style="text-align: center;">-{% trans 'or' %}-</div>
+
+        <div class="socialaccount_ballot">
+
+
+        </div>
+        <a title="Google" class="socialaccount_provider google" href="/accounts/google/login/?process=login">
+          <div class="google-btn justify-content-center">
+            <div class="google-icon-wrapper">
+              <img class="google-icon"
+                src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+            </div>
+            <p class="btn-text">Ingresar con Google</p>
+          </div>
+        </a>
+
+
       </div>
-      <p class="btn-text">Ingresar con Google</p>
+
     </div>
-  </a>
-  <style>
-  .jconfirm {
-    z-index: 1031 !important;
-  }
-</style>
+    <!-- <style>
+    .jconfirm {
+      z-index: 1031 !important;
+    }
+  </style> -->
+  </div>
+  <div class="tab_profile-pane fade" id="ex3-pills-2" role="tabpanel" aria-labelledby="ex3-tab-2">
+    <div class="container ">
+      <h2 class="mb-4">Regístrese ahora!</h2>
+
+      <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+      </p>
+
+      <form class="signup" id="formRegister">
+        {% csrf_token %}
+
+        <div class="row mb-4">
+          <div class="col">
+
+            <div class="form-outline">
+              <input type="text" name="first_name" maxlength="20" class="form-control" required="" id="id_first_name">
+              <label for="id_first_name" class="form-label">First name</label>
+            </div>
+          </div>
+          <div class="col">
+
+            <div class="form-outline">
+              <input type="text" name="last_name" maxlength="20" class="form-control" required="" id="id_last_name">
+              <label for="id_last_name" class="form-label">Last name</label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col">
+            <div class="form-outline">
+              <input type="text" name="dni" maxlength="8" class="form-control" required="" id="id_dni"> <label
+                for="id_dni" class="form-label">Dni</label>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-outline">
+              <input type="text" name="fechanac" class="form-control" required="" id="id_fechanac"><label
+                for="id_fechanac " class="form-label">Fecha de nacimiento</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-outline mb-4">
+          <input type="text" name="celular" maxlength="9" class="form-control" required="" id="id_celular"> <label
+            for="id_celular" class="form-label">Celular</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          <input type="email" name="email" autocomplete="email" class="form-control" required="" id="id_email">
+          <label for="id_email" class="form-label">Correo electrónico</label>
+        </div>
+
+
+        <div class="row mb-4">
+          <div class="col">
+            <div class="form-outline">
+              <input type="password" name="password1" autocomplete="new-password" class="form-control" required=""
+                id="id_password1">
+              <label for="id_password1" class="form-label">Contraseña</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-outline">
+              <input type="password" name="password2" class="form-control" required="" id="id_password2"> <label
+                for="id_password2" class="form-label">Confirmar contraseña</label>
+            </div>
+          </div>
+        </div>
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button type="submit" id="btn-register-submit" class="btn btn-primary btn-block">{% trans "Sign Up" %} </button>
+      </form>
+    </div>
+  </div>
 
 </div>
+<!-- Pills content -->
 {% endblock %}
 
 {% block js_page %}
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-confirm.min.js' %}"></script>
 <script>
   $("#formlogin").submit(function (e) {
     let form = document.getElementById("formlogin")
@@ -124,6 +230,59 @@
     })
 
   });
+  $("#formRegister").submit(function (e) {
+    let form = document.getElementById("formRegister")
+    let formData = new FormData(form)
+    let first_name = document.getElementById("id_first_name")
+    let last_name = document.getElementById("id_last_name")
+    let dni = document.getElementById("id_dni")
+    let fecha = document.getElementById("id_fechanac")
+    let celular = document.getElementById("id_celular")
+    let password = document.getElementById("id_password1")
+    let password2 = document.getElementById("id_password2")
+    let email = document.getElementById("id_email")
+    let btn=document.getElementById("btn-register-submit")
+    btn.innerHTML = ""
+    btn.disabled = true
+
+    first_name.disabled = true
+    last_name.disabled = true
+    dni.disabled = true
+    celular.disabled = true
+    password.disabled = true
+    password2.disabled = true
+    email.disabled = true
+    let parent = document.createElement("div")
+    let loader = document.createElement("span")
+    loader.style.marginRight = "2px"
+    loader.classList.add("spinner-border", "spinner-border-sm")
+    loader.setAttribute("role", "status")
+    loader.setAttribute("aria-hidden", "true")
+    parent.appendChild(loader)
+    btn.appendChild(parent)
+    e.preventDefault();
+    fetch("{% url 'base:register' %}", {
+      method: "POST",
+      body: formData
+    }).then(data=>data.json()).then(response=>{
+      console.log(response)
+      if (response.hasOwnProperty("error")) {
+          console.log("error");
+          first_name.disabled = false
+          last_name.disabled = false
+          dni.disabled = false
+          celular.disabled = false
+          password.disabled = false
+          password2.disabled = false
+          email.disabled = false
+          btn.innerHTML = ""
+        btn.textContent = "REGISTRAR"
+          btn.disabled=false
+        }
+    })
+
+  });
 </script>
 <script src="{% static 'js/mdb.min.js' %}"></script>
+
 {% endblock js_page %}

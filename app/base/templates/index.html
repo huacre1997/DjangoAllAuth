@@ -814,20 +814,78 @@
     <div class="footer-copyright py-3">
       © 2021 Copyright:
     </div>
+
+   
+    <!-- <nav>
+      <a href="#section1">Section 1</a>
+      <a href="#section2">Section 2</a>
+      <a href="#section3">Section 3</a>
+      <a href="#section4">Section 4</a>
+      <a href="#section5">Section 5</a>
+    </nav> -->
+    
+    <!-- <section style="  height: 100vh;
+    background-color: gray;" id="section1">Section 1</section>
+    <section style="  height: 100vh;
+    background-color: red;" id="section2">Section 2</section>
+    <section style="  height: 100vh;
+    background-color: green;" id="section3">Section 3</section>
+    <section id="section4">Section 4</section>
+    <section id="section5">Section 5</section> -->
   </footer>
 
 
 
 </body>
 {% load static %}
+
+
 <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
 
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/mdb.min.js' %}"></script>
 <script src="{% static 'js/filter.js' %}"></script>
 <script src="{% static 'js/cart.js' %}"></script>
 
+<script>
+  var tweenedX = document.getElementById("tweenedX"),
+    modifiedX = document.getElementById("modifiedX")
 
+
+   function getSamePageAnchor (link) {
+  if (
+    link.protocol !== window.location.protocol ||
+    link.host !== window.location.host ||
+    link.pathname !== window.location.pathname ||
+    link.search !== window.location.search
+  ) {
+    return false;
+  }
+
+  return link.hash;
+}
+
+// Scroll to a given hash, preventing the event given if there is one
+function scrollToHash(hash, e) {
+  const elem = hash ? document.querySelector(hash) : false;
+  if(elem) {
+    if(e) e.preventDefault();
+    gsap.to(window, {scrollTo: elem});
+  }
+}
+
+// If a link's href is within the current page, scroll to it instead
+document.querySelectorAll('a[href]').forEach(a => {
+  a.addEventListener('click', e => {
+    scrollToHash(getSamePageAnchor(a), e);
+  });
+});
+
+// Scroll to the element in the URL's hash on load
+scrollToHash(window.location.hash);
+
+</script>
 <!-- <script type="text/javascript" src="{% static 'js/modules/wow.js' %}">
   // Animations initialization
 
