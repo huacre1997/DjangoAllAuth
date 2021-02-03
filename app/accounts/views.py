@@ -60,7 +60,7 @@ def editName(request):
 def createAddress(request):
     if request.method=="POST":
         form=AdressForm(request.POST)  
-
+        print(request.POST)
         if request.POST["method_address"]=="post":
             
             if form.is_valid():  

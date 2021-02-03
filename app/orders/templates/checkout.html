@@ -132,6 +132,8 @@
                     <div class="form_Address none">
                       <form id="formAddress" action="{% url 'accounts:createAddress' %}">
                         {% csrf_token %}
+                        <input type="hidden" id="method_address" name="method_address" value="post">
+                        <input type="hidden" id="address_profile" name="address_profile">
                         <div class="form-outline mb-4">
                           <input type="text" name="description" id="description_id" class="form-control" />
                           <label class="form-label" for="description">Dirección</label>

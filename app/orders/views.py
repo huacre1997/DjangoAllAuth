@@ -21,11 +21,9 @@ from .pay import *
 class CheckOutView(TemplateView):
     template_name = "checkout.html"
     # login_url = '/login'
+    @never_cache
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return JsonResponse({"auth":1})
-        else:
-            return JsonResponse({"auth":0})
+   
 
         return super(CheckOutView, self).dispatch(request, *args, **kwargs)
     
@@ -57,7 +55,8 @@ class CheckOutView(TemplateView):
         context["address"]=Adress.objects.filter(user_id=self.request.user.id)
         context["cartTotal"]=cart.total
         context["cartCount"]=cart.quantity
-
+        if self.request.user.is_authenticated:
+            context["auth"]=1
         return context
 
 # 1. Import the PayPal SDK client created in `Set up Server-Side SDK` section.

@@ -17,8 +17,7 @@ if (document.getElementById("btnCheck")!=null) {
     
 
 document.getElementById("btnCheck").addEventListener("click",function(){
-    fetch(this.dataset.url).then(data=>data.json()).then(function(response){
-        if(response.auth==0){
+      
             var login = $.confirm({
                 title: "",
                 columnClass: "col-lg-5 col-md-7 col-xs-9",
@@ -43,8 +42,8 @@ document.getElementById("btnCheck").addEventListener("click",function(){
                   this.buttons.okButton.hide();            
                 },                        
               });
-        }
-    })
+     
+ 
 })}
 for (let i = 0; i < x.length; i++) {
     const element = x[i];
@@ -143,8 +142,8 @@ Array.from(adresscomponent).forEach(element=>{
     element.addEventListener("click",(e)=>{
         Array.from(adresscomponent).forEach(element2=>{
                 element2.classList.add("active-adress")
-                if(element2.childNodes[2].nextSibling.childNodes[1]!=undefined){
-                    element2.childNodes[2].nextSibling.removeChild(element2.childNodes[2].nextSibling.childNodes[1])
+                if(element2.childNodes[2].nextSibling.childNodes[2]!=undefined){
+                    element2.childNodes[2].nextSibling.removeChild(element2.childNodes[2].nextSibling.childNodes[2])
 
                 }    
        

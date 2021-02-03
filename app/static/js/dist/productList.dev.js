@@ -238,7 +238,7 @@ function createAddress() {
     var pnamePro = document.createElement("p");
     var namePro = document.createElement("strong");
     namePro.textContent = response.province;
-    pnamePro.classList.add("address_" + response.id, "justify-content-between", "d-flex", "justify-self-end");
+    pnamePro.classList.add("address_" + response.id, "justify-content-between", "d-flex");
     pnamePro.appendChild(namePro);
     var txt3 = document.createTextNode("");
     var pnameDis = document.createElement("p");

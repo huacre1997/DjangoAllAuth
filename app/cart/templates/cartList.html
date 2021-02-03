@@ -184,7 +184,20 @@
                                 {% endif %}</p>
 
                         </li>
-                        <li><button id="btnCheck" data-url="{% url 'orders:checkout' %}" class="btn indigo btn-primary btn-block">CheckOut</button></li>
+                        <li>
+                            {% if auth %}
+                                <a class="btn indigo btn-primary btn-block" href="
+                                {% if cartCount == 0 %}
+                                   # 
+                                   {%else%}
+                                   {% url 'orders:checkout' %}
+                                {% endif %}
+                                    ">CheckOut</a>
+                            {% else %}
+                            <button id="btnCheck" data-url="{% url 'orders:checkout' %}" class="btn indigo btn-primary btn-block">CheckOut</button></li>
+
+                            {% endif %}
+                                 
                     </ul>
 
                 </div>

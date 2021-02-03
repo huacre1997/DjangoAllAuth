@@ -279,7 +279,7 @@ function createAddress() {
     let pnamePro = document.createElement("p")
     let namePro = document.createElement("strong")
     namePro.textContent = response.province
-    pnamePro.classList.add("address_" + response.id, "justify-content-between", "d-flex","justify-self-end")
+    pnamePro.classList.add("address_" + response.id, "justify-content-between", "d-flex")
     pnamePro.appendChild(namePro)
     let txt3=document.createTextNode("")
 
@@ -325,6 +325,7 @@ function createAddress() {
 
     Array.from(adresscomponent).forEach(element=>{
       console.log(element);
+      console.log("array");
       element.addEventListener("click",(e)=>{
           console.log(e.target.childNodes)
           Array.from(adresscomponent).forEach(element2=>{
@@ -335,13 +336,14 @@ function createAddress() {
                   }    
          
           })
+          console.log( e.target.childNodes[2].nextElementSibling);
           e.target.classList.remove("active-adress")
           let valdir=e.target.childNodes[2].nextElementSibling.className;
           document.getElementById("address").value=parseInt(valdir.split("_").pop())
           let img=document.createElement("img")
           img.src="/static/icons/comprobado.png"
           e.target.childNodes[2].nextElementSibling.appendChild(img)
-  
+          
   
       })
   })

@@ -32,7 +32,7 @@ def CartView(request):
         
         data = CartItem.objects.values("product","product__image", "product__name","product__slug",
                                     "product__marca__name", "product__price", "count").filter(cart=cart.id).order_by("created")
-        context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity}
+        context = {"object": data, "cartTotal": cart.total, "cartCount": cart.quantity,"auth":1}
         return render(request, "cartList.html", context)
 
     else:

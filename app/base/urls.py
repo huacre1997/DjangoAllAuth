@@ -13,7 +13,7 @@ urlpatterns = [
 
     path('login',LoginFormView.as_view(),name="login"),
     path('signup',RegisterView.as_view(),name="register"),
-    path('logout/',Logout.as_view(),name="logout"),
+    path('logout/',LogoutView.as_view(next_page="/"),name="logout"),
     path("province/",getProvince,name="getprovince"),
     path("district/",getDistrict,name="getdistrict"),
 

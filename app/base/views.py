@@ -128,6 +128,4 @@ class LoginFormView(LoginView):
         context["title"] = "Login"
         context["login"]=LoginForm
         return context
-class Logout(LogoutView):
-    def get(self, request, *args, **kwargs):
-        return redirect(request.META['HTTP_REFERER'])
+
