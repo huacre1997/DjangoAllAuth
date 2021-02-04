@@ -1,7 +1,7 @@
 body {
   padding: 0 !important;
   background: lightgrey !important;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
 }
 
 .p_subnav {

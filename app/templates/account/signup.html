@@ -93,69 +93,85 @@
   </div>
   <div class="tab_profile-pane fade show active" id="ex3-pills-2" role="tabpanel" aria-labelledby="ex3-tab-2">
     <div class="container ">
-      <h2 class="mb-4">Regístrese ahora!</h2>
+      <h2 class="mb-2">Regístrese ahora!</h2>
 
-      <p>{% blocktrans %}Already have an account? Then please <a href="#"  id="shortcut_login">sign in</a>.{% endblocktrans %}
+      <p class="mb-4 ">{% blocktrans %}Already have an account? Then please <a href="#"  id="shortcut_login">Identifíquese</a>.{% endblocktrans %}
       </p>
 
-      <form class="signup" id="formRegister">
+      <form class="signup  needs-validation" id="formRegister"  novalidate>
         {% csrf_token %}
 
         <div class="row mb-4">
           <div class="col">
 
             <div class="form-outline">
-              <input type="text" name="first_name" maxlength="20" class="form-control" required="" id="id_first_name">
+              <input type="text" name="first_name" maxlength="20" class="form-control signup_input" required="" id="id_first_name">
               <label for="id_first_name" class="form-label">First name</label>
+              <div class="invalid-feedback" id="invalid_first"></div>
+
             </div>
           </div>
           <div class="col">
 
             <div class="form-outline">
-              <input type="text" name="last_name" maxlength="20" class="form-control" required="" id="id_last_name">
+              <input type="text" name="last_name" maxlength="20" class="form-control signup_input" required="" id="id_last_name">
               <label for="id_last_name" class="form-label">Last name</label>
+              <div class="invalid-feedback" id="invalid_last"></div>
+
             </div>
           </div>
         </div>
         <div class="row mb-4">
           <div class="col">
             <div class="form-outline">
-              <input type="text" name="dni" maxlength="8" class="form-control" required="" id="id_dni"> <label
-                for="id_dni" class="form-label">Dni</label>
+              <input type="text" name="dni" maxlength="8" class="form-control signup_input" required="" id="id_dni"> <label
+                for="id_dni" class="form-label">DNI</label>
+                <div class="invalid-feedback" id="invalid_dni"></div>
+
             </div>
           </div>
 
           <div class="col">
             <div class="form-outline">
-              <input type="text" name="fechanac" class="form-control" required="" id="id_fechanac"><label
+              <input type="text" name="fechanac" class="form-control signup_input" required="" id="id_fechanac"><label
                 for="id_fechanac " class="form-label">Fecha de nacimiento</label>
+                <div class="invalid-feedback" id="invalid_fecha"></div>
+
             </div>
           </div>
         </div>
 
         <div class="form-outline mb-4">
-          <input type="text" name="celular" maxlength="9" class="form-control" required="" id="id_celular"> <label
+          <input type="text" name="celular" maxlength="9" class="form-control signup_input" required="" id="id_celular"> <label
             for="id_celular" class="form-label">Celular</label>
+            <div class="invalid-feedback" id="invalid_celular"></div>
+
         </div>
 
         <div class="form-outline mb-4">
-          <input type="email" name="email" autocomplete="email" class="form-control" required="" id="id_email">
+          <input type="email" name="email" autocomplete="email" class="form-control signup_input" required="" id="id_email">
           <label for="id_email" class="form-label">Correo electrónico</label>
+          <div class="invalid-feedback" id="invalid_email"></div>
+
         </div>
 
 
         <div class="row mb-4">
           <div class="col">
             <div class="form-outline">
-              <input type="password" name="password1" autocomplete="new-password" class="form-control" required=""
+              <input type="password" name="password1" autocomplete="new-password" class="form-control signup_input" required=""
                 id="id_password1">
               <label for="id_password1" class="form-label">Contraseña</label>
+              <div class="invalid-feedback" id="invalid_password1"></div>
+
             </div>
           </div>
           <div class="col">
             <div class="form-outline">
-              <input type="password" name="password2" class="form-control" required="" id="id_password2"> <label
+              <input type="password" name="password2" class="form-control signup_input" required="" id="id_password2"> <label
                 for="id_password2" class="form-label">Confirmar contraseña</label>
+                <div class="invalid-feedback" id="invalid_password2"></div>
+
             </div>
           </div>
         </div>
@@ -173,8 +189,7 @@
 {% endblock %}
 
 {% block js_page %}
-<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-<script src="{% static 'js/jquery-confirm.min.js' %}"></script>
+
 <script>
   $("#formlogin").submit(function (e) {
     let form = document.getElementById("formlogin")
@@ -220,6 +235,22 @@
 
   });
   $("#formRegister").submit(function (e) {
+
+ // Fetch all the forms we want to apply custom Bootstrap validation styles to
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let form = document.getElementById("formRegister")
     let formData = new FormData(form)
     let first_name = document.getElementById("id_first_name")
@@ -233,7 +264,14 @@
     let btn=document.getElementById("btn-register-submit")
     btn.innerHTML = ""
     btn.disabled = true
+    input=document.querySelectorAll("input[class='signup_input'")
+    invalid=document.querySelectorAll(".invalud-feedback")
 
+    for (let i = 0; i < input.length; i++) {
+      console.log(input[i])
+      input[i].classList.remove("is_invalid");
+      
+    }
     first_name.disabled = true
     last_name.disabled = true
     dni.disabled = true
@@ -250,13 +288,14 @@
     parent.appendChild(loader)
     btn.appendChild(parent)
     e.preventDefault();
+    // form.classList.remove("was-validated")
+   
     fetch("{% url 'base:register' %}", {
       method: "POST",
       body: formData
     }).then(data=>data.json()).then(response=>{
       console.log(response)
       if (response.hasOwnProperty("error")) {
-          console.log("error");
           first_name.disabled = false
           last_name.disabled = false
           dni.disabled = false
@@ -267,6 +306,38 @@
           btn.innerHTML = ""
         btn.textContent = "REGISTRAR"
           btn.disabled=false
+          if (response.error.celular) {
+            document.getElementById("invalid_celular").innerHTML=response.error.celular[0]
+            celular.classList.add("is-invalid")
+          }
+          if (response.error.first_name) {
+            document.getElementById("invalid_first").innerHTML=response.error.first_name[0]
+            first_name.classList.add("is-invalid")
+          }
+          if (response.error.last_name) {
+            document.getElementById("invalid_last").innerHTML=response.error.last_name[0]
+            last_name.classList.add("is-invalid")
+          }
+          if (response.error.dni) {
+            document.getElementById("invalid_dni").innerHTML=response.error.dni[0]
+            dni.classList.add("is-invalid")
+          }
+          if (response.error.email) {
+            document.getElementById("invalid_email").innerHTML=response.error.email[0]
+            email.classList.add("is-invalid")
+          }
+          if (response.error.fechanac) {
+            document.getElementById("invalid_fecha").innerHTML=response.error.fechanac[0]
+            fecha.classList.add("is-invalid")
+          }
+          if (response.error.password1) {
+            document.getElementById("invalid_password1").innerHTML=response.error.password1[0]
+            password.classList.add("is-invalid")
+          }
+          if (response.error.password2) {
+            document.getElementById("invalid_password2").innerHTML=response.error.password2[0]
+            password2.classList.add("is-invalid")
+          }
         }
     })
 

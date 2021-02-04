@@ -104,9 +104,9 @@
   </div>
   <div class="tab_profile-pane fade" id="ex3-pills-2" role="tabpanel" aria-labelledby="ex3-tab-2">
     <div class="container ">
-      <h2 class="mb-4">Regístrese ahora!</h2>
+      <h2 class="mb-2">Regístrese ahora!</h2>
 
-      <p>{% blocktrans %}Already have an account? Then please <a href="#" id="shortcut_login">sign in</a>.{% endblocktrans %}
+      <p class="mb-4">{% blocktrans %}Already have an account? Then please <a href="#" id="shortcut_login">Identifíquese</a>.{% endblocktrans %}
       </p>
 
       <form class="signup" id="formRegister">
@@ -176,6 +176,7 @@
         {% endif %}
         <button type="submit" id="btn-register-submit" class="btn btn-primary btn-block">{% trans "Sign Up" %} </button>
       </form>
+      
     </div>
   </div>
 
@@ -184,8 +185,7 @@
 {% endblock %}
 
 {% block js_page %}
-<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-<script src="{% static 'js/jquery-confirm.min.js' %}"></script>
+
 <script>
   $("#formlogin").submit(function (e) {
     let form = document.getElementById("formlogin")

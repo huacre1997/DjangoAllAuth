@@ -1,4 +1,26 @@
 $(function () {
+  $('.owl-carousel').owlCarousel({
+    loop: true,
+    margin: 10,
+    nav: true,
+    autoplay: true,
+    autoplayTimeout: 2000,
+    autoplayHoverPause: true,
+    responsive: {
+      0: {
+        items: 1,
+        nav: true
+      },
+      600: {
+        items: 3,
+        nav: false
+      },
+      1000: {
+        items: 4,
+        nav: false,
+      }
+    }
+  })
   $(".js-header-responsive").select2({
     width: 'resolve' // need to override the changed default
   });

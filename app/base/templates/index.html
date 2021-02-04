@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+  <link rel="shortcut icon" href="favicon.ico">
   {% comment %}
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> {% endcomment %}
 
@@ -80,6 +80,8 @@
       background-size: cover;
     }
   </style>
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
 </head>
 
 <body class="body">
@@ -840,58 +842,20 @@
 {% load static %}
 
 
-<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
 
 
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/mdb.min.js' %}"></script>
 <script src="{% static 'js/filter.js' %}"></script>
 <script src="{% static 'js/cart.js' %}"></script>
 
-<script>
-  var tweenedX = document.getElementById("tweenedX"),
-    modifiedX = document.getElementById("modifiedX")
 
-
-   function getSamePageAnchor (link) {
-  if (
-    link.protocol !== window.location.protocol ||
-    link.host !== window.location.host ||
-    link.pathname !== window.location.pathname ||
-    link.search !== window.location.search
-  ) {
-    return false;
-  }
-
-  return link.hash;
-}
-
-// Scroll to a given hash, preventing the event given if there is one
-function scrollToHash(hash, e) {
-  const elem = hash ? document.querySelector(hash) : false;
-  if(elem) {
-    if(e) e.preventDefault();
-    gsap.to(window, {scrollTo: elem});
-  }
-}
-
-// If a link's href is within the current page, scroll to it instead
-document.querySelectorAll('a[href]').forEach(a => {
-  a.addEventListener('click', e => {
-    scrollToHash(getSamePageAnchor(a), e);
-  });
-});
-
-// Scroll to the element in the URL's hash on load
-scrollToHash(window.location.hash);
-
-</script>
 <!-- <script type="text/javascript" src="{% static 'js/modules/wow.js' %}">
   // Animations initialization
 
 </script> -->
 
 <script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/custom.js'%}"></script>
 
 <script src="{% static 'js/login.js' %}"></script>
 <script src="{% static 'js/nouislider.min.js' %}"></script>
@@ -900,33 +864,11 @@ scrollToHash(window.location.hash);
 <script src="{% static 'js/imgloading.min.js' %}"></script>
 <script src="{% static 'js/productList.js' %}"></script>
 <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'js/jquery-confirm.min.js' %}"></script>
+<script src="{% static 'js/jquery-confirm.min.js' %}"></script> 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script text="text/javascript">
-  $('.owl-carousel').owlCarousel({
-    loop: true,
-    margin: 10,
-    nav: true,
-    autoplay: true,
-    autoplayTimeout: 2000,
-    autoplayHoverPause: true,
-    responsive: {
-      0: {
-        items: 1,
-        nav: true
-      },
-      600: {
-        items: 3,
-        nav: false
-      },
-      1000: {
-        items: 4,
-        nav: false,
-      }
-    }
-  })
+
   var user = "{{request.user.first_name}}"
   let TopMessage=(title,icon,time=6000)=>{
     const Toast = Swal.mixin({
@@ -946,22 +888,7 @@ scrollToHash(window.location.hash);
         title:title         
       });
 }
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-  var csrftoken = getCookie("csrftoken")
+  
 </script>
 {% comment %} <script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
 <script src="{% static 'plugins/greensock/TimelineMax.min.js'%}"></script>
@@ -971,10 +898,11 @@ scrollToHash(window.location.hash);
 <script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js'%}"></script>
 <script src="{% static 'plugins/slick-1.8.0/slick.js'%}"></script>
 <script src="{% static 'plugins/easing/easing.js'%}"></script> {% endcomment %}
-<script src="{% static 'js/custom.js'%}"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-
+<script>
+  jQuery.event.special.touchstart = { setup: function( _, ns, handle ){ if ( ns.includes("noPreventDefault") ) { this.addEventListener("touchstart", handle, { passive: false }); } else { this.addEventListener("touchstart", handle, { passive: true }); } } };
+</script>
 {% block js_page %}
 
 {% endblock js_page %}

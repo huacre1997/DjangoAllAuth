@@ -73,21 +73,22 @@ class RegisterView(SignupView):
         if form.is_valid():
             self.user = form.save(self.request)
             try:
-                return complete_signup(
+                complete_signup(
                     self.request,
                     self.user,
                     app_settings.EMAIL_VERIFICATION,
                     None,
                 )
+                print("if")
+                return JsonResponse({"response":"ok"},safe=False)
             except ImmediateHttpResponse as e:
                 return e.response
         else :
             data = {
                 "error":form.errors,
                 'stat': False,
-                'form': render_to_string(self.template_name, {'form': form}, request=request)}
+                }
             return JsonResponse(data)
-        return HttpResponse('Activation link is valid!')
 
 class LoginFormView(LoginView):
     form_class = LoginForm
