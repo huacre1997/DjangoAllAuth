@@ -90,16 +90,15 @@
 
     <!-- Top Bar -->
 
-    <div class="container">
       <div class="row">
-        <div class="grid g-col-3 g-row-3 align-items-center">
-          <div class="">
+        <div class="grid g-col-3  g-row-3 align-items-center" style="padding: 0 3em;">
+          <!-- <div class="">
             <i class="fa fa-phone" aria-hidden="true"></i> +51 996 0000 53
-          </div>
-          <div class="">
+          </div> -->
+          <!-- <div class="">
         <i class="fa fa-envelope" aria-hidden="true"></i> huacreenciso97@gmail.com
-          </div>
-          <div class="">
+          </div> -->
+          <div class="grid-column-start-3">
             
               {% if request.user.is_authenticated %}
 
@@ -122,12 +121,13 @@
             </div>
 
               {% else %}
-              <div class="grid g-col-3">
-                <div>
-           
-              <a href="{% url 'base:register' %}"><i class="fa fa-user" aria-hidden="true"></i> Registrarse</a></div>
-            <a id="btnLogin" hreft="{% url 'base:login' %}" style="cursor: pointer;color:#1266f1">| <i class="fa fa-lock" aria-hidden="true"></i> Login</a>
-            </div>
+              <div class="grid g-col-2">
+                <button type="button" class="btn btn-link" id="btnRegister" data-mdb-ripple-color="dark"  data-url="{% url 'base:register' %}"> <i class="fa fa-user" aria-hidden="true"></i> Regístrese</button>
+
+                  <!-- <a id="btnLogin" hreft="{% url 'base:login' %}" style="cursor: pointer;color:#1266f1">| <i class="fa fa-lock" aria-hidden="true"></i> Login</a> -->
+                  <button type="button" class="btn btn-link" id="btnLogin" data-mdb-ripple-color="dark"  data-url="{% url 'base:login' %}"> <i class="fa fa-lock" aria-hidden="true"></i> Identifíquese</button>
+
+                </div>
               {% endif %}
 
           </div>
@@ -448,7 +448,7 @@
 
   <div id="effect" style="display: none;" class="ui-widget-content ui-corner-all">
     <p>
-      <button id="btnLogin" class="btn btn-secondary">Entrar</button>
+      <button id="" class="btn btn-secondary">Entrar</button>
       Si no se encuentra registrado <a href="#">Registrese aquí</a>
     </p>
   </div>

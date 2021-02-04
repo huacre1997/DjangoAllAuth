@@ -139,6 +139,35 @@ $(function (e) {
   //   console.log(login)
   //   login.open()
   // });
+  document.getElementById("btnRegister").addEventListener("click",function(){
+    var register = $.confirm({
+      title: "",
+      columnClass: "col-lg-5 col-md-7 col-xs-9",
+      closeIcon: true,
+      content: function () {
+        var self = this;
+        return $.ajax({
+            url: "/signup",
+            dataType: "json",
+            method: "get",
+          })
+          .done(function (response) {
+            self.setContent(response.html);
+          })
+      },
+      buttons: {
+        okButton: {
+          text: "ok",
+          action: function () {},
+        },
+      },
+      
+      onContentReady: function (e) {
+        this.buttons.okButton.hide();
+      },
+      
+    });
+  })
   document.getElementById("btnLogin").addEventListener("click",function(){
     var login = $.confirm({
       title: "",
@@ -169,3 +198,4 @@ $(function (e) {
     });
   })
 });
+

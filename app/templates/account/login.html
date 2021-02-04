@@ -71,7 +71,7 @@
           <button class="btn btn-primary btn-block my-4" id="btn-login-submit" type="submit">Entrar</button>
 
           <p class="text-center">No eres miembro?
-            <a href="">Registrate aquí</a>
+            <a href="#" id="register_tab">Registrate aquí</a>
           </p>
 
         </form>
@@ -106,7 +106,7 @@
     <div class="container ">
       <h2 class="mb-4">Regístrese ahora!</h2>
 
-      <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}
+      <p>{% blocktrans %}Already have an account? Then please <a href="#" id="shortcut_login">sign in</a>.{% endblocktrans %}
       </p>
 
       <form class="signup" id="formRegister">
@@ -282,6 +282,19 @@
     })
 
   });
+  document.getElementById("shortcut_login").addEventListener("click",function () {
+      console.log("aea");
+    document.getElementById("ex3-tab-2").classList.remove("active")
+    document.getElementById("ex3-pills-2").classList.remove("show","active")
+    document.getElementById("ex3-tab-1").classList.add("active")
+    document.getElementById("ex3-pills-1").classList.add("show","active")
+    })
+    document.getElementById("register_tab").addEventListener("click",function () { 
+    document.getElementById("ex3-tab-1").classList.remove("active")
+    document.getElementById("ex3-pills-1").classList.remove("show","active")
+    document.getElementById("ex3-tab-2").classList.add("active")
+    document.getElementById("ex3-pills-2").classList.add("show","active")
+     })
 </script>
 <script src="{% static 'js/mdb.min.js' %}"></script>
 
