@@ -73,14 +73,14 @@ class RegisterView(SignupView):
         if form.is_valid():
             self.user = form.save(self.request)
             try:
+                print("If")
                 complete_signup(
                     self.request,
                     self.user,
                     app_settings.EMAIL_VERIFICATION,
                     None,
                 )
-                print("if")
-                return JsonResponse({"response":"ok"},safe=False)
+                return JsonResponse({"response": self.request },safe=False)
             except ImmediateHttpResponse as e:
                 return e.response
         else :

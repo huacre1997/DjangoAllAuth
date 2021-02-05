@@ -142,8 +142,9 @@ $(function (e) {
   document.getElementById("btnRegister").addEventListener("click",function(){
     var register = $.confirm({
       title: "",
-      columnClass: "col-lg-5 col-md-7 col-xs-9",
+      columnClass: "col-lg-7 col-md-9 col-sm-10 col-xs-10",
       closeIcon: true,
+      containerFluid:true,
       content: function () {
         var self = this;
         return $.ajax({
@@ -171,7 +172,7 @@ $(function (e) {
   document.getElementById("btnLogin").addEventListener("click",function(){
     var login = $.confirm({
       title: "",
-      columnClass: "col-lg-5 col-md-7 col-xs-9",
+      columnClass: "col-lg-7 col-md-9 col-sm-10 col-xs-10",
       closeIcon: true,
       content: function () {
         var self = this;
