@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.generic import FormView,TemplateView
-from allauth.account.views import LoginView,SignupView
+from allauth.account.views import LoginView,SignupView,EmailConfirmation
 from allauth.exceptions import ImmediateHttpResponse
 from allauth.account import app_settings
 from allauth.account.utils import complete_signup
@@ -19,7 +19,6 @@ from django.template import RequestContext
 from accounts.models import Province,District,Adress
 from django.core import serializers
 from django.contrib.auth.views import LogoutView
-
 
 def getProvince(request):
     qs=Province.objects.only("name","id")
@@ -69,18 +68,19 @@ class RegisterView(SignupView):
     form_class=MyCustomSignupForm
     def post(self,request,*args, **kwargs):
         data={}
+        print(request.POST)
         form = MyCustomSignupForm(request.POST)
         if form.is_valid():
             self.user = form.save(self.request)
             try:
-                print("If")
-                complete_signup(
+                mail=complete_signup(
                     self.request,
                     self.user,
                     app_settings.EMAIL_VERIFICATION,
                     None,
                 )
-                return JsonResponse({"response": self.request },safe=False)
+         
+                return JsonResponse({"mail": request.POST["email"] },safe=False)
             except ImmediateHttpResponse as e:
                 return e.response
         else :

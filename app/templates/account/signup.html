@@ -84,11 +84,11 @@
       </div>
 
     </div>
-    <!-- <style>
+    <style>
     .jconfirm {
       z-index: 1031 !important;
     }
-  </style> -->
+  </style>
   </div>
   <div class="tab_profile-pane fade show active" id="ex3-pills-2" role="tabpanel" aria-labelledby="ex3-tab-2">
     <div class="container ">
@@ -237,22 +237,6 @@
 
   });
   $("#formRegister").submit(function (e) {
-
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     let form = document.getElementById("formRegister")
     let formData = new FormData(form)
     let first_name = document.getElementById("id_first_name")
@@ -292,10 +276,14 @@
 
     fetch("{% url 'base:register' %}", {
       method: "POST",
-      body: formData
+      body: formData,
+      data:{
+        mail:email.value
+      }
     }).then(data => data.json()).then(response => {
-      console.log(response)
       if (response.hasOwnProperty("error")) {
+        document.getElementById("invalid_password1").parentNode.parentNode.classList.remove("mb-4")
+
         first_name.disabled = false
         last_name.disabled = false
         dni.disabled = false
@@ -346,10 +334,13 @@
             password.classList.add("is-invalid")
 
           }else{
-            document.getElementById("invalid_password1").parentNode.parentNode.classList.remove("mb-4")
+            console.log("else");
 
             document.getElementById("invalid_password1").innerHTML = response.error.password1[0]
           password.classList.add("is-invalid")
+          password.value=""
+          password2.value=""
+
           }
 
         }
@@ -361,14 +352,40 @@
 
         }
       }else{
-        document.getElementById("ex3-pills-2").innerHTML=response.response
+        document.getElementById("ex3-pills-2").innerHTML=""
+        let grid=document.createElement("div")
+        grid.classList.add("grid")
+        let img=document.createElement("img")
+        img.src="/static/img/check.png"
+        img.style.width="150px"
+        img.classList.add("justify-self-center")
+        let h1=document.createElement("h1")
+        h1.textContent="Genial!"
+        h1.classList.add("justify-self-center")
+        let p1=document.createElement("p")
+        p1.classList.add("justify-self-center")
+        p1.textContent="Acabamos de enviar un mensaje de confirmación al correo :"
+
+        let strong=document.createElement("strong")
+        strong.textContent=response.mail
         
+        p1.after(strong)
+        p1.appendChild(strong)
+
+        let p2=document.createElement("p")
+        p2.textContent="Ingrese a su bandeja de entrada y haga click en el link de confirmación."
+        p2.classList.add("justify-self-center")
+
+        grid.appendChild(img)
+        grid.appendChild(h1)
+        grid.appendChild(p1)
+        grid.appendChild(p2)
+        document.getElementById("ex3-pills-2").appendChild(grid)
       }
     })
 
   });
   document.getElementById("shortcut_login").addEventListener("click", function () {
-    console.log("aea");
     document.getElementById("ex3-tab-2").classList.remove("active")
     document.getElementById("ex3-pills-2").classList.remove("show", "active")
     document.getElementById("ex3-tab-1").classList.add("active")

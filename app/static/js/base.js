@@ -1,6 +1,9 @@
 $(function () {
   $('.owl-carousel').owlCarousel({
     loop: true,
+    lazyload:true,
+    stagePadding: 50,
+    lazyLoadEager:20,
     margin: 10,
     nav: true,
     autoplay: true,
