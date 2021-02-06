@@ -58,7 +58,29 @@ class CheckOutView(TemplateView):
         if self.request.user.is_authenticated:
             context["auth"]=1
         return context
+import culqi
 
+def charges(request):
+    if request.method == 'POST':
+        token = request.POST['token']
+        installments = request.POST['installments']
+
+        culqi.secret_key = "sk_test_86ea6b22eb0c1319"
+
+        dir_charge = {'amount': 3500,
+                      'capture': True,
+                      'currency_code': 'PEN',
+                      'description': 'Culqi Store',
+                      'email': 'wmuro@me.com',
+                      'installments': installments,
+                      'metadata': {'order_id': '1234'},
+                      'source_id': token}
+
+        charge = culqi.Charge.create(dir_charge)
+        
+        return JsonResponse(charge, safe=False)
+
+    return JsonResponse("only POST method", safe=False)
 # 1. Import the PayPal SDK client created in `Set up Server-Side SDK` section.
 from .pay import PayPalClient
 from paypalcheckoutsdk.orders import OrdersCaptureRequest

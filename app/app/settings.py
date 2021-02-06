@@ -61,8 +61,7 @@ INSTALLED_APPS = [
     "products",
     "orders",
     "cart",
-    "paypalcheckoutsdk"
-
+    "paypalcheckoutsdk",
 ]
 IMAGEFIT_ROOT = "media"
 

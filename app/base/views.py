@@ -14,7 +14,6 @@ from accounts.forms import MyCustomSignupForm
 import json
 from allauth.account.admin import EmailAddress
 from products.models import Category,Marcas,Product,Productimage
-from django.urls import reverse
 from django.template import RequestContext 
 from accounts.models import Province,District,Adress
 from django.core import serializers
