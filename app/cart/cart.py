@@ -5,7 +5,7 @@ from json import JSONEncoder
 import json
 class Cart(object):
     model = apps.get_model('products', 'Product')
-
+    
     def __init__(self, request):
         self.session = request.session        
         cart = self.session.get(settings.CART_SESSION_ID)  

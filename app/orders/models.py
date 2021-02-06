@@ -11,6 +11,9 @@ from accounts.models import Adress
 # from decimal import Decimal
 from base.models import BaseModel
 from accounts.models import Adress
+import random
+import string
+from products.models import Product
 ORDER_STATUS_CHOICES = (
     ('creado', 'Creado'),
     ('pagado', 'Pagado'),
@@ -18,7 +21,6 @@ ORDER_STATUS_CHOICES = (
     ('reembolsado', 'Reembolsado'),
 )
 class Order(models.Model):
-    order_id            =models.CharField(primary_key=True, max_length=100)
     client            = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE)
     cart                = models.ForeignKey(Cart,on_delete=models.CASCADE)
     address =            models.ForeignKey(Adress, related_name='adress', on_delete=models.CASCADE)
@@ -31,8 +33,6 @@ class Order(models.Model):
 
 
 
-    def __str__(self):
-        return self.order_id
 
 #     objects = OrderManager()
 
@@ -56,3 +56,12 @@ class Order(models.Model):
         self.save()
         return cart_total
 
+class OrderDetails(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product     = models.ForeignKey(Product,on_delete=models.SET_NULL,null=True)
+    count    = models.PositiveIntegerField()
+    updated     = models.DateTimeField(auto_now=True)
+    created   = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.order

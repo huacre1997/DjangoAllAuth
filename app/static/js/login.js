@@ -142,7 +142,7 @@ $(function (e) {
   document.getElementById("btnRegister").addEventListener("click",function(){
     var register = $.confirm({
       title: "",
-      columnClass: "col-lg-7 col-md-9 col-sm-10 col-xs-10",
+      columnClass: "col-lg-6 col-md-9 col-sm-10 col-xs-10",
       closeIcon: true,
       containerFluid:true,
       content: function () {
@@ -172,7 +172,7 @@ $(function (e) {
   document.getElementById("btnLogin").addEventListener("click",function(){
     var login = $.confirm({
       title: "",
-      columnClass: "col-lg-7 col-md-9 col-sm-10 col-xs-10",
+      columnClass: "col-lg-6 col-md-9 col-sm-10 col-xs-10",
       closeIcon: true,
       content: function () {
         var self = this;

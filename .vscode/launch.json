@@ -1,0 +1,32 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+    {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": true,
+            "python":"D:/Program Files/Python39/python.exe",
+            "program": "${workspaceFolder}\\app\\manage.py",
+            "args": ["runserver"],
+            "cwd": "${workspaceRoot}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+       
+            "django": true
+        },
+
+
+        {
+            "name": "Python: Archivo actual",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

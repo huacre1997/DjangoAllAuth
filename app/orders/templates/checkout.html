@@ -251,12 +251,13 @@
 </script>
 <script>
   
-  
+    var count={{cartCount|safe}}
   var amount={{cartTotal|safe}}
   Culqi.settings({
     title: 'Electronia',
     currency: 'PEN',
     description: 'Importe Total',
+    installments: false,
 
     amount: amount*100
   });
@@ -267,33 +268,24 @@ $('#miBoton').on('click', function (e) {
 });
 // Recibimos Token del Culqi.js
 function culqi() {
+  console.log(Culqi);
   if (Culqi.token) {
-      $(document).ajaxStart(function(){
-        run_waitMe();
-      });
+      console.log(Culqi.token);
       // Imprimir Token
       $.ajax({
          type: 'POST',
          url: '/charges/',
-         data: { csrfmiddlewaretoken: csrftoken, token: Culqi.token.id, installments: Culqi.token.metadata.installments },
+         data: { csrfmiddlewaretoken: csrftoken, 
+          token: Culqi.token.id,
+          email:Culqi.token.email,
+           amount:Culqi.getSettings.amount ,
+          count ,
+          address:document.getElementById("address").value },
          datatype: 'json',
          success: function(data){
-           var result = "";
-           if(data.constructor == String){
-               result = JSON.parse(data);
-           }
-           if(data.constructor == Object){
-               result = JSON.parse(JSON.stringify(data));
-           }
-           if(result.object === 'charge'){
-             resultdiv(result.outcome.user_message);
-           }
-           if(result.object === 'error'){
-               resultdiv(result.user_message);
-           }
+          console.log(data);
          },
          error: function(error) {
-           resultdiv(error);
          }
       });
   } else {
@@ -302,14 +294,7 @@ function culqi() {
     resultdiv(Culqi.error.user_message);
   }
 };
-function run_waitMe(){
-  $('body').waitMe({
-    effect: 'orbit',
-    text: 'Procesando pago...',
-    bg: 'rgba(255,255,255,0.7)',
-    color:'#28d2c8'
-  });
-}
+
   paypal.Buttons({
         createOrder: function (data, actions) {
           // This function sets up the details of the transaction, including the amount and line item details.

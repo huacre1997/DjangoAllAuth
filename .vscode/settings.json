@@ -1,8 +1,18 @@
 {
-    "python.pythonPath": "D:\\Users\\usuario\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+    "python.pythonPath": "d:\\Program Files\\Python39\\python.exe",
     "compile-hero.disable-compile-files-on-did-save-code": true,
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": false,
     "python.linting.mypyEnabled": false,
-    "python.linting.flake8Enabled": true
+    "python.linting.flake8Enabled": true,
+    "python.envFile": ".env",
+
+
+
+
+
+
+
+    "python.languageServer": "Jedi"
+
 }
